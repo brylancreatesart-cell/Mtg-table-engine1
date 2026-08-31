@@ -1,0 +1,107 @@
+OFFSET 8715
+SELECTOR .avatarMount,.hudAvatar
+DECL overflow:hidden
+
+OFFSET 8755
+SELECTOR .avatarMount svg,.hudAvatar svg,#profileModalAvatar svg
+DECL width:100%;height:100%;display:block
+
+OFFSET 10269
+SELECTOR .hudAvatar
+DECL width:52px;height:52px;border-radius:50%;border:1px solid #34556c;background:#0b131b
+
+OFFSET 29342
+SELECTOR .oppMiniAvatar
+DECL width:30px;height:30px;border-radius:50%;overflow:hidden;border:1px solid #34556c;background:#0b131b
+
+OFFSET 29458
+SELECTOR .oppMiniAvatar svg
+DECL width:100%;height:100%;display:block
+
+OFFSET 30875
+SELECTOR .oppMiniAvatar
+DECL width:26px;height:26px
+
+OFFSET 32370
+SELECTOR .playerHud[data-poison-band="danger"] .hudAvatar,.playerHud[data-poison-band="critical"] .hudAvatar
+DECL box-shadow:0 0 0 2px rgba(116,180,95,.28),0 0 18px rgba(93,173,74,.18)
+
+OFFSET 32541
+SELECTOR .playerHud[data-poison-band="critical"] .hudAvatar
+DECL filter:saturate(.75) contrast(1.06)
+
+OFFSET 36630
+SELECTOR /* Phase 61 — mobile layout cleanup + dedicated HUD pages */ .avatarMount,.hudAvatar,.oppMiniAvatar
+DECL display:grid;place-items:center;position:relative
+
+OFFSET 44052
+SELECTOR .hudAvatar
+DECL border-color:color-mix(in srgb,var(--deck-a) 68%,#34556c);box-shadow:0 0 16px var(--deck-glow)
+
+OFFSET 48068
+SELECTOR .battleActive .hudAvatar
+DECL background:radial-gradient(circle,color-mix(in srgb,var(--deck-a) 13%,#0b131b),#081018 70%);box-shadow:0 0 22px var(--deck-glow),inset 0 0 18px color-mix(in srgb,var(--deck-b) 10%,transparent)
+
+OFFSET 59595
+SELECTOR .bfSeatAvatar
+DECL width:38px;height:38px;border-radius:50%;overflow:hidden;border:1px solid #3b596b
+
+OFFSET 60729
+SELECTOR .bfSeatAvatar
+DECL width:34px;height:34px
+
+OFFSET 69072
+SELECTOR .avatarHeroArt
+DECL position:relative;min-width:0;aspect-ratio:4/5;border-radius:18px;overflow:hidden;background:#09131b;border:1px solid color-mix(in srgb,var(--hero-accent,var(--deck-a,#c9a85e)) 30%,#243b4c);box-shadow:0 18px 32px rgba(0,0,0,.26)
+
+OFFSET 69317
+SELECTOR .avatarHeroArt .fantasyAvatar,.avatarChoicePortrait .fantasyAvatar
+DECL width:100%!important;height:100%!important
+
+OFFSET 69428
+SELECTOR .avatarHeroArt .portraitAvatar,.avatarChoicePortrait .portraitAvatar
+DECL border-radius:inherit!important;box-shadow:none!important;background:#09131b!important
+
+OFFSET 69585
+SELECTOR .avatarHeroArt .avatarAura,.avatarChoicePortrait .avatarAura
+DECL display:none!important
+
+OFFSET 69670
+SELECTOR .avatarHeroArt .portraitAvatar img
+DECL width:100%;height:100%;object-fit:cover;object-position:center 22%;transform:scale(1.06)!important;filter:saturate(1.03) contrast(1.02)
+
+OFFSET 71519
+SELECTOR .avatarChoicePortrait
+DECL position:relative;aspect-ratio:1/1;border-radius:14px;overflow:hidden;background:#08131b;border:1px solid rgba(201,168,94,.14)
+
+OFFSET 71669
+SELECTOR .avatarChoicePortrait .portraitAvatar img
+DECL width:100%;height:100%;object-fit:cover;object-position:center 18%;transform:scale(1.06)!important
+
+OFFSET 72530
+SELECTOR .avatarChoicePremium.selected .avatarChoicePortrait
+DECL border-color:color-mix(in srgb,var(--sel-accent,var(--deck-a,#c9a85e)) 52%,#56728a)
+
+OFFSET 73062
+SELECTOR .avatarHeroArt
+DECL max-width:280px;justify-self:center;width:100%
+
+OFFSET 79249
+SELECTOR .profileHubAvatarPick .avatarChoicePortrait
+DECL border-radius:11px
+
+OFFSET 84916
+SELECTOR #myAvatar,.profileAvatarTap
+DECL border:0!important;box-shadow:none!important;background:transparent!important
+
+OFFSET 85023
+SELECTOR #myAvatar .portraitAvatar,.profileAvatarTap .portraitAvatar
+DECL box-shadow:none!important
+
+OFFSET 85110
+SELECTOR #myAvatar .avatarAura,.profileAvatarTap .avatarAura
+DECL display:none!important
+
+OFFSET 85186
+SELECTOR #myAvatar .portraitAvatar img,.profileAvatarTap .portraitAvatar img
+DECL transform:scale(1.08);object-fit:cover
