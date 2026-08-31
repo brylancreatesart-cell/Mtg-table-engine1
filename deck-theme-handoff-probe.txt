@@ -1,0 +1,898 @@
+FILE scripts/inline-101.js
+
+TERM showLobbyPage OFFSET 12341
+ProfileStore.migrate(row.profile_data);playerProfile.auth={mode:'authenticated',provider:'supabase',subject:user.id,email:user.email||null};playerProfile.onboardingComplete=!!row.onboarding_complete;cloudOnboardingComplete=!!row.onboarding_complete;
+ profileStorage.save(playerProfile);MTGAccounts.setActive(playerProfile.id,localStorage);MTGAccounts.saveAccount(playerProfile,localStorage);clearLegacyGuestPersistence();
+ activeDeckId=localStorage.getItem('mtgte_active_deck_'+playerProfile.id)||null;let restoredDeck=activeDeckId?MTGProfileStore.activeDeck(playerProfile,activeDeckId):null;if(restoredDeck)hydrateProfileFromSavedDeck(restoredDeck);else prof={cards:[],mods:[],tags:[],capabilities:[],cardMap:new Map(),commander:null,partner:null};startPresence();renderProfile();renderDeckLibrary();$('accountOverlay').classList.add('h');
+ if(cloudOnboardingComplete){$('setup').classList.add('h');showLobbyPage();setTimeout(offerLiveRecovery,350)}else{$('lobby').classList.add('h');$('setup').classList.remove('h');startVerifyAmbience();toast('Finish your first deck verification to complete setup.')}
+}
+async function accountSignIn(){
+ if(authBusy)return;let email=$('authSignInEmail').value.trim(),pass=$('authSignInPassword').value;if(!email||!pass)return authStatus('Enter your email and password.','error');authBusy=true;authStatus('Signing in…');
+ try{await MTGCloudAccount.signIn(email,pass);authStatus('Account verified.','good');await enterAuthenticatedAccount()}catch(e){authStatus(e.message||'Could not sign in.','error')}finally{authBusy=false}
+}
+async function accountSignUp(){
+ if(authBusy)return;let email=$('authCreateEmail').value.trim(),p1=$('authCreatePassword').value,p2=$('authCreatePassword2').value;if(!/^\S+@\S+\.\S+$/.test(email))return authStatus('Enter a valid email address.','error');if(p1.length<8)return authStatus('Use at least 8 characters for your password.','error');if(p1!==p2)return authStatus('Those passwords do not match.','error');authBusy=true;authStatus('Creating your account…');
+ try{let data=await MTGCloudAccount.signUp(email,p1);if(data?.access_token){authStatus('Account created.','good');showIdentitySetup('authenticated',MTGCloudAccount.currentUser())}else{showAuthMode('signin');$('authSignInEmail').value=email;$('authSignInPassword').value='';authStatus('Account created. Check your email to confirm it, then sign in.','good')}}catch(e){authStatus(e.message||'Could not create account.','error')}finally{authBusy=false}
+}
+function startGuestIdentity(){
+ clearLegacyGuestPersistence();MTGCloudAccount.forgetSession?.();MTGCloudAccount.clearMemory();
+ // Guest is intentionally non-persistent: every fresh Guest entry starts onboarding again.
+ // Actual mult
+
+
+TERM showLobbyPage OFFSET 144057
+f(oldRoom){try{MTGLiveReconnect?.clearIdentity?.(localStorage,oldRoom)}catch{}localStorage.removeItem('mtgte_last_seat_'+oldRoom)}localStorage.removeItem('mtgte_last_room');
+ clearTimeout(soloNpcTimer);soloNpcTimer=null;battleStarted=false;soloTestMode=false;HST=0;me=1;activeRoom='';roomDescriptor=null;transportSession=null;
+ players=[{id:1,r:0,connected:true,cid:clientId,name:playerProfile?.name||'Player 1',commander:commanderName(),avatarId:playerProfile?.avatarId||MTGAvatars.DEFAULT_ID,deckName:publicDeckName(),deckSize:localDeckCardCount(),commanderCount:localCommanderCount()}];
+ st=MTGEngine.normalizeState({life:{1:40},poison:{1:0},tax:{1:0},cmdCasts:{1:0},energy:{1:0},exp:{1:0},cmd:{},turn:1,active:1,phase:'MAIN 1',stack:[],battle:[],feed:[],choice:{},hist:[],fallen:{},events:[],snapshots:[]});
+ $('room').classList.add('h');$('jb').classList.add('h');$('code').textContent='------';showLobbyPage();toast('You left the battle.');
+}
+
+function showProfileAdvancedTools(){choice(['Solo Test','Open Profile','Player HUD','Match History','Analytics','Playgroups','Accounts','Account Link','Room Session','Live Reconnect','Protocol Policy','Battlefield Interaction','Zones & Movement','Targeting & Selection','Attachments & Relationships','Combat Declaration','Combat Damage','Combat Rules','Combat Keywords','Combat Damage Steps','Combat Assignment Assist','Combat Damage Validation','Combat Damage Effects','Commander Combat','Commander Zone & Tax','Commander Return Choices','State-Based Actions','Runtime Status','Diagnostics','Release Gate','Reliable Delivery','Live Transport','Protocol','State Verify','Room Health','App Status','Data Health','Sync Queue','Sync Status','Live Recovery','Export Backup','Import Backup','Copy Friend Code','Rename Profile','Sign Out'],x=>{if(x==='Solo Test')chooseSoloTest();else if(x==='Open Profile')showProfileCenter();else if(x==='Player HUD')showPlayerHudStatus();else if(x==='Match History')showMatchHistory();else if(x==='Analytics')showAnalytics();else if(x==='Playgroups')showPlaygroups();else if(x==='Accounts')showAccounts();else if(x==='Account Link')showAccountLinkStatus();else if(x==='Room Session')showRoomSessionStatus();else if(x==='Live Reconnect')showLiveReconnect();else if(x==='Protocol Policy')showProtocolPolicy();else if(x==='Battlefield Interaction')showBattlefieldInteractionStatus();if(x==='Zones & Movement')showZoneStatus();else if(x==='Targeting & Selection')showTargetingStatus();else if(x==='Attachments & Relationships')showAttachmentStatus();else if(x==='Combat Declaration')showCombatStatus();else if(x==='Combat Damage')showCombatDamageStatus();else if(x==='Combat Rules')showCombatRulesStatus();else if(x==='Combat Keywords')s
+
+
+TERM activeDeckTheme OFFSET 153070
+)))===8]);return{version:VERSION,ok:checks.every(x=>x[1]),checks}}
+ return{VERSION,connected,count,countFrom,snapshot,publish,localQA};
+})();
+globalThis.MTGAudioTableContext=MTGAudioTableContext;
+function lobbyMusicSeatCount(){return MTGAudioTableContext.count()}
+function lobbyMusicPerDevice(){let n=lobbyMusicSeatCount();return MTG_LOBBY_VOLUME_BY_CONNECTED[n]??MTG_LOBBY_VOLUME_BY_CONNECTED[1]}
+function scoreModeMaster(mode=warScore.mode){return mode==='lobby'?Math.min(MTG_MUSIC_VOLUME_CAP,lobbyMusicPerDevice()):.04}
+function refreshAudioTableContext(reason='refresh'){let snap=MTGAudioTableContext.publish(reason);if(warScore.desiredMode==='lobby'&&warScore.audio&&!warScore.audio.paused){let next=scoreModeMaster('lobby');if(Math.abs(Number(warScore.targetVolume||0)-next)>.0001){warScore.targetVolume=next;fadeExactScore(next,.5)}}return snap}
+function scoreIdentity(){let ids=Array.isArray(activeDeckTheme?.identity)?activeDeckTheme.identity:[];if(!ids.length&&typeof MTGDeckTheme!=='undefined'&&prof)try{ids=MTGDeckTheme.identityFromProfile(prof)}catch{}return[...new Set((ids||[]).map(x=>String(x).toUpperCase()).filter(x=>'WUBRG'.includes(x)))]}
+function ensureExactScoreElement(){let a=$('mtgteExactLobbyScore');if(!a){a=document.createElement('audio');a.id='mtgteExactLobbyScore';a.src=MTG_EXACT_SCORE_SRC;a.preload='auto';a.loop=true;a.setAttribute('playsinline','');a.setAttribute('webkit-playsinline','');a.setAttribute('aria-hidden','true');a.style.display='none';document.body.appendChild(a)}a.loop=true;warScore.audio=a;return a}
+function fadeExactScore(target,seconds=.8,onDone=null){let a=ensureExactScoreElement(),to=Math.max(0,Math.min(1,Number(target)||0)),from=Math.max(0,Math.min(1,Number(a.volume)||0)),duration=Math.max(.05,Number(seconds)||.8)*1000,start=performance.now();if(warScore.fadeFrame)cancelAnimationFrame(warScore.fadeFrame);function step(now){let p=Math.min(1,(now-start)/duration),e=p*p*(3-2*p);a.volume=from+(to-from)*e;if(p<1)warScore.fadeFrame=requestAnimationFrame(step);else{warScore.fadeFrame=0;a.volume=to;if(onDone)onDone()}}warScore.fadeFrame=requestAnimationFrame(step)}
+function loadRenderedScoreAssets(){let a=ensureExactScoreElement();if(!warScore.loaded){warScore.loaded=true;if(a.readyState===0&&a.paused&&Number(a.currentTime||0)===0)try{a.load()}catch{}}return Promise.resolve(true)}
+function createRenderedScoreBus(){ensureExactScoreElement();return true}
+function startRenderedSources(){return true}
+function updateRenderedScoreMix(identity=null,mode=warScore.mode||warScore.desiredMode||'verify'){warScore.identity=Array.isArray(identity)?identity.slice():scoreIdentity();if(warScore.audio&&!warScore.audio.paused){warScore.targetVolume=scoreModeMaste
+
+
+TERM activeDeckTheme OFFSET 153097
+RSION,ok:checks.every(x=>x[1]),checks}}
+ return{VERSION,connected,count,countFrom,snapshot,publish,localQA};
+})();
+globalThis.MTGAudioTableContext=MTGAudioTableContext;
+function lobbyMusicSeatCount(){return MTGAudioTableContext.count()}
+function lobbyMusicPerDevice(){let n=lobbyMusicSeatCount();return MTG_LOBBY_VOLUME_BY_CONNECTED[n]??MTG_LOBBY_VOLUME_BY_CONNECTED[1]}
+function scoreModeMaster(mode=warScore.mode){return mode==='lobby'?Math.min(MTG_MUSIC_VOLUME_CAP,lobbyMusicPerDevice()):.04}
+function refreshAudioTableContext(reason='refresh'){let snap=MTGAudioTableContext.publish(reason);if(warScore.desiredMode==='lobby'&&warScore.audio&&!warScore.audio.paused){let next=scoreModeMaster('lobby');if(Math.abs(Number(warScore.targetVolume||0)-next)>.0001){warScore.targetVolume=next;fadeExactScore(next,.5)}}return snap}
+function scoreIdentity(){let ids=Array.isArray(activeDeckTheme?.identity)?activeDeckTheme.identity:[];if(!ids.length&&typeof MTGDeckTheme!=='undefined'&&prof)try{ids=MTGDeckTheme.identityFromProfile(prof)}catch{}return[...new Set((ids||[]).map(x=>String(x).toUpperCase()).filter(x=>'WUBRG'.includes(x)))]}
+function ensureExactScoreElement(){let a=$('mtgteExactLobbyScore');if(!a){a=document.createElement('audio');a.id='mtgteExactLobbyScore';a.src=MTG_EXACT_SCORE_SRC;a.preload='auto';a.loop=true;a.setAttribute('playsinline','');a.setAttribute('webkit-playsinline','');a.setAttribute('aria-hidden','true');a.style.display='none';document.body.appendChild(a)}a.loop=true;warScore.audio=a;return a}
+function fadeExactScore(target,seconds=.8,onDone=null){let a=ensureExactScoreElement(),to=Math.max(0,Math.min(1,Number(target)||0)),from=Math.max(0,Math.min(1,Number(a.volume)||0)),duration=Math.max(.05,Number(seconds)||.8)*1000,start=performance.now();if(warScore.fadeFrame)cancelAnimationFrame(warScore.fadeFrame);function step(now){let p=Math.min(1,(now-start)/duration),e=p*p*(3-2*p);a.volume=from+(to-from)*e;if(p<1)warScore.fadeFrame=requestAnimationFrame(step);else{warScore.fadeFrame=0;a.volume=to;if(onDone)onDone()}}warScore.fadeFrame=requestAnimationFrame(step)}
+function loadRenderedScoreAssets(){let a=ensureExactScoreElement();if(!warScore.loaded){warScore.loaded=true;if(a.readyState===0&&a.paused&&Number(a.currentTime||0)===0)try{a.load()}catch{}}return Promise.resolve(true)}
+function createRenderedScoreBus(){ensureExactScoreElement();return true}
+function startRenderedSources(){return true}
+function updateRenderedScoreMix(identity=null,mode=warScore.mode||warScore.desiredMode||'verify'){warScore.identity=Array.isArray(identity)?identity.slice():scoreIdentity();if(warScore.audio&&!warScore.audio.paused){warScore.targetVolume=scoreModeMaster(mode);fadeExactScore(warS
+
+
+TERM MTGDeckTheme OFFSET 153148
+SION,connected,count,countFrom,snapshot,publish,localQA};
+})();
+globalThis.MTGAudioTableContext=MTGAudioTableContext;
+function lobbyMusicSeatCount(){return MTGAudioTableContext.count()}
+function lobbyMusicPerDevice(){let n=lobbyMusicSeatCount();return MTG_LOBBY_VOLUME_BY_CONNECTED[n]??MTG_LOBBY_VOLUME_BY_CONNECTED[1]}
+function scoreModeMaster(mode=warScore.mode){return mode==='lobby'?Math.min(MTG_MUSIC_VOLUME_CAP,lobbyMusicPerDevice()):.04}
+function refreshAudioTableContext(reason='refresh'){let snap=MTGAudioTableContext.publish(reason);if(warScore.desiredMode==='lobby'&&warScore.audio&&!warScore.audio.paused){let next=scoreModeMaster('lobby');if(Math.abs(Number(warScore.targetVolume||0)-next)>.0001){warScore.targetVolume=next;fadeExactScore(next,.5)}}return snap}
+function scoreIdentity(){let ids=Array.isArray(activeDeckTheme?.identity)?activeDeckTheme.identity:[];if(!ids.length&&typeof MTGDeckTheme!=='undefined'&&prof)try{ids=MTGDeckTheme.identityFromProfile(prof)}catch{}return[...new Set((ids||[]).map(x=>String(x).toUpperCase()).filter(x=>'WUBRG'.includes(x)))]}
+function ensureExactScoreElement(){let a=$('mtgteExactLobbyScore');if(!a){a=document.createElement('audio');a.id='mtgteExactLobbyScore';a.src=MTG_EXACT_SCORE_SRC;a.preload='auto';a.loop=true;a.setAttribute('playsinline','');a.setAttribute('webkit-playsinline','');a.setAttribute('aria-hidden','true');a.style.display='none';document.body.appendChild(a)}a.loop=true;warScore.audio=a;return a}
+function fadeExactScore(target,seconds=.8,onDone=null){let a=ensureExactScoreElement(),to=Math.max(0,Math.min(1,Number(target)||0)),from=Math.max(0,Math.min(1,Number(a.volume)||0)),duration=Math.max(.05,Number(seconds)||.8)*1000,start=performance.now();if(warScore.fadeFrame)cancelAnimationFrame(warScore.fadeFrame);function step(now){let p=Math.min(1,(now-start)/duration),e=p*p*(3-2*p);a.volume=from+(to-from)*e;if(p<1)warScore.fadeFrame=requestAnimationFrame(step);else{warScore.fadeFrame=0;a.volume=to;if(onDone)onDone()}}warScore.fadeFrame=requestAnimationFrame(step)}
+function loadRenderedScoreAssets(){let a=ensureExactScoreElement();if(!warScore.loaded){warScore.loaded=true;if(a.readyState===0&&a.paused&&Number(a.currentTime||0)===0)try{a.load()}catch{}}return Promise.resolve(true)}
+function createRenderedScoreBus(){ensureExactScoreElement();return true}
+function startRenderedSources(){return true}
+function updateRenderedScoreMix(identity=null,mode=warScore.mode||warScore.desiredMode||'verify'){warScore.identity=Array.isArray(identity)?identity.slice():scoreIdentity();if(warScore.audio&&!warScore.audio.paused){warScore.targetVolume=scoreModeMaster(mode);fadeExactScore(warScore.targetVolume,.55)}return true}
+async functi
+
+
+TERM MTGDeckTheme OFFSET 153189
+ublish,localQA};
+})();
+globalThis.MTGAudioTableContext=MTGAudioTableContext;
+function lobbyMusicSeatCount(){return MTGAudioTableContext.count()}
+function lobbyMusicPerDevice(){let n=lobbyMusicSeatCount();return MTG_LOBBY_VOLUME_BY_CONNECTED[n]??MTG_LOBBY_VOLUME_BY_CONNECTED[1]}
+function scoreModeMaster(mode=warScore.mode){return mode==='lobby'?Math.min(MTG_MUSIC_VOLUME_CAP,lobbyMusicPerDevice()):.04}
+function refreshAudioTableContext(reason='refresh'){let snap=MTGAudioTableContext.publish(reason);if(warScore.desiredMode==='lobby'&&warScore.audio&&!warScore.audio.paused){let next=scoreModeMaster('lobby');if(Math.abs(Number(warScore.targetVolume||0)-next)>.0001){warScore.targetVolume=next;fadeExactScore(next,.5)}}return snap}
+function scoreIdentity(){let ids=Array.isArray(activeDeckTheme?.identity)?activeDeckTheme.identity:[];if(!ids.length&&typeof MTGDeckTheme!=='undefined'&&prof)try{ids=MTGDeckTheme.identityFromProfile(prof)}catch{}return[...new Set((ids||[]).map(x=>String(x).toUpperCase()).filter(x=>'WUBRG'.includes(x)))]}
+function ensureExactScoreElement(){let a=$('mtgteExactLobbyScore');if(!a){a=document.createElement('audio');a.id='mtgteExactLobbyScore';a.src=MTG_EXACT_SCORE_SRC;a.preload='auto';a.loop=true;a.setAttribute('playsinline','');a.setAttribute('webkit-playsinline','');a.setAttribute('aria-hidden','true');a.style.display='none';document.body.appendChild(a)}a.loop=true;warScore.audio=a;return a}
+function fadeExactScore(target,seconds=.8,onDone=null){let a=ensureExactScoreElement(),to=Math.max(0,Math.min(1,Number(target)||0)),from=Math.max(0,Math.min(1,Number(a.volume)||0)),duration=Math.max(.05,Number(seconds)||.8)*1000,start=performance.now();if(warScore.fadeFrame)cancelAnimationFrame(warScore.fadeFrame);function step(now){let p=Math.min(1,(now-start)/duration),e=p*p*(3-2*p);a.volume=from+(to-from)*e;if(p<1)warScore.fadeFrame=requestAnimationFrame(step);else{warScore.fadeFrame=0;a.volume=to;if(onDone)onDone()}}warScore.fadeFrame=requestAnimationFrame(step)}
+function loadRenderedScoreAssets(){let a=ensureExactScoreElement();if(!warScore.loaded){warScore.loaded=true;if(a.readyState===0&&a.paused&&Number(a.currentTime||0)===0)try{a.load()}catch{}}return Promise.resolve(true)}
+function createRenderedScoreBus(){ensureExactScoreElement();return true}
+function startRenderedSources(){return true}
+function updateRenderedScoreMix(identity=null,mode=warScore.mode||warScore.desiredMode||'verify'){warScore.identity=Array.isArray(identity)?identity.slice():scoreIdentity();if(warScore.audio&&!warScore.audio.paused){warScore.targetVolume=scoreModeMaster(mode);fadeExactScore(warScore.targetVolume,.55)}return true}
+async function startWarScore(mode='verify'){warScore.
+
+
+TERM --deck-a OFFSET 184246
+r('G'),.10]]}for(let i=0;i<5;i++){let r=refl[i]||[dom,0];styles.push('--deck-reflect-'+(i+1)+':'+deckVaultRgba(r[0].rgb,r[1]))}let crestFilter=count>=5?'grayscale(.18) sepia(.60) saturate(.84) hue-rotate(352deg) brightness(1.08)':count===4?'grayscale(.50) sepia(.24) saturate(.82) brightness(.92)':dom.crest;styles.push('--deck-crest-filter:'+crestFilter);styles.push('--deck-crest-inlay:'+deckVaultRgba(sec.rgb,count===1?.12:count===2?.34:count===3?.27:count===4?.18:.16));styles.push('--deck-crest-inlay-2:'+deckVaultRgba(ter.rgb,count<=2?.08:count===3?.20:count===4?.16:.14));styles.push('--deck-edge-glow:'+deckVaultRgba(dom.rgb,count<=1?.14:count===2?.12:count===3?.10:.08));styles.push('--deck-crest-glow:'+deckVaultRgba(sec.rgb,count<=1?.14:count===2?.18:count===3?.15:.11));styles.push('--deck-selected-glow:'+deckVaultRgba(dom.rgb,count<=1?.22:count===2?.20:count===3?.18:.15));styles.push('--deck-active-color:'+deckVaultRgba(dom.rgb,count<=2?.12:.08));let frame=count>=3?'B':dominant==='C'?'B':dominant,vaultA=count===0?.065:count===1?.085:count===2?.070:count===3?.055:count===4?.040:.035,vaultMain=count===5?[190,151,82]:dom.rgb,vaultSecond=count===5?sec.rgb:sec.rgb,vaultVars={'--vault-ambience-main':deckVaultRgba(vaultMain,vaultA),'--vault-ambience-secondary':deckVaultRgba(vaultSecond,vaultA*.58),'--vault-ambience-column':deckVaultRgba(dom.rgb,vaultA*.50),'--vault-ambience-shelf':deckVaultRgba(sec.rgb,vaultA*.36),'--vault-drawer-tint':deckVaultRgba(dom.rgb,Math.min(.11,vaultA*1.18))};return{ids,ordered,dominant,frame,boxStyle:styles.join(';'),vaultVars}}
+function deckVaultSetAmbience(palette,{immediate=false}={}){let m=$('modal');if(!m)return;let neutral={'--vault-ambience-main':'rgba(0,0,0,0)','--vault-ambience-secondary':'rgba(0,0,0,0)','--vault-ambience-column':'rgba(0,0,0,0)','--vault-ambience-shelf':'rgba(0,0,0,0)','--vault-drawer-tint':'rgba(0,0,0,0)'},vars=palette?.vaultVars||neutral,apply=()=>Object.entries(vars).forEach(([k,v])=>m.style.setProperty(k,v)),reduced=!!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;if(immediate||reduced)apply();else requestAnimationFrame(apply)}
+function deckVaultFrameKey(d,active=false){if(active)return'M';return deckVaultPalette(d).frame}
+function deckVaultCrestIndex(d){let ids=deckIdentity(d),key='WUBRG'.split('').filter(c=>ids.includes(c)).join('')||'C',combo={WG:0,UR:1,BG:2,W:3,R:4,G:5,WUBG:6,UG:7,WBR:8,WUBRG:5,C:6}[key];if(combo!==undefined)return combo;let h=2166136261;for(let i=0;i<key.length;i++){h^=key.charCodeAt(i);h=Math.imul(h,16777619)}return Math.abs(h>>>0)%9}
+let deckVaultManaSvgSeq=0;function deckVaultManaMedallion(c){const mats={W:{rimHi:'#fff4c8',rimMid:'#b99a5a',rimLo:'#493a25',enHi:'#fffdf
+
+
+TERM applyDeckTheme OFFSET 204120
+sList.remove('h');startVerifyAmbience();toast('Import and verify the new deck. Your current active deck stays selected until you choose otherwise.')}
+function renameSavedDeck(id,name){let d=MTGProfileStore.activeDeck(playerProfile,id),n=String(name||'').trim().replace(/\s+/g,' ').slice(0,32);if(!d||!n)return false;let result=MTGProfileStore.saveDeck(playerProfile,{...d,id:d.id,name:n});playerProfile=result.profile;saveProfile();vaultSelectedDeckId=id;vaultPanelMode='actions';renderDeckLibrary();renderDeckVault({preserveScroll:true});toast('Deck renamed.');return true}
+function removeSavedDeck(id){let d=MTGProfileStore.activeDeck(playerProfile,id);if(!d)return;let wasActive=id===activeDeckId;playerProfile=MTGProfileStore.removeDeck(playerProfile,id);if(wasActive){persistActiveDeckSelection(null);prof={cards:[],mods:[],tags:[],capabilities:[],cardMap:new Map(),commander:null,partner:null};applyDeckTheme()}saveProfile();let decks=playerProfile.decks||[];vaultSelectedDeckId=decks[0]?.id||null;vaultPanelMode='actions';vaultDrawerOpen=false;vaultDrawerOpening=false;renderDeckLibrary();renderDeckVault({preserveScroll:true});toast(wasActive?'Deck removed. Choose another verified deck to make active.':'Deck removed from the Vault.')}
+function handleDeckVaultCommand(cmd){let d=MTGProfileStore.activeDeck(playerProfile,vaultSelectedDeckId);if(!d&&cmd!=='new')return;if(cmd==='use')return activateSavedDeck(d.id);if(cmd==='edit'){vaultPanelMode='edit';return renderDeckVault({preserveScroll:true})}if(cmd==='rename'){vaultPanelMode='rename';renderDeckVault({preserveScroll:true});setTimeout(()=>$('vaultRenameInput')?.focus(),0);return}if(cmd==='save-rename')return renameSavedDeck(d.id,$('vaultRenameInput')?.value);if(cmd==='edit-list')return beginEditSavedDeck(d.id);if(cmd==='remove'){vaultPanelMode='remove';return renderDeckVault({preserveScroll:true})}if(cmd==='confirm-remove')return removeSavedDeck(d.id);if(cmd==='back-edit'){vaultPanelMode='edit';return renderDeckVault({preserveScroll:true})}if(cmd==='back'){vaultPanelMode='actions';return renderDeckVault({preserveScroll:true})}}
+function saveCurrentDeck(){if(!playerProfile)return toast('Create a profile first.');if(!prof.cards?.length)return toast('Verify a deck first.');if(!prof.commander)return toast('Choose your commander first.');let editingExisting=editingDeckId?MTGProfileStore.activeDeck(playerProfile,editingDeckId):null,existing=editingExisting||(!creatingNewDeckFromVault?currentSavedDeck():null),name=editingExisting?.name||null;if(!name){name=prompt('Deck name',existing?.name||prof.commander||'My Deck');if(!name?.trim())return;name=name.trim()}let previousActive=editingPreviousActiveDeckId,result=MTGProfileStore.saveDeck
+
+
+TERM saveCurrentDeck OFFSET 205332
+'Deck removed from the Vault.')}
+function handleDeckVaultCommand(cmd){let d=MTGProfileStore.activeDeck(playerProfile,vaultSelectedDeckId);if(!d&&cmd!=='new')return;if(cmd==='use')return activateSavedDeck(d.id);if(cmd==='edit'){vaultPanelMode='edit';return renderDeckVault({preserveScroll:true})}if(cmd==='rename'){vaultPanelMode='rename';renderDeckVault({preserveScroll:true});setTimeout(()=>$('vaultRenameInput')?.focus(),0);return}if(cmd==='save-rename')return renameSavedDeck(d.id,$('vaultRenameInput')?.value);if(cmd==='edit-list')return beginEditSavedDeck(d.id);if(cmd==='remove'){vaultPanelMode='remove';return renderDeckVault({preserveScroll:true})}if(cmd==='confirm-remove')return removeSavedDeck(d.id);if(cmd==='back-edit'){vaultPanelMode='edit';return renderDeckVault({preserveScroll:true})}if(cmd==='back'){vaultPanelMode='actions';return renderDeckVault({preserveScroll:true})}}
+function saveCurrentDeck(){if(!playerProfile)return toast('Create a profile first.');if(!prof.cards?.length)return toast('Verify a deck first.');if(!prof.commander)return toast('Choose your commander first.');let editingExisting=editingDeckId?MTGProfileStore.activeDeck(playerProfile,editingDeckId):null,existing=editingExisting||(!creatingNewDeckFromVault?currentSavedDeck():null),name=editingExisting?.name||null;if(!name){name=prompt('Deck name',existing?.name||prof.commander||'My Deck');if(!name?.trim())return;name=name.trim()}let previousActive=editingPreviousActiveDeckId,result=MTGProfileStore.saveDeck(playerProfile,{id:existing?.id,name,commander:prof.commander,partner:prof.partner||null,format:$('formatSelect')?.value||'commander',colorIdentity:(typeof MTGDeckTheme!=='undefined'?MTGDeckTheme.identityFromProfile(prof):[]),list:prof.cards,rawText:$('deck').value,mechanics:prof.tags,quickActions:(prof.capabilities||[]).map(c=>c.action),privacy:existing?.privacy||'private'});playerProfile=result.profile;saveProfile();
+ if(editingExisting){let saved=result.deck,editedWasActive=previousActive===saved.id;editingDeckId=null;editingPreviousActiveDeckId=null;$('saveDeckBtn').textContent='Save to Deck Library';if(editedWasActive||!previousActive){persistActiveDeckSelection(saved.id);hydrateProfileFromSavedDeck(saved)}else{persistActiveDeckSelection(previousActive);let prior=MTGProfileStore.activeDeck(playerProfile,previousActive);if(prior)hydrateProfileFromSavedDeck(prior)}$('setup').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();renderDeckLibrary();setTimeout(()=>openDeckVault(saved.id),0);toast('Verified deck changes saved.');return}
+ if(creatingNewDeckFromVault){let saved=result.deck;creatingNewDeckFromVault=false;editingPreviousActiveDeckId=null;$('saveDeckBtn').textCont
+
+
+TERM MTGDeckTheme OFFSET 206090
+urn renderDeckVault({preserveScroll:true})}if(cmd==='back'){vaultPanelMode='actions';return renderDeckVault({preserveScroll:true})}}
+function saveCurrentDeck(){if(!playerProfile)return toast('Create a profile first.');if(!prof.cards?.length)return toast('Verify a deck first.');if(!prof.commander)return toast('Choose your commander first.');let editingExisting=editingDeckId?MTGProfileStore.activeDeck(playerProfile,editingDeckId):null,existing=editingExisting||(!creatingNewDeckFromVault?currentSavedDeck():null),name=editingExisting?.name||null;if(!name){name=prompt('Deck name',existing?.name||prof.commander||'My Deck');if(!name?.trim())return;name=name.trim()}let previousActive=editingPreviousActiveDeckId,result=MTGProfileStore.saveDeck(playerProfile,{id:existing?.id,name,commander:prof.commander,partner:prof.partner||null,format:$('formatSelect')?.value||'commander',colorIdentity:(typeof MTGDeckTheme!=='undefined'?MTGDeckTheme.identityFromProfile(prof):[]),list:prof.cards,rawText:$('deck').value,mechanics:prof.tags,quickActions:(prof.capabilities||[]).map(c=>c.action),privacy:existing?.privacy||'private'});playerProfile=result.profile;saveProfile();
+ if(editingExisting){let saved=result.deck,editedWasActive=previousActive===saved.id;editingDeckId=null;editingPreviousActiveDeckId=null;$('saveDeckBtn').textContent='Save to Deck Library';if(editedWasActive||!previousActive){persistActiveDeckSelection(saved.id);hydrateProfileFromSavedDeck(saved)}else{persistActiveDeckSelection(previousActive);let prior=MTGProfileStore.activeDeck(playerProfile,previousActive);if(prior)hydrateProfileFromSavedDeck(prior)}$('setup').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();renderDeckLibrary();setTimeout(()=>openDeckVault(saved.id),0);toast('Verified deck changes saved.');return}
+ if(creatingNewDeckFromVault){let saved=result.deck;creatingNewDeckFromVault=false;editingPreviousActiveDeckId=null;$('saveDeckBtn').textContent='Save to Deck Library';if(previousActive&&MTGProfileStore.activeDeck(playerProfile,previousActive)){persistActiveDeckSelection(previousActive);hydrateProfileFromSavedDeck(MTGProfileStore.activeDeck(playerProfile,previousActive))}else{persistActiveDeckSelection(saved.id);hydrateProfileFromSavedDeck(saved)}$('setup').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();renderDeckLibrary();setTimeout(()=>openDeckVault(saved.id),0);toast('Verified deck stored in the Vault.');return}
+ persistActiveDeckSelection(result.deck.id);renderDeckLibrary();toast(result.created?'Deck saved.':'Deck version saved.')}
+$('saveDeckBtn').onclick=saveCurrentDeck;if($('deckVaultLock'))$('deckVaultLock').onclick=()=>openDeckVault();
+let prof={car
+
+
+TERM MTGDeckTheme OFFSET 206117
+veScroll:true})}if(cmd==='back'){vaultPanelMode='actions';return renderDeckVault({preserveScroll:true})}}
+function saveCurrentDeck(){if(!playerProfile)return toast('Create a profile first.');if(!prof.cards?.length)return toast('Verify a deck first.');if(!prof.commander)return toast('Choose your commander first.');let editingExisting=editingDeckId?MTGProfileStore.activeDeck(playerProfile,editingDeckId):null,existing=editingExisting||(!creatingNewDeckFromVault?currentSavedDeck():null),name=editingExisting?.name||null;if(!name){name=prompt('Deck name',existing?.name||prof.commander||'My Deck');if(!name?.trim())return;name=name.trim()}let previousActive=editingPreviousActiveDeckId,result=MTGProfileStore.saveDeck(playerProfile,{id:existing?.id,name,commander:prof.commander,partner:prof.partner||null,format:$('formatSelect')?.value||'commander',colorIdentity:(typeof MTGDeckTheme!=='undefined'?MTGDeckTheme.identityFromProfile(prof):[]),list:prof.cards,rawText:$('deck').value,mechanics:prof.tags,quickActions:(prof.capabilities||[]).map(c=>c.action),privacy:existing?.privacy||'private'});playerProfile=result.profile;saveProfile();
+ if(editingExisting){let saved=result.deck,editedWasActive=previousActive===saved.id;editingDeckId=null;editingPreviousActiveDeckId=null;$('saveDeckBtn').textContent='Save to Deck Library';if(editedWasActive||!previousActive){persistActiveDeckSelection(saved.id);hydrateProfileFromSavedDeck(saved)}else{persistActiveDeckSelection(previousActive);let prior=MTGProfileStore.activeDeck(playerProfile,previousActive);if(prior)hydrateProfileFromSavedDeck(prior)}$('setup').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();renderDeckLibrary();setTimeout(()=>openDeckVault(saved.id),0);toast('Verified deck changes saved.');return}
+ if(creatingNewDeckFromVault){let saved=result.deck;creatingNewDeckFromVault=false;editingPreviousActiveDeckId=null;$('saveDeckBtn').textContent='Save to Deck Library';if(previousActive&&MTGProfileStore.activeDeck(playerProfile,previousActive)){persistActiveDeckSelection(previousActive);hydrateProfileFromSavedDeck(MTGProfileStore.activeDeck(playerProfile,previousActive))}else{persistActiveDeckSelection(saved.id);hydrateProfileFromSavedDeck(saved)}$('setup').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();renderDeckLibrary();setTimeout(()=>openDeckVault(saved.id),0);toast('Verified deck stored in the Vault.');return}
+ persistActiveDeckSelection(result.deck.id);renderDeckLibrary();toast(result.created?'Deck saved.':'Deck version saved.')}
+$('saveDeckBtn').onclick=saveCurrentDeck;if($('deckVaultLock'))$('deckVaultLock').onclick=()=>openDeckVault();
+let prof={cards:[],mods:[],tags:[],capab
+
+
+TERM activeDeckTheme OFFSET 207963
+ingNewDeckFromVault=false;editingPreviousActiveDeckId=null;$('saveDeckBtn').textContent='Save to Deck Library';if(previousActive&&MTGProfileStore.activeDeck(playerProfile,previousActive)){persistActiveDeckSelection(previousActive);hydrateProfileFromSavedDeck(MTGProfileStore.activeDeck(playerProfile,previousActive))}else{persistActiveDeckSelection(saved.id);hydrateProfileFromSavedDeck(saved)}$('setup').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();renderDeckLibrary();setTimeout(()=>openDeckVault(saved.id),0);toast('Verified deck stored in the Vault.');return}
+ persistActiveDeckSelection(result.deck.id);renderDeckLibrary();toast(result.created?'Deck saved.':'Deck version saved.')}
+$('saveDeckBtn').onclick=saveCurrentDeck;if($('deckVaultLock'))$('deckVaultLock').onclick=()=>openDeckVault();
+let prof={cards:[],mods:[],tags:[],capabilities:[],cardMap:new Map()};let activeDeckTheme=null;function applyDeckTheme(){if(typeof MTGDeckTheme==='undefined')return null;activeDeckTheme=MTGDeckTheme.apply(prof,document);if(typeof updateRenderedScoreMix==='function')updateRenderedScoreMix(activeDeckTheme?.identity||[]);return activeDeckTheme}const parse=s=>s.split(/\n/).map(x=>x.trim()).filter(x=>/^\d+\s+/.test(x)).map(x=>{let m=x.match(/^(\d+)\s+(.+?)(?:\s+\([^)]+\)\s+\S+)?$/);return{q:+m[1],n:m[2],oracleText:'',typeLine:'',keywords:[],mechanics:[],behaviors:{}}});function profile(){const analyzed=MTGDeckEngine.analyzeDeck(prof.cards),names=new Set((analyzed.cards||[]).map(c=>String(c.n||'').trim().toLowerCase())),commanderCandidate=prof.commander||null,partnerCandidate=prof.partner||null,commander=commanderCandidate&&names.has(String(commanderCandidate).trim().toLowerCase())?commanderCandidate:null,partner=partnerCandidate&&names.has(String(partnerCandidate).trim().toLowerCase())?partnerCandidate:null;prof={...analyzed,commander,partner};prof.cardMap=new Map(prof.cards.map(c=>[c.n.toLowerCase(),c]));prof.mods=MTGDeckEngine.quickActionGroups(prof);applyDeckTheme()}function confFor(n){const card=prof.cardMap?.get(String(n).toLowerCase());if(!card)return['Manual','Card is not present in the loaded deck profile.'];if(card.behaviors&&Object.keys(card.behaviors).length&&card.behaviors.source!=='oracle-public')return['Verified','Tracked behavior comes from this deck card’s structured rules profile.'];if((card.oracleText||'').trim()){const recognized=Array.isArray(card.behaviors?.abilities)&&card.behaviors.abilities.length;return['Partial',recognized?'Public Oracle trigger behavior was recognized; unsupported or ambiguous effects still require player confirmation.':'Mechanics were detected from this deck card’s rules text; ambiguous choices still require confirmat
+
+
+TERM applyDeckTheme OFFSET 207993
+ingPreviousActiveDeckId=null;$('saveDeckBtn').textContent='Save to Deck Library';if(previousActive&&MTGProfileStore.activeDeck(playerProfile,previousActive)){persistActiveDeckSelection(previousActive);hydrateProfileFromSavedDeck(MTGProfileStore.activeDeck(playerProfile,previousActive))}else{persistActiveDeckSelection(saved.id);hydrateProfileFromSavedDeck(saved)}$('setup').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();renderDeckLibrary();setTimeout(()=>openDeckVault(saved.id),0);toast('Verified deck stored in the Vault.');return}
+ persistActiveDeckSelection(result.deck.id);renderDeckLibrary();toast(result.created?'Deck saved.':'Deck version saved.')}
+$('saveDeckBtn').onclick=saveCurrentDeck;if($('deckVaultLock'))$('deckVaultLock').onclick=()=>openDeckVault();
+let prof={cards:[],mods:[],tags:[],capabilities:[],cardMap:new Map()};let activeDeckTheme=null;function applyDeckTheme(){if(typeof MTGDeckTheme==='undefined')return null;activeDeckTheme=MTGDeckTheme.apply(prof,document);if(typeof updateRenderedScoreMix==='function')updateRenderedScoreMix(activeDeckTheme?.identity||[]);return activeDeckTheme}const parse=s=>s.split(/\n/).map(x=>x.trim()).filter(x=>/^\d+\s+/.test(x)).map(x=>{let m=x.match(/^(\d+)\s+(.+?)(?:\s+\([^)]+\)\s+\S+)?$/);return{q:+m[1],n:m[2],oracleText:'',typeLine:'',keywords:[],mechanics:[],behaviors:{}}});function profile(){const analyzed=MTGDeckEngine.analyzeDeck(prof.cards),names=new Set((analyzed.cards||[]).map(c=>String(c.n||'').trim().toLowerCase())),commanderCandidate=prof.commander||null,partnerCandidate=prof.partner||null,commander=commanderCandidate&&names.has(String(commanderCandidate).trim().toLowerCase())?commanderCandidate:null,partner=partnerCandidate&&names.has(String(partnerCandidate).trim().toLowerCase())?partnerCandidate:null;prof={...analyzed,commander,partner};prof.cardMap=new Map(prof.cards.map(c=>[c.n.toLowerCase(),c]));prof.mods=MTGDeckEngine.quickActionGroups(prof);applyDeckTheme()}function confFor(n){const card=prof.cardMap?.get(String(n).toLowerCase());if(!card)return['Manual','Card is not present in the loaded deck profile.'];if(card.behaviors&&Object.keys(card.behaviors).length&&card.behaviors.source!=='oracle-public')return['Verified','Tracked behavior comes from this deck card’s structured rules profile.'];if((card.oracleText||'').trim()){const recognized=Array.isArray(card.behaviors?.abilities)&&card.behaviors.abilities.length;return['Partial',recognized?'Public Oracle trigger behavior was recognized; unsupported or ambiguous effects still require player confirmation.':'Mechanics were detected from this deck card’s rules text; ambiguous choices still require confirmation.']}return['Manual','The d
+
+
+TERM MTGDeckTheme OFFSET 208020
+l;$('saveDeckBtn').textContent='Save to Deck Library';if(previousActive&&MTGProfileStore.activeDeck(playerProfile,previousActive)){persistActiveDeckSelection(previousActive);hydrateProfileFromSavedDeck(MTGProfileStore.activeDeck(playerProfile,previousActive))}else{persistActiveDeckSelection(saved.id);hydrateProfileFromSavedDeck(saved)}$('setup').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();renderDeckLibrary();setTimeout(()=>openDeckVault(saved.id),0);toast('Verified deck stored in the Vault.');return}
+ persistActiveDeckSelection(result.deck.id);renderDeckLibrary();toast(result.created?'Deck saved.':'Deck version saved.')}
+$('saveDeckBtn').onclick=saveCurrentDeck;if($('deckVaultLock'))$('deckVaultLock').onclick=()=>openDeckVault();
+let prof={cards:[],mods:[],tags:[],capabilities:[],cardMap:new Map()};let activeDeckTheme=null;function applyDeckTheme(){if(typeof MTGDeckTheme==='undefined')return null;activeDeckTheme=MTGDeckTheme.apply(prof,document);if(typeof updateRenderedScoreMix==='function')updateRenderedScoreMix(activeDeckTheme?.identity||[]);return activeDeckTheme}const parse=s=>s.split(/\n/).map(x=>x.trim()).filter(x=>/^\d+\s+/.test(x)).map(x=>{let m=x.match(/^(\d+)\s+(.+?)(?:\s+\([^)]+\)\s+\S+)?$/);return{q:+m[1],n:m[2],oracleText:'',typeLine:'',keywords:[],mechanics:[],behaviors:{}}});function profile(){const analyzed=MTGDeckEngine.analyzeDeck(prof.cards),names=new Set((analyzed.cards||[]).map(c=>String(c.n||'').trim().toLowerCase())),commanderCandidate=prof.commander||null,partnerCandidate=prof.partner||null,commander=commanderCandidate&&names.has(String(commanderCandidate).trim().toLowerCase())?commanderCandidate:null,partner=partnerCandidate&&names.has(String(partnerCandidate).trim().toLowerCase())?partnerCandidate:null;prof={...analyzed,commander,partner};prof.cardMap=new Map(prof.cards.map(c=>[c.n.toLowerCase(),c]));prof.mods=MTGDeckEngine.quickActionGroups(prof);applyDeckTheme()}function confFor(n){const card=prof.cardMap?.get(String(n).toLowerCase());if(!card)return['Manual','Card is not present in the loaded deck profile.'];if(card.behaviors&&Object.keys(card.behaviors).length&&card.behaviors.source!=='oracle-public')return['Verified','Tracked behavior comes from this deck card’s structured rules profile.'];if((card.oracleText||'').trim()){const recognized=Array.isArray(card.behaviors?.abilities)&&card.behaviors.abilities.length;return['Partial',recognized?'Public Oracle trigger behavior was recognized; unsupported or ambiguous effects still require player confirmation.':'Mechanics were detected from this deck card’s rules text; ambiguous choices still require confirmation.']}return['Manual','The deck list contains this ca
+
+
+TERM activeDeckTheme OFFSET 208059
+ Deck Library';if(previousActive&&MTGProfileStore.activeDeck(playerProfile,previousActive)){persistActiveDeckSelection(previousActive);hydrateProfileFromSavedDeck(MTGProfileStore.activeDeck(playerProfile,previousActive))}else{persistActiveDeckSelection(saved.id);hydrateProfileFromSavedDeck(saved)}$('setup').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();renderDeckLibrary();setTimeout(()=>openDeckVault(saved.id),0);toast('Verified deck stored in the Vault.');return}
+ persistActiveDeckSelection(result.deck.id);renderDeckLibrary();toast(result.created?'Deck saved.':'Deck version saved.')}
+$('saveDeckBtn').onclick=saveCurrentDeck;if($('deckVaultLock'))$('deckVaultLock').onclick=()=>openDeckVault();
+let prof={cards:[],mods:[],tags:[],capabilities:[],cardMap:new Map()};let activeDeckTheme=null;function applyDeckTheme(){if(typeof MTGDeckTheme==='undefined')return null;activeDeckTheme=MTGDeckTheme.apply(prof,document);if(typeof updateRenderedScoreMix==='function')updateRenderedScoreMix(activeDeckTheme?.identity||[]);return activeDeckTheme}const parse=s=>s.split(/\n/).map(x=>x.trim()).filter(x=>/^\d+\s+/.test(x)).map(x=>{let m=x.match(/^(\d+)\s+(.+?)(?:\s+\([^)]+\)\s+\S+)?$/);return{q:+m[1],n:m[2],oracleText:'',typeLine:'',keywords:[],mechanics:[],behaviors:{}}});function profile(){const analyzed=MTGDeckEngine.analyzeDeck(prof.cards),names=new Set((analyzed.cards||[]).map(c=>String(c.n||'').trim().toLowerCase())),commanderCandidate=prof.commander||null,partnerCandidate=prof.partner||null,commander=commanderCandidate&&names.has(String(commanderCandidate).trim().toLowerCase())?commanderCandidate:null,partner=partnerCandidate&&names.has(String(partnerCandidate).trim().toLowerCase())?partnerCandidate:null;prof={...analyzed,commander,partner};prof.cardMap=new Map(prof.cards.map(c=>[c.n.toLowerCase(),c]));prof.mods=MTGDeckEngine.quickActionGroups(prof);applyDeckTheme()}function confFor(n){const card=prof.cardMap?.get(String(n).toLowerCase());if(!card)return['Manual','Card is not present in the loaded deck profile.'];if(card.behaviors&&Object.keys(card.behaviors).length&&card.behaviors.source!=='oracle-public')return['Verified','Tracked behavior comes from this deck card’s structured rules profile.'];if((card.oracleText||'').trim()){const recognized=Array.isArray(card.behaviors?.abilities)&&card.behaviors.abilities.length;return['Partial',recognized?'Public Oracle trigger behavior was recognized; unsupported or ambiguous effects still require player confirmation.':'Mechanics were detected from this deck card’s rules text; ambiguous choices still require confirmation.']}return['Manual','The deck list contains this card, but no rules metadata is loaded yet. T
+
+
+TERM MTGDeckTheme OFFSET 208075
+f(previousActive&&MTGProfileStore.activeDeck(playerProfile,previousActive)){persistActiveDeckSelection(previousActive);hydrateProfileFromSavedDeck(MTGProfileStore.activeDeck(playerProfile,previousActive))}else{persistActiveDeckSelection(saved.id);hydrateProfileFromSavedDeck(saved)}$('setup').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();renderDeckLibrary();setTimeout(()=>openDeckVault(saved.id),0);toast('Verified deck stored in the Vault.');return}
+ persistActiveDeckSelection(result.deck.id);renderDeckLibrary();toast(result.created?'Deck saved.':'Deck version saved.')}
+$('saveDeckBtn').onclick=saveCurrentDeck;if($('deckVaultLock'))$('deckVaultLock').onclick=()=>openDeckVault();
+let prof={cards:[],mods:[],tags:[],capabilities:[],cardMap:new Map()};let activeDeckTheme=null;function applyDeckTheme(){if(typeof MTGDeckTheme==='undefined')return null;activeDeckTheme=MTGDeckTheme.apply(prof,document);if(typeof updateRenderedScoreMix==='function')updateRenderedScoreMix(activeDeckTheme?.identity||[]);return activeDeckTheme}const parse=s=>s.split(/\n/).map(x=>x.trim()).filter(x=>/^\d+\s+/.test(x)).map(x=>{let m=x.match(/^(\d+)\s+(.+?)(?:\s+\([^)]+\)\s+\S+)?$/);return{q:+m[1],n:m[2],oracleText:'',typeLine:'',keywords:[],mechanics:[],behaviors:{}}});function profile(){const analyzed=MTGDeckEngine.analyzeDeck(prof.cards),names=new Set((analyzed.cards||[]).map(c=>String(c.n||'').trim().toLowerCase())),commanderCandidate=prof.commander||null,partnerCandidate=prof.partner||null,commander=commanderCandidate&&names.has(String(commanderCandidate).trim().toLowerCase())?commanderCandidate:null,partner=partnerCandidate&&names.has(String(partnerCandidate).trim().toLowerCase())?partnerCandidate:null;prof={...analyzed,commander,partner};prof.cardMap=new Map(prof.cards.map(c=>[c.n.toLowerCase(),c]));prof.mods=MTGDeckEngine.quickActionGroups(prof);applyDeckTheme()}function confFor(n){const card=prof.cardMap?.get(String(n).toLowerCase());if(!card)return['Manual','Card is not present in the loaded deck profile.'];if(card.behaviors&&Object.keys(card.behaviors).length&&card.behaviors.source!=='oracle-public')return['Verified','Tracked behavior comes from this deck card’s structured rules profile.'];if((card.oracleText||'').trim()){const recognized=Array.isArray(card.behaviors?.abilities)&&card.behaviors.abilities.length;return['Partial',recognized?'Public Oracle trigger behavior was recognized; unsupported or ambiguous effects still require player confirmation.':'Mechanics were detected from this deck card’s rules text; ambiguous choices still require confirmation.']}return['Manual','The deck list contains this card, but no rules metadata is loaded yet. The engine wil
+
+
+TERM activeDeckTheme OFFSET 208178
+previousActive);hydrateProfileFromSavedDeck(MTGProfileStore.activeDeck(playerProfile,previousActive))}else{persistActiveDeckSelection(saved.id);hydrateProfileFromSavedDeck(saved)}$('setup').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();renderDeckLibrary();setTimeout(()=>openDeckVault(saved.id),0);toast('Verified deck stored in the Vault.');return}
+ persistActiveDeckSelection(result.deck.id);renderDeckLibrary();toast(result.created?'Deck saved.':'Deck version saved.')}
+$('saveDeckBtn').onclick=saveCurrentDeck;if($('deckVaultLock'))$('deckVaultLock').onclick=()=>openDeckVault();
+let prof={cards:[],mods:[],tags:[],capabilities:[],cardMap:new Map()};let activeDeckTheme=null;function applyDeckTheme(){if(typeof MTGDeckTheme==='undefined')return null;activeDeckTheme=MTGDeckTheme.apply(prof,document);if(typeof updateRenderedScoreMix==='function')updateRenderedScoreMix(activeDeckTheme?.identity||[]);return activeDeckTheme}const parse=s=>s.split(/\n/).map(x=>x.trim()).filter(x=>/^\d+\s+/.test(x)).map(x=>{let m=x.match(/^(\d+)\s+(.+?)(?:\s+\([^)]+\)\s+\S+)?$/);return{q:+m[1],n:m[2],oracleText:'',typeLine:'',keywords:[],mechanics:[],behaviors:{}}});function profile(){const analyzed=MTGDeckEngine.analyzeDeck(prof.cards),names=new Set((analyzed.cards||[]).map(c=>String(c.n||'').trim().toLowerCase())),commanderCandidate=prof.commander||null,partnerCandidate=prof.partner||null,commander=commanderCandidate&&names.has(String(commanderCandidate).trim().toLowerCase())?commanderCandidate:null,partner=partnerCandidate&&names.has(String(partnerCandidate).trim().toLowerCase())?partnerCandidate:null;prof={...analyzed,commander,partner};prof.cardMap=new Map(prof.cards.map(c=>[c.n.toLowerCase(),c]));prof.mods=MTGDeckEngine.quickActionGroups(prof);applyDeckTheme()}function confFor(n){const card=prof.cardMap?.get(String(n).toLowerCase());if(!card)return['Manual','Card is not present in the loaded deck profile.'];if(card.behaviors&&Object.keys(card.behaviors).length&&card.behaviors.source!=='oracle-public')return['Verified','Tracked behavior comes from this deck card’s structured rules profile.'];if((card.oracleText||'').trim()){const recognized=Array.isArray(card.behaviors?.abilities)&&card.behaviors.abilities.length;return['Partial',recognized?'Public Oracle trigger behavior was recognized; unsupported or ambiguous effects still require player confirmation.':'Mechanics were detected from this deck card’s rules text; ambiguous choices still require confirmation.']}return['Manual','The deck list contains this card, but no rules metadata is loaded yet. The engine will not invent card-specific behavior.']}
+function groupHtml(label,cards){let count=cards.reduce((a,c)=>a+c.
+
+
+TERM activeDeckTheme OFFSET 208216
+dDeck(MTGProfileStore.activeDeck(playerProfile,previousActive))}else{persistActiveDeckSelection(saved.id);hydrateProfileFromSavedDeck(saved)}$('setup').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();renderDeckLibrary();setTimeout(()=>openDeckVault(saved.id),0);toast('Verified deck stored in the Vault.');return}
+ persistActiveDeckSelection(result.deck.id);renderDeckLibrary();toast(result.created?'Deck saved.':'Deck version saved.')}
+$('saveDeckBtn').onclick=saveCurrentDeck;if($('deckVaultLock'))$('deckVaultLock').onclick=()=>openDeckVault();
+let prof={cards:[],mods:[],tags:[],capabilities:[],cardMap:new Map()};let activeDeckTheme=null;function applyDeckTheme(){if(typeof MTGDeckTheme==='undefined')return null;activeDeckTheme=MTGDeckTheme.apply(prof,document);if(typeof updateRenderedScoreMix==='function')updateRenderedScoreMix(activeDeckTheme?.identity||[]);return activeDeckTheme}const parse=s=>s.split(/\n/).map(x=>x.trim()).filter(x=>/^\d+\s+/.test(x)).map(x=>{let m=x.match(/^(\d+)\s+(.+?)(?:\s+\([^)]+\)\s+\S+)?$/);return{q:+m[1],n:m[2],oracleText:'',typeLine:'',keywords:[],mechanics:[],behaviors:{}}});function profile(){const analyzed=MTGDeckEngine.analyzeDeck(prof.cards),names=new Set((analyzed.cards||[]).map(c=>String(c.n||'').trim().toLowerCase())),commanderCandidate=prof.commander||null,partnerCandidate=prof.partner||null,commander=commanderCandidate&&names.has(String(commanderCandidate).trim().toLowerCase())?commanderCandidate:null,partner=partnerCandidate&&names.has(String(partnerCandidate).trim().toLowerCase())?partnerCandidate:null;prof={...analyzed,commander,partner};prof.cardMap=new Map(prof.cards.map(c=>[c.n.toLowerCase(),c]));prof.mods=MTGDeckEngine.quickActionGroups(prof);applyDeckTheme()}function confFor(n){const card=prof.cardMap?.get(String(n).toLowerCase());if(!card)return['Manual','Card is not present in the loaded deck profile.'];if(card.behaviors&&Object.keys(card.behaviors).length&&card.behaviors.source!=='oracle-public')return['Verified','Tracked behavior comes from this deck card’s structured rules profile.'];if((card.oracleText||'').trim()){const recognized=Array.isArray(card.behaviors?.abilities)&&card.behaviors.abilities.length;return['Partial',recognized?'Public Oracle trigger behavior was recognized; unsupported or ambiguous effects still require player confirmation.':'Mechanics were detected from this deck card’s rules text; ambiguous choices still require confirmation.']}return['Manual','The deck list contains this card, but no rules metadata is loaded yet. The engine will not invent card-specific behavior.']}
+function groupHtml(label,cards){let count=cards.reduce((a,c)=>a+c.q,0),id='g'+label.toLowerCase();return
+
+
+TERM applyDeckTheme OFFSET 209055
+updateRenderedScoreMix(activeDeckTheme?.identity||[]);return activeDeckTheme}const parse=s=>s.split(/\n/).map(x=>x.trim()).filter(x=>/^\d+\s+/.test(x)).map(x=>{let m=x.match(/^(\d+)\s+(.+?)(?:\s+\([^)]+\)\s+\S+)?$/);return{q:+m[1],n:m[2],oracleText:'',typeLine:'',keywords:[],mechanics:[],behaviors:{}}});function profile(){const analyzed=MTGDeckEngine.analyzeDeck(prof.cards),names=new Set((analyzed.cards||[]).map(c=>String(c.n||'').trim().toLowerCase())),commanderCandidate=prof.commander||null,partnerCandidate=prof.partner||null,commander=commanderCandidate&&names.has(String(commanderCandidate).trim().toLowerCase())?commanderCandidate:null,partner=partnerCandidate&&names.has(String(partnerCandidate).trim().toLowerCase())?partnerCandidate:null;prof={...analyzed,commander,partner};prof.cardMap=new Map(prof.cards.map(c=>[c.n.toLowerCase(),c]));prof.mods=MTGDeckEngine.quickActionGroups(prof);applyDeckTheme()}function confFor(n){const card=prof.cardMap?.get(String(n).toLowerCase());if(!card)return['Manual','Card is not present in the loaded deck profile.'];if(card.behaviors&&Object.keys(card.behaviors).length&&card.behaviors.source!=='oracle-public')return['Verified','Tracked behavior comes from this deck card’s structured rules profile.'];if((card.oracleText||'').trim()){const recognized=Array.isArray(card.behaviors?.abilities)&&card.behaviors.abilities.length;return['Partial',recognized?'Public Oracle trigger behavior was recognized; unsupported or ambiguous effects still require player confirmation.':'Mechanics were detected from this deck card’s rules text; ambiguous choices still require confirmation.']}return['Manual','The deck list contains this card, but no rules metadata is loaded yet. The engine will not invent card-specific behavior.']}
+function groupHtml(label,cards){let count=cards.reduce((a,c)=>a+c.q,0),id='g'+label.toLowerCase();return '<div class="vg"><button class="vh" data-vg="'+id+'"><span>'+label+' · '+count+'</span><span>⌄</span></button><div id="'+id+'" class="vb h">'+(cards.length?cards.map(c=>'<div class="vc"><b>'+c.q+'× '+c.n+'</b><small>'+confFor(c.n)[1]+'</small></div>').join(''):'<div class="vc">None</div>')+'</div></div>'}
+function renderLegality(){if(typeof MTGLegality==='undefined'||!$('legalityReport'))return null;let format=$('formatSelect')?.value||'commander',r=MTGLegality.validate(prof.cards,{format,commander:prof.commander,partner:prof.partner});prof.legality=r;let cls=r.status,label=r.status==='legal'?'LEGAL ✓':r.status==='illegal'?'ILLEGAL ✕':r.status==='warning'?'WARNING ⚠️':'UNVERIFIED ?';let issues=r.issues.slice(0,12).map(x=>'<div class="legalityIssue"><b>'+esc(x.card)+' · '+x.severity.toUpperCase()+'</b><small>'+esc(x.reason)+'<
+
+
+TERM applyDeckTheme OFFSET 215045
+.innerHTML='<option value="">Choose your commander</option>'+cardOpts;partnerSel.innerHTML='<option value="">None</option>'+cardOpts;$('commanderPick').classList.remove('h');if(prof.partner&&prof.cards.some(c=>c.n===prof.partner))partnerSel.value=prof.partner;if(prof.commander&&prof.cards.some(c=>c.n===prof.commander)){cmdSel.value=prof.commander;$('commanderInfo').innerHTML='<span class="cmdBadge">COMMANDER</span> '+prof.commander}else $('commanderInfo').textContent='Choose the card the app should track as your commander.';renderLegality();$('vr').classList.remove('h')};
+$('commanderSelect').onchange=()=>{prof.commander=$('commanderSelect').value||null;$('commanderInfo').innerHTML=prof.commander?'<span class="cmdBadge">COMMANDER</span> '+prof.commander+(prof.partner?' <span class="cmdBadge">CO-COMMANDER</span> '+prof.partner:''):'Choose the card the app should track as your commander.';applyDeckTheme();renderLegality()};$('partnerSelect').onchange=()=>{prof.partner=$('partnerSelect').value||null;$('commanderInfo').innerHTML=prof.commander?'<span class="cmdBadge">COMMANDER</span> '+prof.commander+(prof.partner?' <span class="cmdBadge">CO-COMMANDER</span> '+prof.partner:''):'Choose the card the app should track as your commander.';applyDeckTheme();renderLegality()};$('formatSelect').onchange=()=>{if(prof.cards?.length)renderLegality()};
+$('cont').onclick=()=>{
+ if(editingDeckId||creatingNewDeckFromVault)return toast('Verify and save this deck before returning to the lobby.');
+ if(!$('commanderSelect').value)return toast('Choose your commander first.');prof.commander=$('commanderSelect').value;prof.partner=$('partnerSelect').value||null;
+ const isAccount=playerProfile?.auth?.mode==='authenticated'&&MTGCloudAccount?.signedIn?.();
+ if(playerProfile&&prof.cards?.length&&!activeDeckId){
+   let result=MTGProfileStore.saveDeck(playerProfile,{name:prof.commander||(isAccount?'My Deck':'Guest Deck'),commander:prof.commander,partner:prof.partner||null,format:$('formatSelect')?.value||'commander',colorIdentity:(typeof MTGDeckTheme!=='undefined'?MTGDeckTheme.identityFromProfile(prof):[]),list:prof.cards,rawText:$('deck').value,mechanics:prof.tags,quickActions:(prof.capabilities||[]).map(c=>c.action),privacy:'private'});playerProfile=result.profile;activeDeckId=result.deck.id;
+   if(isAccount)localStorage.setItem('mtgte_active_deck_'+playerProfile.id,activeDeckId);else sessionStorage.setItem('mtgte_guest_active_deck',activeDeckId);saveProfile();
+ }
+ if(isAccount&&!playerProfile.onboardingComplete){playerProfile.onboardingComplete=true;cloudOnboardingComplete=true;saveProfile();MTGCloudAccount.setOnboardingComplete(true,playerProfile).catch(e=>console.warn('Could not mark onboardin
+
+
+TERM applyDeckTheme OFFSET 215395
+('commanderInfo').innerHTML='<span class="cmdBadge">COMMANDER</span> '+prof.commander}else $('commanderInfo').textContent='Choose the card the app should track as your commander.';renderLegality();$('vr').classList.remove('h')};
+$('commanderSelect').onchange=()=>{prof.commander=$('commanderSelect').value||null;$('commanderInfo').innerHTML=prof.commander?'<span class="cmdBadge">COMMANDER</span> '+prof.commander+(prof.partner?' <span class="cmdBadge">CO-COMMANDER</span> '+prof.partner:''):'Choose the card the app should track as your commander.';applyDeckTheme();renderLegality()};$('partnerSelect').onchange=()=>{prof.partner=$('partnerSelect').value||null;$('commanderInfo').innerHTML=prof.commander?'<span class="cmdBadge">COMMANDER</span> '+prof.commander+(prof.partner?' <span class="cmdBadge">CO-COMMANDER</span> '+prof.partner:''):'Choose the card the app should track as your commander.';applyDeckTheme();renderLegality()};$('formatSelect').onchange=()=>{if(prof.cards?.length)renderLegality()};
+$('cont').onclick=()=>{
+ if(editingDeckId||creatingNewDeckFromVault)return toast('Verify and save this deck before returning to the lobby.');
+ if(!$('commanderSelect').value)return toast('Choose your commander first.');prof.commander=$('commanderSelect').value;prof.partner=$('partnerSelect').value||null;
+ const isAccount=playerProfile?.auth?.mode==='authenticated'&&MTGCloudAccount?.signedIn?.();
+ if(playerProfile&&prof.cards?.length&&!activeDeckId){
+   let result=MTGProfileStore.saveDeck(playerProfile,{name:prof.commander||(isAccount?'My Deck':'Guest Deck'),commander:prof.commander,partner:prof.partner||null,format:$('formatSelect')?.value||'commander',colorIdentity:(typeof MTGDeckTheme!=='undefined'?MTGDeckTheme.identityFromProfile(prof):[]),list:prof.cards,rawText:$('deck').value,mechanics:prof.tags,quickActions:(prof.capabilities||[]).map(c=>c.action),privacy:'private'});playerProfile=result.profile;activeDeckId=result.deck.id;
+   if(isAccount)localStorage.setItem('mtgte_active_deck_'+playerProfile.id,activeDeckId);else sessionStorage.setItem('mtgte_guest_active_deck',activeDeckId);saveProfile();
+ }
+ if(isAccount&&!playerProfile.onboardingComplete){playerProfile.onboardingComplete=true;cloudOnboardingComplete=true;saveProfile();MTGCloudAccount.setOnboardingComplete(true,playerProfile).catch(e=>console.warn('Could not mark onboarding complete',e));}
+ else if(!isAccount&&playerProfile&&!playerProfile.onboardingComplete){playerProfile.onboardingComplete=true;saveProfile();}
+ applyDeckTheme();$('setup').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();slots();renderProfile();renderFriends();renderDeckLibrary();consumeInviteLink()
+};
+let phase109DisplayReq
+
+
+TERM MTGDeckTheme OFFSET 216186
+="cmdBadge">CO-COMMANDER</span> '+prof.partner:''):'Choose the card the app should track as your commander.';applyDeckTheme();renderLegality()};$('formatSelect').onchange=()=>{if(prof.cards?.length)renderLegality()};
+$('cont').onclick=()=>{
+ if(editingDeckId||creatingNewDeckFromVault)return toast('Verify and save this deck before returning to the lobby.');
+ if(!$('commanderSelect').value)return toast('Choose your commander first.');prof.commander=$('commanderSelect').value;prof.partner=$('partnerSelect').value||null;
+ const isAccount=playerProfile?.auth?.mode==='authenticated'&&MTGCloudAccount?.signedIn?.();
+ if(playerProfile&&prof.cards?.length&&!activeDeckId){
+   let result=MTGProfileStore.saveDeck(playerProfile,{name:prof.commander||(isAccount?'My Deck':'Guest Deck'),commander:prof.commander,partner:prof.partner||null,format:$('formatSelect')?.value||'commander',colorIdentity:(typeof MTGDeckTheme!=='undefined'?MTGDeckTheme.identityFromProfile(prof):[]),list:prof.cards,rawText:$('deck').value,mechanics:prof.tags,quickActions:(prof.capabilities||[]).map(c=>c.action),privacy:'private'});playerProfile=result.profile;activeDeckId=result.deck.id;
+   if(isAccount)localStorage.setItem('mtgte_active_deck_'+playerProfile.id,activeDeckId);else sessionStorage.setItem('mtgte_guest_active_deck',activeDeckId);saveProfile();
+ }
+ if(isAccount&&!playerProfile.onboardingComplete){playerProfile.onboardingComplete=true;cloudOnboardingComplete=true;saveProfile();MTGCloudAccount.setOnboardingComplete(true,playerProfile).catch(e=>console.warn('Could not mark onboarding complete',e));}
+ else if(!isAccount&&playerProfile&&!playerProfile.onboardingComplete){playerProfile.onboardingComplete=true;saveProfile();}
+ applyDeckTheme();$('setup').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();slots();renderProfile();renderFriends();renderDeckLibrary();consumeInviteLink()
+};
+let phase109DisplayRequested=typeof MTGSharedDisplay!=='undefined'&&MTGSharedDisplay.displayRequested(location),phase109DisplayRoom=typeof MTGSharedDisplay!=='undefined'?(MTGSharedDisplay.parseDisplayRoom(location)||''):'',sharedDisplayMode=!!phase109DisplayRequested,sharedDisplayWakeLock=null;let battleStarted=false;let me=sharedDisplayMode?0:1,HST=0,peer=null,cc=null,cs=new Map(),activeRoom='',soloTestMode=false,soloNpcTimer=null,lastNetSeen=Date.now(),authoritySyncRevision=0,authorityLobbyRevision=0,lastLobbyRevision=0,clientConnectionGuard=typeof MTGAuthoritativeSync!=='undefined'?MTGAuthoritativeSync.connectionGuard():null,pendingCommands=new Map(),clientId=sharedDisplayMode?('display_'+(crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2))):(localStorage.getItem('mtgte_clie
+
+
+TERM MTGDeckTheme OFFSET 216213
+pan> '+prof.partner:''):'Choose the card the app should track as your commander.';applyDeckTheme();renderLegality()};$('formatSelect').onchange=()=>{if(prof.cards?.length)renderLegality()};
+$('cont').onclick=()=>{
+ if(editingDeckId||creatingNewDeckFromVault)return toast('Verify and save this deck before returning to the lobby.');
+ if(!$('commanderSelect').value)return toast('Choose your commander first.');prof.commander=$('commanderSelect').value;prof.partner=$('partnerSelect').value||null;
+ const isAccount=playerProfile?.auth?.mode==='authenticated'&&MTGCloudAccount?.signedIn?.();
+ if(playerProfile&&prof.cards?.length&&!activeDeckId){
+   let result=MTGProfileStore.saveDeck(playerProfile,{name:prof.commander||(isAccount?'My Deck':'Guest Deck'),commander:prof.commander,partner:prof.partner||null,format:$('formatSelect')?.value||'commander',colorIdentity:(typeof MTGDeckTheme!=='undefined'?MTGDeckTheme.identityFromProfile(prof):[]),list:prof.cards,rawText:$('deck').value,mechanics:prof.tags,quickActions:(prof.capabilities||[]).map(c=>c.action),privacy:'private'});playerProfile=result.profile;activeDeckId=result.deck.id;
+   if(isAccount)localStorage.setItem('mtgte_active_deck_'+playerProfile.id,activeDeckId);else sessionStorage.setItem('mtgte_guest_active_deck',activeDeckId);saveProfile();
+ }
+ if(isAccount&&!playerProfile.onboardingComplete){playerProfile.onboardingComplete=true;cloudOnboardingComplete=true;saveProfile();MTGCloudAccount.setOnboardingComplete(true,playerProfile).catch(e=>console.warn('Could not mark onboarding complete',e));}
+ else if(!isAccount&&playerProfile&&!playerProfile.onboardingComplete){playerProfile.onboardingComplete=true;saveProfile();}
+ applyDeckTheme();$('setup').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();slots();renderProfile();renderFriends();renderDeckLibrary();consumeInviteLink()
+};
+let phase109DisplayRequested=typeof MTGSharedDisplay!=='undefined'&&MTGSharedDisplay.displayRequested(location),phase109DisplayRoom=typeof MTGSharedDisplay!=='undefined'?(MTGSharedDisplay.parseDisplayRoom(location)||''):'',sharedDisplayMode=!!phase109DisplayRequested,sharedDisplayWakeLock=null;let battleStarted=false;let me=sharedDisplayMode?0:1,HST=0,peer=null,cc=null,cs=new Map(),activeRoom='',soloTestMode=false,soloNpcTimer=null,lastNetSeen=Date.now(),authoritySyncRevision=0,authorityLobbyRevision=0,lastLobbyRevision=0,clientConnectionGuard=typeof MTGAuthoritativeSync!=='undefined'?MTGAuthoritativeSync.connectionGuard():null,pendingCommands=new Map(),clientId=sharedDisplayMode?('display_'+(crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2))):(localStorage.getItem('mtgte_client_id')||('c_'+(crypto.rand
+
+
+TERM applyDeckTheme OFFSET 217003
+f.partner||null,format:$('formatSelect')?.value||'commander',colorIdentity:(typeof MTGDeckTheme!=='undefined'?MTGDeckTheme.identityFromProfile(prof):[]),list:prof.cards,rawText:$('deck').value,mechanics:prof.tags,quickActions:(prof.capabilities||[]).map(c=>c.action),privacy:'private'});playerProfile=result.profile;activeDeckId=result.deck.id;
+   if(isAccount)localStorage.setItem('mtgte_active_deck_'+playerProfile.id,activeDeckId);else sessionStorage.setItem('mtgte_guest_active_deck',activeDeckId);saveProfile();
+ }
+ if(isAccount&&!playerProfile.onboardingComplete){playerProfile.onboardingComplete=true;cloudOnboardingComplete=true;saveProfile();MTGCloudAccount.setOnboardingComplete(true,playerProfile).catch(e=>console.warn('Could not mark onboarding complete',e));}
+ else if(!isAccount&&playerProfile&&!playerProfile.onboardingComplete){playerProfile.onboardingComplete=true;saveProfile();}
+ applyDeckTheme();$('setup').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();slots();renderProfile();renderFriends();renderDeckLibrary();consumeInviteLink()
+};
+let phase109DisplayRequested=typeof MTGSharedDisplay!=='undefined'&&MTGSharedDisplay.displayRequested(location),phase109DisplayRoom=typeof MTGSharedDisplay!=='undefined'?(MTGSharedDisplay.parseDisplayRoom(location)||''):'',sharedDisplayMode=!!phase109DisplayRequested,sharedDisplayWakeLock=null;let battleStarted=false;let me=sharedDisplayMode?0:1,HST=0,peer=null,cc=null,cs=new Map(),activeRoom='',soloTestMode=false,soloNpcTimer=null,lastNetSeen=Date.now(),authoritySyncRevision=0,authorityLobbyRevision=0,lastLobbyRevision=0,clientConnectionGuard=typeof MTGAuthoritativeSync!=='undefined'?MTGAuthoritativeSync.connectionGuard():null,pendingCommands=new Map(),clientId=sharedDisplayMode?('display_'+(crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2))):(localStorage.getItem('mtgte_client_id')||('c_'+(crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2))));if(!sharedDisplayMode)localStorage.setItem('mtgte_client_id',clientId);let roomDescriptor=null,transportSession=null,transportStats={accepted:0,rejected:0,duplicates:0,authorityRejects:0,staleRejects:0,lastReason:null},diagnosticLog=[];let deliveryQueue=typeof MTGReliableDelivery!=='undefined'?MTGReliableDelivery.createQueue({onEvent:e=>{if(typeof MTGObservability!=='undefined'&&['RETRY','TIMEOUT','ACKED','SUPERSEDED'].includes(e.code))diagnosticLog=MTGObservability.append(diagnosticLog,{category:'transport',level:e.code==='TIMEOUT'?'warning':'info',code:'DELIVERY_'+e.code,message:'Reliable delivery '+e.code.toLowerCase(),meta:e})}}):null;function transportSessionId(){return'room:'+String(activeRoom||'offline')}funct
+
+
+TERM MTGDeckTheme OFFSET 237128
+ortState='unavailable';netState('LOCAL MODE',1);runRuntimeChecks()};document.head.append(s)}
+function roomIdentity(){return typeof MTGLiveReconnect!=='undefined'&&activeRoom?MTGLiveReconnect.loadIdentity(localStorage,activeRoom):null}
+function adoptRoomDescriptor(d){if(!d)return;roomDescriptor=d;transportSession=null}
+function saveRoomIdentity(seat,seatToken,role='player'){if(typeof MTGLiveReconnect==='undefined'||!activeRoom||!seatToken)return;MTGLiveReconnect.saveIdentity(localStorage,{room:activeRoom,playerId:clientId,seat,seatToken,role,epoch:roomDescriptor?.epoch||0})}
+function localDeckCardCount(){let n=(prof?.cards||[]).reduce((a,c)=>a+Math.max(0,Number(c.q||1)),0);return n||100}function localCommanderCount(){let d=currentSavedDeck();return Math.max(1,Number(d?.partner?2:1))}function localDeckColorIdentity(){let d=currentSavedDeck(),ids=d?deckIdentity(d):[];if(!ids.length&&typeof MTGDeckTheme!=='undefined'&&prof)try{ids=MTGDeckTheme.identityFromProfile(prof)}catch{}return[...new Set((ids||[]).map(x=>String(x||'').toUpperCase()).filter(x=>'WUBRG'.includes(x)))]}function localProfilePresence(){return{name:playerProfile?.name||'Player',commander:commanderName(),avatarId:playerProfile?.avatarId||MTGAvatars.DEFAULT_ID,deckName:publicDeckName(),deckSize:localDeckCardCount(),commanderCount:localCommanderCount(),deckColorIdentity:localDeckColorIdentity()}}
+function syncLocalProfilePresence({broadcast=true}={}){
+  if(!playerProfile)return false;
+  let presence=localProfilePresence(),self=players.find(p=>Number(p.id)===Number(me));
+  if(self){self.name=presence.name;self.commander=presence.commander;self.avatarId=presence.avatarId;self.deckName=presence.deckName;self.deckSize=presence.deckSize;self.commanderCount=presence.commanderCount;self.deckColorIdentity=presence.deckColorIdentity.slice();}
+  try{slots()}catch{}
+  if(battleStarted){try{hud();sync()}catch{}}
+  else{try{updateLobbyStatus()}catch{}}
+  if(broadcast&&activeRoom){
+    if(HST){try{send({t:'players',players})}catch{}}
+    else if(cc&&cc.open){try{cc.send({t:'profile_update',...presence})}catch{}}
+  }
+  return true;
+}
+function clientHello(){if(sharedDisplayMode)return{t:'hello',cid:clientId,role:'spectator',displayMode:'shared-table',name:'Shared Table Display'};let id=roomIdentity(),fp=typeof MTGStateVerify!=='undefined'?MTGStateVerify.fingerprint(st):{seq:0,hash:null};if(id&&id.seatToken&&typeof MTGLiveReconnect!=='undefined')return MTGLiveReconnect.resumeHello({room:activeRoom,identity:id,peerId:peer?.id||'',fingerprint:fp,profile:localProfilePresence()});return{t:'hello',cid:clientId,...localProfilePresence()}}
+function bindConn(x,id){hardenBattleConnection(x);let generation=(!HST&&id==null&&clientCo
+
+
+TERM MTGDeckTheme OFFSET 237169
+DE',1);runRuntimeChecks()};document.head.append(s)}
+function roomIdentity(){return typeof MTGLiveReconnect!=='undefined'&&activeRoom?MTGLiveReconnect.loadIdentity(localStorage,activeRoom):null}
+function adoptRoomDescriptor(d){if(!d)return;roomDescriptor=d;transportSession=null}
+function saveRoomIdentity(seat,seatToken,role='player'){if(typeof MTGLiveReconnect==='undefined'||!activeRoom||!seatToken)return;MTGLiveReconnect.saveIdentity(localStorage,{room:activeRoom,playerId:clientId,seat,seatToken,role,epoch:roomDescriptor?.epoch||0})}
+function localDeckCardCount(){let n=(prof?.cards||[]).reduce((a,c)=>a+Math.max(0,Number(c.q||1)),0);return n||100}function localCommanderCount(){let d=currentSavedDeck();return Math.max(1,Number(d?.partner?2:1))}function localDeckColorIdentity(){let d=currentSavedDeck(),ids=d?deckIdentity(d):[];if(!ids.length&&typeof MTGDeckTheme!=='undefined'&&prof)try{ids=MTGDeckTheme.identityFromProfile(prof)}catch{}return[...new Set((ids||[]).map(x=>String(x||'').toUpperCase()).filter(x=>'WUBRG'.includes(x)))]}function localProfilePresence(){return{name:playerProfile?.name||'Player',commander:commanderName(),avatarId:playerProfile?.avatarId||MTGAvatars.DEFAULT_ID,deckName:publicDeckName(),deckSize:localDeckCardCount(),commanderCount:localCommanderCount(),deckColorIdentity:localDeckColorIdentity()}}
+function syncLocalProfilePresence({broadcast=true}={}){
+  if(!playerProfile)return false;
+  let presence=localProfilePresence(),self=players.find(p=>Number(p.id)===Number(me));
+  if(self){self.name=presence.name;self.commander=presence.commander;self.avatarId=presence.avatarId;self.deckName=presence.deckName;self.deckSize=presence.deckSize;self.commanderCount=presence.commanderCount;self.deckColorIdentity=presence.deckColorIdentity.slice();}
+  try{slots()}catch{}
+  if(battleStarted){try{hud();sync()}catch{}}
+  else{try{updateLobbyStatus()}catch{}}
+  if(broadcast&&activeRoom){
+    if(HST){try{send({t:'players',players})}catch{}}
+    else if(cc&&cc.open){try{cc.send({t:'profile_update',...presence})}catch{}}
+  }
+  return true;
+}
+function clientHello(){if(sharedDisplayMode)return{t:'hello',cid:clientId,role:'spectator',displayMode:'shared-table',name:'Shared Table Display'};let id=roomIdentity(),fp=typeof MTGStateVerify!=='undefined'?MTGStateVerify.fingerprint(st):{seq:0,hash:null};if(id&&id.seatToken&&typeof MTGLiveReconnect!=='undefined')return MTGLiveReconnect.resumeHello({room:activeRoom,identity:id,peerId:peer?.id||'',fingerprint:fp,profile:localProfilePresence()});return{t:'hello',cid:clientId,...localProfilePresence()}}
+function bindConn(x,id){hardenBattleConnection(x);let generation=(!HST&&id==null&&clientConnectionGuard)?clientConnectionGuard.next
+
+
+TERM showLobbyPage OFFSET 272259
+lay from that device.</div><button id="copySharedDisplayLink" class="choice"><b>COPY DISPLAY LINK</b><small>'+esc(room)+' · PUBLIC / READ ONLY</small></button><button id="openSharedDisplayLink" class="choice"><b>OPEN DISPLAY PREVIEW</b></button></div>';$('copySharedDisplayLink').onclick=async()=>{try{await navigator.clipboard.writeText(u);toast('Shared display link copied.')}catch{prompt('Copy this shared display link',u)}};$('openSharedDisplayLink').onclick=()=>window.open(u,'_blank','noopener')}
+if($('sharedDisplayConnect'))$('sharedDisplayConnect').onclick=()=>connectSharedDisplay($('sharedDisplayRoomInput').value);if($('sharedDisplayRoomInput'))$('sharedDisplayRoomInput').addEventListener('keydown',e=>{if(e.key==='Enter')connectSharedDisplay(e.currentTarget.value)});if($('sharedDisplayLinkBtn'))$('sharedDisplayLinkBtn').onclick=showSharedDisplayLink;
+$('battleLobbyBtn').onclick=()=>{showLobbyPage();toast('Game connection is still active.');};
+$('host').onclick=()=>{soloTestMode=false;HST=1;$('room').classList.remove('h');let go=()=>{if(!window.Peer){if(peerTransportState==='unavailable'){HST=0;netState('LOCAL MODE',1);return toast('Multiplayer transport unavailable.')}return setTimeout(go,400)}let r=code();activeRoom=r.toLowerCase();roomDescriptor=null;transportSession=null;authoritySyncRevision=1;authorityLobbyRevision=1;lastLobbyRevision=1;$('code').textContent=r;players[0].name=playerProfile?.name||'Player 1';players[0].commander=commanderName();players[0].avatarId=playerProfile?.avatarId||MTGAvatars.DEFAULT_ID;players[0].deckName=publicDeckName();players[0].deckSize=localDeckCardCount();players[0].commanderCount=localCommanderCount();players[0].deckColorIdentity=localDeckColorIdentity();if(typeof MTGRoomSession!=='undefined')roomDescriptor=MTGRoomSession.createDescriptor({room:activeRoom,sessionId:transportSessionId(),matchId:st?.meta?.matchId||null,hostPlayerId:clientId,hostPeerId:'mtgte-'+activeRoom,participants:[{playerId:clientId,peerId:'mtgte-'+activeRoom,seat:1,role:'player'}],epoch:1});players[0].cid=clientId;let hp=MTGRoomSession.participantByPlayer(roomDescriptor,clientId);if(hp?.seatToken)saveRoomIdentity(1,hp.seatToken,'player');transportSession=null;refreshPresence();startLobbyAmbience();peer=new Peer('mtgte-'+activeRoom);peer.on('open',()=>netState('HOST ONLINE'));peer.on('disconnected',()=>netState('RECONNECTING',1));peer.on('error',e=>{if(e?.type==='unavailable-id')demoteFormerHost();else netState('HOST ERROR',1)});peer.on('connection',bindHostIncoming)};go()};function openJoinRoomPanel(){soloTestMode=false;startLobbyAmbience();$('room').classList.remove('h');$('jb').classList.remove('h')}function connectToRoomCode(raw){let roomInput=String(r
+
+
+TERM showLobbyPage OFFSET 277327
+r=String(coCommanderName()||'').trim().toLowerCase();if(primary&&q===primary)return{ownerId:Number(owner),commanderId:MTGEngine.commanderKey(owner),name:String(commanderName())};if(partner&&q===partner)return{ownerId:Number(owner),commanderId:MTGEngine.commanderKey(owner,'player_'+Number(owner)+'_commander_2'),name:String(coCommanderName())};return null}
+function showBattlePage(){
+ $('setup').classList.add('h');$('lobby').classList.add('h');$('hostControl').classList.add('h');$('game').classList.remove('h');$('app').classList.add('battleActive');$('hudModeBtn').classList.toggle('h',!HST);
+ $('battleRoomCode').textContent=(activeRoom||'------').toUpperCase();$('battleSeat').textContent=me;$('battleCommander').textContent=(commanderName()||'NO COMMANDER').toUpperCase();setPlayerHudPage(playerHudPage||'home');
+ if(location.hash!=='#battle')history.replaceState(null,'','#battle')
+}
+function showLobbyPage(){$('app')?.classList.remove('battleActive');
+ $('game').classList.add('h');$('hostControl').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();
+ if(location.hash==='#battle')history.replaceState(null,'',location.pathname+location.search+'#lobby');
+ slots();consumeInviteLink()
+}
+function introRosterHtml(){return players.filter(p=>p.connected!==false).map(p=>'<div class="battleIntroPlayer"><div class="battleIntroAvatar">'+rosterAvatar(p)+'</div><div><div class="battleIntroName">'+(p.name||('Player '+p.id))+'</div><div class="battleIntroCmd">'+(p.commander||'No commander')+(p.deckName?' · '+p.deckName:'')+'</div></div></div>').join('')}
+let introTimer=null,introDone=null;function finishBattleIntro(){clearTimeout(introTimer);$('battleIntro').classList.remove('on');$('battleIntro').classList.add('h');$('battleIntro').setAttribute('aria-hidden','true');showBattlePage();hud();sync();$('bt').classList.add('on');setTimeout(()=>$('bt').classList.remove('on'),950);stopLobbyAmbience();cue('battle');feed('All combatants were ready. The battle began.');if(introDone){let fn=introDone;introDone=null;fn()}}
+function playBattleIntro(done){introDone=done||null;let ov=$('battleIntro');$('setup').classList.add('h');$('lobby').classList.add('h');$('game').classList.add('h');$('hostControl').classList.add('h');$('battleIntroRoster').innerHTML=introRosterHtml();$('battleIntroCall').textContent='All combatants are ready.';$('battleIntroFinal').classList.remove('show');ov.classList.remove('h');ov.setAttribute('aria-hidden','false');requestAnimationFrame(()=>ov.classList.add('on'));MTGAnnouncerEngine.event('battleEntry',{});setTimeout(()=>{$('battleIntroCall').textContent='The battlefield waits.'},1250);setTimeout(()=>{$('battleIntroFinal').classList.add('show');$('battleI
+
+
+TERM applyDeckTheme OFFSET 373285
+layer=Number(sourcePlayer);let p=players.find(x=>Number(x.id)===sourcePlayer),registered=registeredCommandersFor(sourcePlayer),key=String(commanderId||MTGEngine.commanderKey(sourcePlayer)),name=registered.find(c=>String(c.id)===key)?.name||p?.commander||('Player '+sourcePlayer+' commander'),current=(st.cmd[me]||{})[key]||0;let raw=prompt(name+' damage to you\nCurrent commander damage: '+current,'1');if(raw===null)return;let amount=Number(raw);if(!Number.isFinite(amount)||amount<=0)return toast('Enter damage greater than 0.');cmd('commanderDamage',{from:sourcePlayer,commanderId:key,amount,damageType:'combat'})}
+let lastHudLife=null;function sync(){document.body.classList.toggle('hostAuthority',!!HST||!!soloTestMode);let life=st.life[me]??40;if(lastHudLife!==null&&Number(life)!==Number(lastHudLife))flash(Number(life)-Number(lastHudLife));lastHudLife=Number(life);$('life').textContent=life;applyDeckTheme();$('turn').textContent='TURN '+st.turn+' · P'+st.active;$('phase').textContent=st.phase;let p=players.find(x=>x.id===me),nm=p?.name||playerProfile?.name||('Player '+me);$('hudName').textContent=nm;$('hudAvatar').innerHTML=avatarMarkup(playerProfile?.avatarId||MTGAvatars.DEFAULT_ID);$('battleCommander').textContent=p?.commander||commanderName()||'NO COMMANDER';let pv=typeof MTGSmartPriority!=='undefined'?MTGSmartPriority.view(st,players,me):null,priority=pv?.holder??st.priority??st.respond??null,pp=$('priorityPill');pp.textContent=pv?.label||(priority===me?'YOU HAVE PRIORITY':priority?'P'+priority+' HAS PRIORITY':(st.active===me?'YOUR TURN':'WAITING'));pp.title='Smart Priority · '+String(pv?.mode||st.smartPriority?.mode||'standard').toUpperCase()+(pv?.hasWindow?' · '+pv.passCount+'/'+pv.passTotal+' passes':'');pp.classList.toggle('mine',priority===me||(!priority&&st.active===me));pp.classList.toggle('priorityClear',!!pv&&!pv.hasWindow&&pv.mode==='full'&&Number(st.active)===Number(me));pp.classList.toggle('priorityStack',!!pv?.stackActive);['poison','tax','cmdCasts','energy','exp'].forEach(k=>{let e=$('s'+k);if(!e)return;if(k==='tax'&&typeof MTGCommanderZone!=='undefined'){e.textContent=MTGCommanderZone.castTax(st,me,MTGEngine.commanderKey(me));return}e.textContent=(st[k]&&st[k][me])||0});if($('mon'))$('mon').textContent=st.mon?'P'+st.mon:'—';if($('ini'))$('ini').textContent=st.ini?'P'+st.ini:'—';document.querySelector('[data-stat="poison"]')?.classList.toggle('danger',(st.poison[me]||0)>=8);document.querySelector('[data-stat="tax"]')?.classList.toggle('hot',(st.tax[me]||0)>=6);refreshSpatialSeatMap();let oppList=(hudFlags.spatialOpponents&&typeof MTGSpatialOpponents!=='undefined'?MTGSpatialOpponents.layout(players,me,spatialSeatMap):players.filter(p=>p.id!==me).map(p=>
+
+
+TERM showLobbyPage OFFSET 554934
+k=()=>{let q=MTGAnnouncerEngine.localQA();toast(q.ok?'Announcer QA passed.':'Announcer QA failed.');$('modal').classList.remove('h');$('choices').innerHTML='<div class="whySheet"><div class="small">SIDE QUEST · ADAPTIVE ANNOUNCER</div><div class="whyTitle">Personality Engine '+(q.ok?'PASS':'FAIL')+'</div><div class="hostMuted" style="margin-bottom:8px">'+esc(q.version)+' · '+esc(String(q.mode).toUpperCase())+'</div>'+q.checks.map(x=>'<div class="historyMatch"><span><b>'+esc(x[0])+'</b></span><strong>'+(x[1]?'✓':'!')+'</strong></div>').join('')+'</div>'};$('prefLoss').onclick=()=>{prefs.autoLoss=!prefs.autoLoss;save();renderHost()}
+}
+window.addEventListener('hashchange',()=>{if(sharedDisplayMode){showSharedDisplayPage();return}if(location.hash==='#host'&&battleStarted&&HST)showHostControl();else if(location.hash==='#battle'&&battleStarted)showBattlePage();else if(location.hash==='#lobby')showLobbyPage()});
+if(typeof window!=='undefined')window.addEventListener('DOMContentLoaded',initPWA);
+if(typeof window!=='undefined')window.addEventListener('load',runRuntimeChecks);
+
+})();
+
+
+
+FILE scripts/inline-70.js
+
+TERM MTGDeckTheme OFFSET 104
+
+(function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory();else root.MTGDeckTheme=factory();})(typeof globalThis!=='undefined'?globalThis:this,function(){
+'use strict';
+const ORDER=['W','U','B','R','G'];
+const COLOR={W:'#f2e9d0',U:'#52b8ff',B:'#8f7aa8',R:'#ff6258',G:'#4bdf88',C:'#9eabb5'};
+const NAME={W:'WHITE',U:'BLUE',B:'BLACK',R:'RED',G:'GREEN',C:'COLORLESS'};
+function normalizeIdentity(input){let a=Array.isArray(input)?input:String(input||'').split('');a=[...new Set(a.map(x=>String(x).toUpperCase()).filter(x=>ORDER.includes(x)))];return ORDER.filter(x=>a.includes(x));}
+function identityFromProfile(profile){let cmd=profile?.commander&&profile?.cardMap?.get?.(String(profile.commander).toLowerCase());let ci=normalizeIdentity(cmd?.colorIdentity||cmd?.color_identity);if(ci.length)return ci;let all=[];for(const c of profile?.cards||[])all.push(...normalizeIdentity(c.colorIdentity||c.color_identity||c.colors));return normalizeIdentity(all);}
+function themeForIdentity(input){let id=normalizeIdentity(input),key=id.join('')||'C',colors=id.length?id.map(x=>COLOR[x]):[COLOR.C];let a=colors[0],b=colors[1]||colors[0],c=colors[2]||colors[colors.length-1]||a;return{key,identity:id.length?id:['C'],label:id.length?id.map(x=>NAME[x]).join(' / '):'COLORLESS',accent:a,accent2:b,accent3:c,colors};}
+function apply(profile,doc){doc=doc||((typeof document!=='undefined')?document:null);let t=themeForIdentity(identityFromProfile(profile));if(!doc)return t;let el=doc.documentElement;el.dataset.deckTheme=t.key;el.style.setProperty('--deck-a',t.accent);el.style.setProperty('--deck-b',t.accent2);el.style.setProperty('--deck-c',t.accent3);el.style.setProperty('--deck-glow',hexToRgba(t.accent,.22));el.style.setProperty('--deck-glow-2',hexToRgba(t.accent2,.12));return t;}
+function hexToRgba(hex,a){let h=String(hex).replace('#','');if(h.length!==6)return `rgba(82,184,255,${a})`;l
+
+
+TERM --deck-a OFFSET 1568
+?.commander&&profile?.cardMap?.get?.(String(profile.commander).toLowerCase());let ci=normalizeIdentity(cmd?.colorIdentity||cmd?.color_identity);if(ci.length)return ci;let all=[];for(const c of profile?.cards||[])all.push(...normalizeIdentity(c.colorIdentity||c.color_identity||c.colors));return normalizeIdentity(all);}
+function themeForIdentity(input){let id=normalizeIdentity(input),key=id.join('')||'C',colors=id.length?id.map(x=>COLOR[x]):[COLOR.C];let a=colors[0],b=colors[1]||colors[0],c=colors[2]||colors[colors.length-1]||a;return{key,identity:id.length?id:['C'],label:id.length?id.map(x=>NAME[x]).join(' / '):'COLORLESS',accent:a,accent2:b,accent3:c,colors};}
+function apply(profile,doc){doc=doc||((typeof document!=='undefined')?document:null);let t=themeForIdentity(identityFromProfile(profile));if(!doc)return t;let el=doc.documentElement;el.dataset.deckTheme=t.key;el.style.setProperty('--deck-a',t.accent);el.style.setProperty('--deck-b',t.accent2);el.style.setProperty('--deck-c',t.accent3);el.style.setProperty('--deck-glow',hexToRgba(t.accent,.22));el.style.setProperty('--deck-glow-2',hexToRgba(t.accent2,.12));return t;}
+function hexToRgba(hex,a){let h=String(hex).replace('#','');if(h.length!==6)return `rgba(82,184,255,${a})`;let n=parseInt(h,16);return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;}
+function localQA(){let checks=[];let q=(n,v)=>checks.push([n,!!v]);q('mono green',themeForIdentity(['G']).key==='G');q('azorius order',themeForIdentity(['U','W']).key==='WU');q('five color',themeForIdentity(['W','U','B','R','G']).identity.length===5);q('colorless fallback',themeForIdentity([]).key==='C');let p={commander:'Test',cardMap:new Map([['test',{colorIdentity:['U','W']}]]),cards:[]};q('commander identity preferred',identityFromProfile(p).join('')==='WU');let p2={cards:[{colorIdentity:['R']},{colorIdentity:['G']}],cardMap:new Map()};q('deck identity fallback',identityFromProfile(p2).join('')==='RG');return{ok:checks.every(x=>x[1]),checks};}
+return{ORDER,COLOR,normalizeIdentity,identityFromProfile,themeForIdentity,apply,localQA};
+});
+
+
+
+
+TERM --deck-b OFFSET 1610
+g(profile.commander).toLowerCase());let ci=normalizeIdentity(cmd?.colorIdentity||cmd?.color_identity);if(ci.length)return ci;let all=[];for(const c of profile?.cards||[])all.push(...normalizeIdentity(c.colorIdentity||c.color_identity||c.colors));return normalizeIdentity(all);}
+function themeForIdentity(input){let id=normalizeIdentity(input),key=id.join('')||'C',colors=id.length?id.map(x=>COLOR[x]):[COLOR.C];let a=colors[0],b=colors[1]||colors[0],c=colors[2]||colors[colors.length-1]||a;return{key,identity:id.length?id:['C'],label:id.length?id.map(x=>NAME[x]).join(' / '):'COLORLESS',accent:a,accent2:b,accent3:c,colors};}
+function apply(profile,doc){doc=doc||((typeof document!=='undefined')?document:null);let t=themeForIdentity(identityFromProfile(profile));if(!doc)return t;let el=doc.documentElement;el.dataset.deckTheme=t.key;el.style.setProperty('--deck-a',t.accent);el.style.setProperty('--deck-b',t.accent2);el.style.setProperty('--deck-c',t.accent3);el.style.setProperty('--deck-glow',hexToRgba(t.accent,.22));el.style.setProperty('--deck-glow-2',hexToRgba(t.accent2,.12));return t;}
+function hexToRgba(hex,a){let h=String(hex).replace('#','');if(h.length!==6)return `rgba(82,184,255,${a})`;let n=parseInt(h,16);return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;}
+function localQA(){let checks=[];let q=(n,v)=>checks.push([n,!!v]);q('mono green',themeForIdentity(['G']).key==='G');q('azorius order',themeForIdentity(['U','W']).key==='WU');q('five color',themeForIdentity(['W','U','B','R','G']).identity.length===5);q('colorless fallback',themeForIdentity([]).key==='C');let p={commander:'Test',cardMap:new Map([['test',{colorIdentity:['U','W']}]]),cards:[]};q('commander identity preferred',identityFromProfile(p).join('')==='WU');let p2={cards:[{colorIdentity:['R']},{colorIdentity:['G']}],cardMap:new Map()};q('deck identity fallback',identityFromProfile(p2).join('')==='RG');return{ok:checks.every(x=>x[1]),checks};}
+return{ORDER,COLOR,normalizeIdentity,identityFromProfile,themeForIdentity,apply,localQA};
+});
+
+
+
+FILE scripts/inline-99.js
+
+TERM MTGDeckTheme OFFSET 1448
+es','MTGAlternateZoneCasting','MTGSuspend','MTGPreparedExile','MTGCastPermissions','MTGFaceDownMechanics','MTGCardForms','MTGLinkedAbilities','MTGPhasing','MTGAdvancedCombatDamage','MTGResolutionLegality','MTGAdvancedSpellResolution','MTGAdvancedCastingCosts','MTGProtectionRules','MTGTargetingRules','MTGOpponentChoices','MTGLayerEngine','MTGReplacementOrdering','MTGOracleResolution','MTGContinuousEffects','MTGReplacementEffects','MTGCleanupLoop','MTGTurnStructure','MTGTriggerOrdering','MTGDeckEngine','MTGAssistMode','MTGTriggerRuntime','MTGTableObserver','MTGLegality','MTGBattlefieldInteractions','MTGZones','MTGTargeting','MTGAttachments','MTGCombat','MTGCombatDamage','MTGCombatRules','MTGStateBasedActions','MTGCombatKeywords','MTGCombatSteps','MTGCombatAssignment','MTGCombatValidation','MTGCombatDamageEffects','MTGCommanderCombat','MTGCommanderZone','MTGCommanderReturn','MTGPlayerHUD','MTGDeckTheme','MTGSpatialOpponents','MTGEventInput','MTGPlayerPages','MTGBattlefieldBoard','MTGQuickActions','MTGDeckAdaptiveHUD','MTGPlayerAlerts','MTGOpponentDetails','MTGQuickActionContext','MTGResourceRail','MTGSmartPriority','MTGSocialInvites'];
+ const INFRA_MODULES=['MTGAvatars','MTGIntegrity','MTGPWA','MTGRoomResilience','MTGRoomSession','MTGLiveReconnect','MTGStateVerify','MTGProtocol','MTGProtocolPolicy','MTGTransportGateway','MTGReliableDelivery','MTGChaosNet','MTGReleaseGate','MTGObservability','MTGRuntimeCheck','MTGSoloTest','MTGSoloNPC','MTGSoloQA','MTGQARunner','MTGActionScript','MTGProfileStore','MTGEngine','MTGMatchRecords','MTGHistoryAnalytics','MTGPlaygroups','MTGPortability','MTGSync','MTGStorage','MTGRecovery','MTGAccounts','MTGSessionBoundary','MTGAuth','MTGCloudSync','MTGSyncJournal'];
+ function qaArgs(name){if(name==='MTGCombatValidation')return[root.MTGEngine,root.MTGCombatAssignment];if(['MTGAlternativePayments','MTGOptionalCastingCosts','MTGAlternativeCastingModes','MTGAlternateZoneCasting','MTGSuspend','MTGPreparedExile','MTGCastPermissions','MTGFaceDownMechanics','MTGCardForms','MTGLinkedAbilities','MTGAdvancedCombatDamage','MTGResolutionLegality','MTGAdvancedSpellResolution','MTGAdvancedCastingCosts','MTGBattlefieldInteractions','MTGZones','MTGTargeting','MTGAttachments','MTGCombat','MTGCombatDamage','MTGCombatRules','MTGStateBasedActions','MTGCombatKeywords','MTGCombatSteps','MTGCombatAssignment','MTGCombatDamageEffects','MTGCommanderCombat','MTGCommanderZone','MTGCommanderReturn'].includes(name))return[root.MTGEngine];return[]}
+ function runtimeIntegrationQA(){let checks=[],q=(n,v)=>checks.push([n,!!v]);try{let E=root.MTGEngine,T=root.MTGTurnStructure,mk=(battle=[])=>E.normalizeState({life:{1:40,2:40,3:40},poison:{1:0,2:0,3:0},tax:{1:0,2:0,3:0},cmdCas
+
+FILE styles/inline-01.css
+
+TERM --deck-a OFFSET 16804
+-template-columns:repeat(2,1fr);gap:7px;margin-top:9px}.rosterMini{display:grid;grid-template-columns:35px 1fr;gap:7px;align-items:center;border:1px solid #1d3442;border-radius:10px;padding:8px;background:#08131b}.rosterMiniAvatar{width:35px;height:35px;border-radius:50%;overflow:hidden;background:#0c1720}.rosterMiniName{font-size:11px;font-weight:900}.rosterMiniCmd{font-size:8px;color:var(--m);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rosterMini.readyMini{border-color:#2e6e51}.lobbyPulse{animation:readyPulse .8s ease}.startReady{box-shadow:0 0 24px rgba(75,223,136,.18);border-color:#4bdf88!important}
+/* Lobby Side Quest — Ready Ritual */
+#lobby{--ready-ratio:0}.lobbyStatusCard{position:relative;overflow:hidden}.lobbyStatusCard:before{content:"";position:absolute;inset:-45%;pointer-events:none;background:conic-gradient(from 180deg,transparent 0 12%,color-mix(in srgb,var(--deck-a,#52b8ff) 18%,transparent) 20%,transparent 30% 62%,color-mix(in srgb,var(--deck-b,#4bdf88) 16%,transparent) 72%,transparent 82%);opacity:calc(.04 + var(--ready-ratio)*.18);transform:rotate(calc(var(--ready-ratio)*35deg));transition:opacity .5s ease,transform .7s ease}.lobbyStatusCard>*{position:relative;z-index:1}.readyRitual{display:grid;grid-template-columns:64px 1fr;gap:11px;align-items:center;margin-top:11px;padding:10px;border:1px solid color-mix(in srgb,var(--deck-a,#52b8ff) 22%,#213744);border-radius:12px;background:rgba(3,10,15,.58);transition:.45s}.readySigil{position:relative;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--deck-a,#52b8ff) 44%,#44545f);box-shadow:inset 0 0 20px rgba(0,0,0,.55),0 0 calc(5px + var(--ready-ratio)*20px) color-mix(in srgb,var(--deck-a,#52b8ff) 22%,transparent);transform:scale(calc(.92 + var(--ready-ratio)*.08));transition:.5s}.readySigil:before,.readySigil:after{content:"";position:absolute;inset:7px;border:1px solid color-mix(in srgb,var(--deck-b,#4bdf88) 40%,transparent);transform:rotate(45deg);border-radius:5px;opacity:calc(.24 + var(--ready-ratio)*.62);transition:.45s}.readySigil:after{inset:15px;transform:rotate(22.5deg);border-radius:50%}.readySigilCore{font-size:10px;font-weight:950;letter-spacing:.03em;color:#edf8ff;text-shadow:0 0 12px color-mix(in srgb,var(--deck-a,#52b8ff) 50%,transparent);z-index:2}.readyRitualKicker{font-size:8px;letter-spacing:.18em;color:var(--m);font-weight:900}.readyRitualText{font-size:10px;color:#cbd9e2;margin-top:3px;line-height:1.35}.readyRunes{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}.readyRune{min-width:31px;height:25px;padding:0 6px;border:1px solid #263a47;border-radius:999px;display:flex;align-items:center;justify-c
+
+
+TERM --deck-a OFFSET 17280
+i{border-color:#2e6e51}.lobbyPulse{animation:readyPulse .8s ease}.startReady{box-shadow:0 0 24px rgba(75,223,136,.18);border-color:#4bdf88!important}
+/* Lobby Side Quest — Ready Ritual */
+#lobby{--ready-ratio:0}.lobbyStatusCard{position:relative;overflow:hidden}.lobbyStatusCard:before{content:"";position:absolute;inset:-45%;pointer-events:none;background:conic-gradient(from 180deg,transparent 0 12%,color-mix(in srgb,var(--deck-a,#52b8ff) 18%,transparent) 20%,transparent 30% 62%,color-mix(in srgb,var(--deck-b,#4bdf88) 16%,transparent) 72%,transparent 82%);opacity:calc(.04 + var(--ready-ratio)*.18);transform:rotate(calc(var(--ready-ratio)*35deg));transition:opacity .5s ease,transform .7s ease}.lobbyStatusCard>*{position:relative;z-index:1}.readyRitual{display:grid;grid-template-columns:64px 1fr;gap:11px;align-items:center;margin-top:11px;padding:10px;border:1px solid color-mix(in srgb,var(--deck-a,#52b8ff) 22%,#213744);border-radius:12px;background:rgba(3,10,15,.58);transition:.45s}.readySigil{position:relative;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--deck-a,#52b8ff) 44%,#44545f);box-shadow:inset 0 0 20px rgba(0,0,0,.55),0 0 calc(5px + var(--ready-ratio)*20px) color-mix(in srgb,var(--deck-a,#52b8ff) 22%,transparent);transform:scale(calc(.92 + var(--ready-ratio)*.08));transition:.5s}.readySigil:before,.readySigil:after{content:"";position:absolute;inset:7px;border:1px solid color-mix(in srgb,var(--deck-b,#4bdf88) 40%,transparent);transform:rotate(45deg);border-radius:5px;opacity:calc(.24 + var(--ready-ratio)*.62);transition:.45s}.readySigil:after{inset:15px;transform:rotate(22.5deg);border-radius:50%}.readySigilCore{font-size:10px;font-weight:950;letter-spacing:.03em;color:#edf8ff;text-shadow:0 0 12px color-mix(in srgb,var(--deck-a,#52b8ff) 50%,transparent);z-index:2}.readyRitualKicker{font-size:8px;letter-spacing:.18em;color:var(--m);font-weight:900}.readyRitualText{font-size:10px;color:#cbd9e2;margin-top:3px;line-height:1.35}.readyRunes{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}.readyRune{min-width:31px;height:25px;padding:0 6px;border:1px solid #263a47;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:4px;background:#071018;color:#758896;font-size:8px;font-weight:900;transition:.35s}.readyRune b{font-size:10px}.readyRune.on{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 55%,#2c6b50);background:linear-gradient(180deg,color-mix(in srgb,var(--deck-a,#4bdf88) 14%,#0b1c17),#07120f);color:#e8fff1;box-shadow:0 0 10px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .lobbyStatusCard{border-color:color-mix(in srgb,var(-
+
+
+TERM --deck-a OFFSET 17517
+relative;overflow:hidden}.lobbyStatusCard:before{content:"";position:absolute;inset:-45%;pointer-events:none;background:conic-gradient(from 180deg,transparent 0 12%,color-mix(in srgb,var(--deck-a,#52b8ff) 18%,transparent) 20%,transparent 30% 62%,color-mix(in srgb,var(--deck-b,#4bdf88) 16%,transparent) 72%,transparent 82%);opacity:calc(.04 + var(--ready-ratio)*.18);transform:rotate(calc(var(--ready-ratio)*35deg));transition:opacity .5s ease,transform .7s ease}.lobbyStatusCard>*{position:relative;z-index:1}.readyRitual{display:grid;grid-template-columns:64px 1fr;gap:11px;align-items:center;margin-top:11px;padding:10px;border:1px solid color-mix(in srgb,var(--deck-a,#52b8ff) 22%,#213744);border-radius:12px;background:rgba(3,10,15,.58);transition:.45s}.readySigil{position:relative;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--deck-a,#52b8ff) 44%,#44545f);box-shadow:inset 0 0 20px rgba(0,0,0,.55),0 0 calc(5px + var(--ready-ratio)*20px) color-mix(in srgb,var(--deck-a,#52b8ff) 22%,transparent);transform:scale(calc(.92 + var(--ready-ratio)*.08));transition:.5s}.readySigil:before,.readySigil:after{content:"";position:absolute;inset:7px;border:1px solid color-mix(in srgb,var(--deck-b,#4bdf88) 40%,transparent);transform:rotate(45deg);border-radius:5px;opacity:calc(.24 + var(--ready-ratio)*.62);transition:.45s}.readySigil:after{inset:15px;transform:rotate(22.5deg);border-radius:50%}.readySigilCore{font-size:10px;font-weight:950;letter-spacing:.03em;color:#edf8ff;text-shadow:0 0 12px color-mix(in srgb,var(--deck-a,#52b8ff) 50%,transparent);z-index:2}.readyRitualKicker{font-size:8px;letter-spacing:.18em;color:var(--m);font-weight:900}.readyRitualText{font-size:10px;color:#cbd9e2;margin-top:3px;line-height:1.35}.readyRunes{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}.readyRune{min-width:31px;height:25px;padding:0 6px;border:1px solid #263a47;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:4px;background:#071018;color:#758896;font-size:8px;font-weight:900;transition:.35s}.readyRune b{font-size:10px}.readyRune.on{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 55%,#2c6b50);background:linear-gradient(180deg,color-mix(in srgb,var(--deck-a,#4bdf88) 14%,#0b1c17),#07120f);color:#e8fff1;box-shadow:0 0 10px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .lobbyStatusCard{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 58%,#4bdf88)!important;box-shadow:0 0 34px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .readyRitual{border-color:color-mix(in srgb,var(--deck-b,#52b8ff) 58%,#4bdf88);background:lin
+
+
+TERM --deck-a OFFSET 17652
+from 180deg,transparent 0 12%,color-mix(in srgb,var(--deck-a,#52b8ff) 18%,transparent) 20%,transparent 30% 62%,color-mix(in srgb,var(--deck-b,#4bdf88) 16%,transparent) 72%,transparent 82%);opacity:calc(.04 + var(--ready-ratio)*.18);transform:rotate(calc(var(--ready-ratio)*35deg));transition:opacity .5s ease,transform .7s ease}.lobbyStatusCard>*{position:relative;z-index:1}.readyRitual{display:grid;grid-template-columns:64px 1fr;gap:11px;align-items:center;margin-top:11px;padding:10px;border:1px solid color-mix(in srgb,var(--deck-a,#52b8ff) 22%,#213744);border-radius:12px;background:rgba(3,10,15,.58);transition:.45s}.readySigil{position:relative;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--deck-a,#52b8ff) 44%,#44545f);box-shadow:inset 0 0 20px rgba(0,0,0,.55),0 0 calc(5px + var(--ready-ratio)*20px) color-mix(in srgb,var(--deck-a,#52b8ff) 22%,transparent);transform:scale(calc(.92 + var(--ready-ratio)*.08));transition:.5s}.readySigil:before,.readySigil:after{content:"";position:absolute;inset:7px;border:1px solid color-mix(in srgb,var(--deck-b,#4bdf88) 40%,transparent);transform:rotate(45deg);border-radius:5px;opacity:calc(.24 + var(--ready-ratio)*.62);transition:.45s}.readySigil:after{inset:15px;transform:rotate(22.5deg);border-radius:50%}.readySigilCore{font-size:10px;font-weight:950;letter-spacing:.03em;color:#edf8ff;text-shadow:0 0 12px color-mix(in srgb,var(--deck-a,#52b8ff) 50%,transparent);z-index:2}.readyRitualKicker{font-size:8px;letter-spacing:.18em;color:var(--m);font-weight:900}.readyRitualText{font-size:10px;color:#cbd9e2;margin-top:3px;line-height:1.35}.readyRunes{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}.readyRune{min-width:31px;height:25px;padding:0 6px;border:1px solid #263a47;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:4px;background:#071018;color:#758896;font-size:8px;font-weight:900;transition:.35s}.readyRune b{font-size:10px}.readyRune.on{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 55%,#2c6b50);background:linear-gradient(180deg,color-mix(in srgb,var(--deck-a,#4bdf88) 14%,#0b1c17),#07120f);color:#e8fff1;box-shadow:0 0 10px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .lobbyStatusCard{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 58%,#4bdf88)!important;box-shadow:0 0 34px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .readyRitual{border-color:color-mix(in srgb,var(--deck-b,#52b8ff) 58%,#4bdf88);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a,#52b8ff) 10%,#06130f),rgba(4,13,17,.78))}#lobby.readyArrival .readySigil{animation:r
+
+
+TERM --deck-a OFFSET 18203
+213744);border-radius:12px;background:rgba(3,10,15,.58);transition:.45s}.readySigil{position:relative;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--deck-a,#52b8ff) 44%,#44545f);box-shadow:inset 0 0 20px rgba(0,0,0,.55),0 0 calc(5px + var(--ready-ratio)*20px) color-mix(in srgb,var(--deck-a,#52b8ff) 22%,transparent);transform:scale(calc(.92 + var(--ready-ratio)*.08));transition:.5s}.readySigil:before,.readySigil:after{content:"";position:absolute;inset:7px;border:1px solid color-mix(in srgb,var(--deck-b,#4bdf88) 40%,transparent);transform:rotate(45deg);border-radius:5px;opacity:calc(.24 + var(--ready-ratio)*.62);transition:.45s}.readySigil:after{inset:15px;transform:rotate(22.5deg);border-radius:50%}.readySigilCore{font-size:10px;font-weight:950;letter-spacing:.03em;color:#edf8ff;text-shadow:0 0 12px color-mix(in srgb,var(--deck-a,#52b8ff) 50%,transparent);z-index:2}.readyRitualKicker{font-size:8px;letter-spacing:.18em;color:var(--m);font-weight:900}.readyRitualText{font-size:10px;color:#cbd9e2;margin-top:3px;line-height:1.35}.readyRunes{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}.readyRune{min-width:31px;height:25px;padding:0 6px;border:1px solid #263a47;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:4px;background:#071018;color:#758896;font-size:8px;font-weight:900;transition:.35s}.readyRune b{font-size:10px}.readyRune.on{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 55%,#2c6b50);background:linear-gradient(180deg,color-mix(in srgb,var(--deck-a,#4bdf88) 14%,#0b1c17),#07120f);color:#e8fff1;box-shadow:0 0 10px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .lobbyStatusCard{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 58%,#4bdf88)!important;box-shadow:0 0 34px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .readyRitual{border-color:color-mix(in srgb,var(--deck-b,#52b8ff) 58%,#4bdf88);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a,#52b8ff) 10%,#06130f),rgba(4,13,17,.78))}#lobby.readyArrival .readySigil{animation:readyArrival .85s ease}#lobby.readyArrival .lobbyAtmosphere:before{animation:lobbyDrift 9s ease-in-out infinite alternate,readySkyFlash .9s ease}.startReady{font-weight:950;letter-spacing:.06em}
+.battleIntro{position:fixed;z-index:95;inset:0;background:radial-gradient(circle at 50% 35%,#10283a 0,#071018 42%,#020406 100%);display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;pointer-events:none;transition:opacity .3s}.battleIntro.on{opacity:1;pointer-events:auto}.battleIntroPanel{width:min(760px,100%);text-align:center}.bat
+
+
+TERM --deck-a OFFSET 18790
+,transparent);transform:rotate(45deg);border-radius:5px;opacity:calc(.24 + var(--ready-ratio)*.62);transition:.45s}.readySigil:after{inset:15px;transform:rotate(22.5deg);border-radius:50%}.readySigilCore{font-size:10px;font-weight:950;letter-spacing:.03em;color:#edf8ff;text-shadow:0 0 12px color-mix(in srgb,var(--deck-a,#52b8ff) 50%,transparent);z-index:2}.readyRitualKicker{font-size:8px;letter-spacing:.18em;color:var(--m);font-weight:900}.readyRitualText{font-size:10px;color:#cbd9e2;margin-top:3px;line-height:1.35}.readyRunes{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}.readyRune{min-width:31px;height:25px;padding:0 6px;border:1px solid #263a47;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:4px;background:#071018;color:#758896;font-size:8px;font-weight:900;transition:.35s}.readyRune b{font-size:10px}.readyRune.on{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 55%,#2c6b50);background:linear-gradient(180deg,color-mix(in srgb,var(--deck-a,#4bdf88) 14%,#0b1c17),#07120f);color:#e8fff1;box-shadow:0 0 10px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .lobbyStatusCard{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 58%,#4bdf88)!important;box-shadow:0 0 34px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .readyRitual{border-color:color-mix(in srgb,var(--deck-b,#52b8ff) 58%,#4bdf88);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a,#52b8ff) 10%,#06130f),rgba(4,13,17,.78))}#lobby.readyArrival .readySigil{animation:readyArrival .85s ease}#lobby.readyArrival .lobbyAtmosphere:before{animation:lobbyDrift 9s ease-in-out infinite alternate,readySkyFlash .9s ease}.startReady{font-weight:950;letter-spacing:.06em}
+.battleIntro{position:fixed;z-index:95;inset:0;background:radial-gradient(circle at 50% 35%,#10283a 0,#071018 42%,#020406 100%);display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;pointer-events:none;transition:opacity .3s}.battleIntro.on{opacity:1;pointer-events:auto}.battleIntroPanel{width:min(760px,100%);text-align:center}.battleIntroKicker{font-size:10px;letter-spacing:.28em;color:#8fa3b3;font-weight:900}.battleIntroTitle{font-size:32px;font-weight:950;margin-top:7px}.battleIntroRoster{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:18px 0}.battleIntroPlayer{display:grid;grid-template-columns:50px 1fr;gap:10px;text-align:left;align-items:center;border:1px solid #28465a;border-radius:12px;background:rgba(6,14,20,.78);padding:10px;transform:translateY(8px);opacity:0;animation:rosterRise .45s ease forwards}.battleIntroPlayer:nth-child(2){animation-delay:.12s}.battleIntroPlayer:nth-child(3
+
+
+TERM --deck-a OFFSET 18877
+ratio)*.62);transition:.45s}.readySigil:after{inset:15px;transform:rotate(22.5deg);border-radius:50%}.readySigilCore{font-size:10px;font-weight:950;letter-spacing:.03em;color:#edf8ff;text-shadow:0 0 12px color-mix(in srgb,var(--deck-a,#52b8ff) 50%,transparent);z-index:2}.readyRitualKicker{font-size:8px;letter-spacing:.18em;color:var(--m);font-weight:900}.readyRitualText{font-size:10px;color:#cbd9e2;margin-top:3px;line-height:1.35}.readyRunes{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}.readyRune{min-width:31px;height:25px;padding:0 6px;border:1px solid #263a47;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:4px;background:#071018;color:#758896;font-size:8px;font-weight:900;transition:.35s}.readyRune b{font-size:10px}.readyRune.on{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 55%,#2c6b50);background:linear-gradient(180deg,color-mix(in srgb,var(--deck-a,#4bdf88) 14%,#0b1c17),#07120f);color:#e8fff1;box-shadow:0 0 10px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .lobbyStatusCard{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 58%,#4bdf88)!important;box-shadow:0 0 34px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .readyRitual{border-color:color-mix(in srgb,var(--deck-b,#52b8ff) 58%,#4bdf88);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a,#52b8ff) 10%,#06130f),rgba(4,13,17,.78))}#lobby.readyArrival .readySigil{animation:readyArrival .85s ease}#lobby.readyArrival .lobbyAtmosphere:before{animation:lobbyDrift 9s ease-in-out infinite alternate,readySkyFlash .9s ease}.startReady{font-weight:950;letter-spacing:.06em}
+.battleIntro{position:fixed;z-index:95;inset:0;background:radial-gradient(circle at 50% 35%,#10283a 0,#071018 42%,#020406 100%);display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;pointer-events:none;transition:opacity .3s}.battleIntro.on{opacity:1;pointer-events:auto}.battleIntroPanel{width:min(760px,100%);text-align:center}.battleIntroKicker{font-size:10px;letter-spacing:.28em;color:#8fa3b3;font-weight:900}.battleIntroTitle{font-size:32px;font-weight:950;margin-top:7px}.battleIntroRoster{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:18px 0}.battleIntroPlayer{display:grid;grid-template-columns:50px 1fr;gap:10px;text-align:left;align-items:center;border:1px solid #28465a;border-radius:12px;background:rgba(6,14,20,.78);padding:10px;transform:translateY(8px);opacity:0;animation:rosterRise .45s ease forwards}.battleIntroPlayer:nth-child(2){animation-delay:.12s}.battleIntroPlayer:nth-child(3){animation-delay:.24s}.battleIntroPlayer:nth-child(4){animation-delay:.36s}.battleIntr
+
+
+TERM --deck-a OFFSET 18973
+:50%}.readySigilCore{font-size:10px;font-weight:950;letter-spacing:.03em;color:#edf8ff;text-shadow:0 0 12px color-mix(in srgb,var(--deck-a,#52b8ff) 50%,transparent);z-index:2}.readyRitualKicker{font-size:8px;letter-spacing:.18em;color:var(--m);font-weight:900}.readyRitualText{font-size:10px;color:#cbd9e2;margin-top:3px;line-height:1.35}.readyRunes{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}.readyRune{min-width:31px;height:25px;padding:0 6px;border:1px solid #263a47;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:4px;background:#071018;color:#758896;font-size:8px;font-weight:900;transition:.35s}.readyRune b{font-size:10px}.readyRune.on{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 55%,#2c6b50);background:linear-gradient(180deg,color-mix(in srgb,var(--deck-a,#4bdf88) 14%,#0b1c17),#07120f);color:#e8fff1;box-shadow:0 0 10px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .lobbyStatusCard{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 58%,#4bdf88)!important;box-shadow:0 0 34px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .readyRitual{border-color:color-mix(in srgb,var(--deck-b,#52b8ff) 58%,#4bdf88);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a,#52b8ff) 10%,#06130f),rgba(4,13,17,.78))}#lobby.readyArrival .readySigil{animation:readyArrival .85s ease}#lobby.readyArrival .lobbyAtmosphere:before{animation:lobbyDrift 9s ease-in-out infinite alternate,readySkyFlash .9s ease}.startReady{font-weight:950;letter-spacing:.06em}
+.battleIntro{position:fixed;z-index:95;inset:0;background:radial-gradient(circle at 50% 35%,#10283a 0,#071018 42%,#020406 100%);display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;pointer-events:none;transition:opacity .3s}.battleIntro.on{opacity:1;pointer-events:auto}.battleIntroPanel{width:min(760px,100%);text-align:center}.battleIntroKicker{font-size:10px;letter-spacing:.28em;color:#8fa3b3;font-weight:900}.battleIntroTitle{font-size:32px;font-weight:950;margin-top:7px}.battleIntroRoster{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:18px 0}.battleIntroPlayer{display:grid;grid-template-columns:50px 1fr;gap:10px;text-align:left;align-items:center;border:1px solid #28465a;border-radius:12px;background:rgba(6,14,20,.78);padding:10px;transform:translateY(8px);opacity:0;animation:rosterRise .45s ease forwards}.battleIntroPlayer:nth-child(2){animation-delay:.12s}.battleIntroPlayer:nth-child(3){animation-delay:.24s}.battleIntroPlayer:nth-child(4){animation-delay:.36s}.battleIntroPlayer:nth-child(5){animation-delay:.48s}.battleIntroPlayer:nth-child(6){animation-delay:.60s}.
+
+
+TERM --deck-a OFFSET 19087
+mix(in srgb,var(--deck-a,#52b8ff) 50%,transparent);z-index:2}.readyRitualKicker{font-size:8px;letter-spacing:.18em;color:var(--m);font-weight:900}.readyRitualText{font-size:10px;color:#cbd9e2;margin-top:3px;line-height:1.35}.readyRunes{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}.readyRune{min-width:31px;height:25px;padding:0 6px;border:1px solid #263a47;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:4px;background:#071018;color:#758896;font-size:8px;font-weight:900;transition:.35s}.readyRune b{font-size:10px}.readyRune.on{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 55%,#2c6b50);background:linear-gradient(180deg,color-mix(in srgb,var(--deck-a,#4bdf88) 14%,#0b1c17),#07120f);color:#e8fff1;box-shadow:0 0 10px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .lobbyStatusCard{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 58%,#4bdf88)!important;box-shadow:0 0 34px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .readyRitual{border-color:color-mix(in srgb,var(--deck-b,#52b8ff) 58%,#4bdf88);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a,#52b8ff) 10%,#06130f),rgba(4,13,17,.78))}#lobby.readyArrival .readySigil{animation:readyArrival .85s ease}#lobby.readyArrival .lobbyAtmosphere:before{animation:lobbyDrift 9s ease-in-out infinite alternate,readySkyFlash .9s ease}.startReady{font-weight:950;letter-spacing:.06em}
+.battleIntro{position:fixed;z-index:95;inset:0;background:radial-gradient(circle at 50% 35%,#10283a 0,#071018 42%,#020406 100%);display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;pointer-events:none;transition:opacity .3s}.battleIntro.on{opacity:1;pointer-events:auto}.battleIntroPanel{width:min(760px,100%);text-align:center}.battleIntroKicker{font-size:10px;letter-spacing:.28em;color:#8fa3b3;font-weight:900}.battleIntroTitle{font-size:32px;font-weight:950;margin-top:7px}.battleIntroRoster{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:18px 0}.battleIntroPlayer{display:grid;grid-template-columns:50px 1fr;gap:10px;text-align:left;align-items:center;border:1px solid #28465a;border-radius:12px;background:rgba(6,14,20,.78);padding:10px;transform:translateY(8px);opacity:0;animation:rosterRise .45s ease forwards}.battleIntroPlayer:nth-child(2){animation-delay:.12s}.battleIntroPlayer:nth-child(3){animation-delay:.24s}.battleIntroPlayer:nth-child(4){animation-delay:.36s}.battleIntroPlayer:nth-child(5){animation-delay:.48s}.battleIntroPlayer:nth-child(6){animation-delay:.60s}.battleIntroPlayer:nth-child(7){animation-delay:.72s}.battleIntroPlayer:nth-child(8){animation-delay:.84s}.battleIn
+
+
+TERM --deck-a OFFSET 19170
+t-size:8px;letter-spacing:.18em;color:var(--m);font-weight:900}.readyRitualText{font-size:10px;color:#cbd9e2;margin-top:3px;line-height:1.35}.readyRunes{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}.readyRune{min-width:31px;height:25px;padding:0 6px;border:1px solid #263a47;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:4px;background:#071018;color:#758896;font-size:8px;font-weight:900;transition:.35s}.readyRune b{font-size:10px}.readyRune.on{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 55%,#2c6b50);background:linear-gradient(180deg,color-mix(in srgb,var(--deck-a,#4bdf88) 14%,#0b1c17),#07120f);color:#e8fff1;box-shadow:0 0 10px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .lobbyStatusCard{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 58%,#4bdf88)!important;box-shadow:0 0 34px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .readyRitual{border-color:color-mix(in srgb,var(--deck-b,#52b8ff) 58%,#4bdf88);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a,#52b8ff) 10%,#06130f),rgba(4,13,17,.78))}#lobby.readyArrival .readySigil{animation:readyArrival .85s ease}#lobby.readyArrival .lobbyAtmosphere:before{animation:lobbyDrift 9s ease-in-out infinite alternate,readySkyFlash .9s ease}.startReady{font-weight:950;letter-spacing:.06em}
+.battleIntro{position:fixed;z-index:95;inset:0;background:radial-gradient(circle at 50% 35%,#10283a 0,#071018 42%,#020406 100%);display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;pointer-events:none;transition:opacity .3s}.battleIntro.on{opacity:1;pointer-events:auto}.battleIntroPanel{width:min(760px,100%);text-align:center}.battleIntroKicker{font-size:10px;letter-spacing:.28em;color:#8fa3b3;font-weight:900}.battleIntroTitle{font-size:32px;font-weight:950;margin-top:7px}.battleIntroRoster{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:18px 0}.battleIntroPlayer{display:grid;grid-template-columns:50px 1fr;gap:10px;text-align:left;align-items:center;border:1px solid #28465a;border-radius:12px;background:rgba(6,14,20,.78);padding:10px;transform:translateY(8px);opacity:0;animation:rosterRise .45s ease forwards}.battleIntroPlayer:nth-child(2){animation-delay:.12s}.battleIntroPlayer:nth-child(3){animation-delay:.24s}.battleIntroPlayer:nth-child(4){animation-delay:.36s}.battleIntroPlayer:nth-child(5){animation-delay:.48s}.battleIntroPlayer:nth-child(6){animation-delay:.60s}.battleIntroPlayer:nth-child(7){animation-delay:.72s}.battleIntroPlayer:nth-child(8){animation-delay:.84s}.battleIntroAvatar{width:50px;height:50px;border-radius:50%;overflow:hidden;background:#0c17
+
+
+TERM --deck-a OFFSET 19367
+op:7px}.readyRune{min-width:31px;height:25px;padding:0 6px;border:1px solid #263a47;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:4px;background:#071018;color:#758896;font-size:8px;font-weight:900;transition:.35s}.readyRune b{font-size:10px}.readyRune.on{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 55%,#2c6b50);background:linear-gradient(180deg,color-mix(in srgb,var(--deck-a,#4bdf88) 14%,#0b1c17),#07120f);color:#e8fff1;box-shadow:0 0 10px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .lobbyStatusCard{border-color:color-mix(in srgb,var(--deck-a,#4bdf88) 58%,#4bdf88)!important;box-shadow:0 0 34px color-mix(in srgb,var(--deck-a,#4bdf88) 18%,transparent)}#lobby[data-ready-all="1"] .readyRitual{border-color:color-mix(in srgb,var(--deck-b,#52b8ff) 58%,#4bdf88);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a,#52b8ff) 10%,#06130f),rgba(4,13,17,.78))}#lobby.readyArrival .readySigil{animation:readyArrival .85s ease}#lobby.readyArrival .lobbyAtmosphere:before{animation:lobbyDrift 9s ease-in-out infinite alternate,readySkyFlash .9s ease}.startReady{font-weight:950;letter-spacing:.06em}
+.battleIntro{position:fixed;z-index:95;inset:0;background:radial-gradient(circle at 50% 35%,#10283a 0,#071018 42%,#020406 100%);display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;pointer-events:none;transition:opacity .3s}.battleIntro.on{opacity:1;pointer-events:auto}.battleIntroPanel{width:min(760px,100%);text-align:center}.battleIntroKicker{font-size:10px;letter-spacing:.28em;color:#8fa3b3;font-weight:900}.battleIntroTitle{font-size:32px;font-weight:950;margin-top:7px}.battleIntroRoster{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:18px 0}.battleIntroPlayer{display:grid;grid-template-columns:50px 1fr;gap:10px;text-align:left;align-items:center;border:1px solid #28465a;border-radius:12px;background:rgba(6,14,20,.78);padding:10px;transform:translateY(8px);opacity:0;animation:rosterRise .45s ease forwards}.battleIntroPlayer:nth-child(2){animation-delay:.12s}.battleIntroPlayer:nth-child(3){animation-delay:.24s}.battleIntroPlayer:nth-child(4){animation-delay:.36s}.battleIntroPlayer:nth-child(5){animation-delay:.48s}.battleIntroPlayer:nth-child(6){animation-delay:.60s}.battleIntroPlayer:nth-child(7){animation-delay:.72s}.battleIntroPlayer:nth-child(8){animation-delay:.84s}.battleIntroAvatar{width:50px;height:50px;border-radius:50%;overflow:hidden;background:#0c1720}.battleIntroName{font-weight:950}.battleIntroCmd{font-size:9px;color:var(--m);margin-top:2px}.battleIntroCall{font-size:14px;min-height:22px;color:#dbe9f2;font-weight:800;letter-spacing:.05em}.b
+
+
+TERM --deck-a OFFSET 23065
+="commanding"]{border-color:#756b46;color:#fff2c8;box-shadow:0 0 22px rgba(232,211,130,.10)}
+.announcerCaption[data-emotion="somber"]{border-color:#5d5268;color:#e8e1ef;background:rgba(7,8,13,.94)}
+.announcerCaption[data-emotion="tense"]{border-color:#704247;color:#ffe6e8;box-shadow:0 0 22px rgba(255,90,80,.10)}
+.announcerCaption[data-emotion="mystical"]{border-color:#555b82;color:#eeeaff;box-shadow:0 0 22px rgba(158,143,232,.11)}
+.announcerCaption[data-emotion="triumphant"]{border-color:#61704e;color:#f4f7d8;box-shadow:0 0 25px rgba(160,199,111,.12)}
+.announcerCaption[data-importance="3"]{font-size:12px;letter-spacing:.055em}
+
+@keyframes lobbyDrift{to{transform:translate3d(20px,12px,0) scale(1.05)}}@keyframes readyPulse{50%{box-shadow:0 0 28px rgba(75,223,136,.26)}}@keyframes readyArrival{45%{transform:scale(1.12);box-shadow:inset 0 0 22px rgba(0,0,0,.42),0 0 34px color-mix(in srgb,var(--deck-a,#52b8ff) 48%,transparent)}}@keyframes readySkyFlash{40%{filter:brightness(1.5);opacity:1}}@keyframes rosterRise{to{opacity:1;transform:translateY(0)}}
+@media(max-width:520px){.hostGrid{grid-template-columns:1fr}.battleIntroRoster{grid-template-columns:1fr}.rosterPreview{grid-template-columns:1fr}.avatarGrid{grid-template-columns:repeat(3,1fr)}.readyRitual{grid-template-columns:54px 1fr;padding:9px}.readySigil{width:50px;height:50px}}
+@media(prefers-reduced-motion:reduce){.lobbyAtmosphere:before,.lobbyPulse,.readySigil,.battleIntroPlayer,.deckVaultPremiumDetail.opening,.deckVaultPremiumDetail.closing{animation:none!important}.deckVaultPremiumInterior,.deckVaultPremiumDetail,.deckVaultPremiumBox{transition:none!important}.battleIntroPlayer{opacity:1;transform:none}.battleIntroFinal,.battleIntro,.readyMeterFill,.announcerCaption,.deckVaultPremiumBox,.deckVaultPremiumAction,.deckVaultPremiumActivePlaque{transition:none!important}}
+/* Phase 11 — durable match history, replay, and analytics */
+.historyList,.analyticsDecks{display:grid;gap:8px;margin-top:12px}.historyMatch,.analyticsRow{width:100%;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);color:inherit;border-radius:12px;padding:12px;display:flex;align-items:center;justify-content:space-between;text-align:left}.historyMatch span,.analyticsRow span{display:grid;gap:3px}.historyMatch small,.analyticsRow small,.matchMeta{color:#99a7b3;font-size:12px}.historyMatch strong,.analyticsRow strong{font-size:20px}.matchMeta{line-height:1.7;margin:12px 0}.replayProgress{height:6px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin:10px 0 14px}.replayProgress i{display:block;height:100%;background:currentColor}.replayEvent{display:grid;gap:3px;padding:12px;border:1px solid rgba(255,255
+
+
+TERM --deck-a OFFSET 43161
+olor:var(--m);background:#08131b}.bfLibraryHint{font-size:7px;color:var(--m);margin-top:7px;letter-spacing:.08em}.bfCommanderEmpty{font-size:8px;color:var(--m);line-height:1.35}.bfCards{display:grid;gap:5px}.bfCardBtn{width:100%;border:1px solid #1f3646;background:#0a1720;color:var(--t);border-radius:8px;padding:7px;text-align:left;font-size:9px}.bfCardBtn.tapped{opacity:.65}.bfTokenQty{font-weight:950;color:#dff5ff}.bfZoneButton{cursor:pointer}.bfLibraryExact{color:#8de7af}.bfLibraryEstimate{color:#f1cf78}@media(max-width:620px){.battlefieldSpatialOverview{grid-template-columns:1fr 1fr;grid-template-areas:"across across" "left right" "you you"}.bfBoard{grid-template-columns:1fr 1fr;grid-template-areas:"command library" "field field" "lands lands" "graveyard exile"}.bfField{min-height:120px}.bfZone{min-height:68px}}
+
+
+/* Phase 63 — deck identity theming + semantic life feedback */
+:root{--deck-a:var(--bl);--deck-b:var(--bl);--deck-c:var(--bl);--deck-glow:rgba(82,184,255,.22);--deck-glow-2:rgba(82,184,255,.12)}
+.playerHud{border-color:color-mix(in srgb,var(--deck-a) 48%,#244257);background:radial-gradient(circle at 12% 0,var(--deck-glow),transparent 38%),radial-gradient(circle at 92% 18%,var(--deck-glow-2),transparent 34%),linear-gradient(180deg,#0b1822,#071019)}
+.playerPageTab.active,.battlefieldPlayerTab.active,.contextualDock .dk:first-child,.dkPrimary{border-color:var(--deck-a)!important;box-shadow:0 0 16px var(--deck-glow);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 16%,#102333),color-mix(in srgb,var(--deck-b) 10%,#0b1720))!important}
+.priorityPill.mine{border-color:var(--deck-a);box-shadow:0 0 14px var(--deck-glow)}
+
+.turnStrip{border-top-color:color-mix(in srgb,var(--deck-a) 25%,#1b2e3a)}
+.lifeStage{position:relative;border-radius:18px;isolation:isolate;transition:background-color .16s ease,box-shadow .16s ease}
+.lifeStage::before{content:"";position:absolute;inset:0;border-radius:18px;opacity:0;pointer-events:none;z-index:-1}
+.lifeStage.gainPulse::before{animation:lifeGainWash .72s ease-out;background:radial-gradient(circle at 70% 50%,rgba(75,223,136,.34),rgba(23,91,51,.13) 52%,transparent 78%)}
+.lifeStage.lossPulse::before{animation:lifeLossWash .72s ease-out;background:radial-gradient(circle at 30% 50%,rgba(255,90,80,.34),rgba(116,29,29,.14) 52%,transparent 78%)}
+.delta{position:absolute;top:50%;font-size:31px;font-weight:950;opacity:0;pointer-events:none;text-shadow:0 2px 12px rgba(0,0,0,.55);z-index:3}
+.delta.gainDelta{right:18px;left:auto;color:#85f1ad}.delta.lossDelta{left:18px;right:auto;color:#ff8b84}
+.delta.on{animation:lifeDelta .72s ease-out}
+@keyframes lifeDelta{0%{opacity:0;transform:translateY(10px) scale(.88)}22%{opa
+
+
+TERM --deck-a OFFSET 43333
+1.35}.bfCards{display:grid;gap:5px}.bfCardBtn{width:100%;border:1px solid #1f3646;background:#0a1720;color:var(--t);border-radius:8px;padding:7px;text-align:left;font-size:9px}.bfCardBtn.tapped{opacity:.65}.bfTokenQty{font-weight:950;color:#dff5ff}.bfZoneButton{cursor:pointer}.bfLibraryExact{color:#8de7af}.bfLibraryEstimate{color:#f1cf78}@media(max-width:620px){.battlefieldSpatialOverview{grid-template-columns:1fr 1fr;grid-template-areas:"across across" "left right" "you you"}.bfBoard{grid-template-columns:1fr 1fr;grid-template-areas:"command library" "field field" "lands lands" "graveyard exile"}.bfField{min-height:120px}.bfZone{min-height:68px}}
+
+
+/* Phase 63 — deck identity theming + semantic life feedback */
+:root{--deck-a:var(--bl);--deck-b:var(--bl);--deck-c:var(--bl);--deck-glow:rgba(82,184,255,.22);--deck-glow-2:rgba(82,184,255,.12)}
+.playerHud{border-color:color-mix(in srgb,var(--deck-a) 48%,#244257);background:radial-gradient(circle at 12% 0,var(--deck-glow),transparent 38%),radial-gradient(circle at 92% 18%,var(--deck-glow-2),transparent 34%),linear-gradient(180deg,#0b1822,#071019)}
+.playerPageTab.active,.battlefieldPlayerTab.active,.contextualDock .dk:first-child,.dkPrimary{border-color:var(--deck-a)!important;box-shadow:0 0 16px var(--deck-glow);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 16%,#102333),color-mix(in srgb,var(--deck-b) 10%,#0b1720))!important}
+.priorityPill.mine{border-color:var(--deck-a);box-shadow:0 0 14px var(--deck-glow)}
+
+.turnStrip{border-top-color:color-mix(in srgb,var(--deck-a) 25%,#1b2e3a)}
+.lifeStage{position:relative;border-radius:18px;isolation:isolate;transition:background-color .16s ease,box-shadow .16s ease}
+.lifeStage::before{content:"";position:absolute;inset:0;border-radius:18px;opacity:0;pointer-events:none;z-index:-1}
+.lifeStage.gainPulse::before{animation:lifeGainWash .72s ease-out;background:radial-gradient(circle at 70% 50%,rgba(75,223,136,.34),rgba(23,91,51,.13) 52%,transparent 78%)}
+.lifeStage.lossPulse::before{animation:lifeLossWash .72s ease-out;background:radial-gradient(circle at 30% 50%,rgba(255,90,80,.34),rgba(116,29,29,.14) 52%,transparent 78%)}
+.delta{position:absolute;top:50%;font-size:31px;font-weight:950;opacity:0;pointer-events:none;text-shadow:0 2px 12px rgba(0,0,0,.55);z-index:3}
+.delta.gainDelta{right:18px;left:auto;color:#85f1ad}.delta.lossDelta{left:18px;right:auto;color:#ff8b84}
+.delta.on{animation:lifeDelta .72s ease-out}
+@keyframes lifeDelta{0%{opacity:0;transform:translateY(10px) scale(.88)}22%{opacity:1;transform:translateY(-2px) scale(1.12)}72%{opacity:1}100%{opacity:0;transform:translateY(-20px) scale(.98)}}
+@keyframes lifeGainWash{0%{opacity:0}20%{opacity:1}100%{
+
+
+TERM --deck-a OFFSET 43655
+ate{color:#f1cf78}@media(max-width:620px){.battlefieldSpatialOverview{grid-template-columns:1fr 1fr;grid-template-areas:"across across" "left right" "you you"}.bfBoard{grid-template-columns:1fr 1fr;grid-template-areas:"command library" "field field" "lands lands" "graveyard exile"}.bfField{min-height:120px}.bfZone{min-height:68px}}
+
+
+/* Phase 63 — deck identity theming + semantic life feedback */
+:root{--deck-a:var(--bl);--deck-b:var(--bl);--deck-c:var(--bl);--deck-glow:rgba(82,184,255,.22);--deck-glow-2:rgba(82,184,255,.12)}
+.playerHud{border-color:color-mix(in srgb,var(--deck-a) 48%,#244257);background:radial-gradient(circle at 12% 0,var(--deck-glow),transparent 38%),radial-gradient(circle at 92% 18%,var(--deck-glow-2),transparent 34%),linear-gradient(180deg,#0b1822,#071019)}
+.playerPageTab.active,.battlefieldPlayerTab.active,.contextualDock .dk:first-child,.dkPrimary{border-color:var(--deck-a)!important;box-shadow:0 0 16px var(--deck-glow);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 16%,#102333),color-mix(in srgb,var(--deck-b) 10%,#0b1720))!important}
+.priorityPill.mine{border-color:var(--deck-a);box-shadow:0 0 14px var(--deck-glow)}
+
+.turnStrip{border-top-color:color-mix(in srgb,var(--deck-a) 25%,#1b2e3a)}
+.lifeStage{position:relative;border-radius:18px;isolation:isolate;transition:background-color .16s ease,box-shadow .16s ease}
+.lifeStage::before{content:"";position:absolute;inset:0;border-radius:18px;opacity:0;pointer-events:none;z-index:-1}
+.lifeStage.gainPulse::before{animation:lifeGainWash .72s ease-out;background:radial-gradient(circle at 70% 50%,rgba(75,223,136,.34),rgba(23,91,51,.13) 52%,transparent 78%)}
+.lifeStage.lossPulse::before{animation:lifeLossWash .72s ease-out;background:radial-gradient(circle at 30% 50%,rgba(255,90,80,.34),rgba(116,29,29,.14) 52%,transparent 78%)}
+.delta{position:absolute;top:50%;font-size:31px;font-weight:950;opacity:0;pointer-events:none;text-shadow:0 2px 12px rgba(0,0,0,.55);z-index:3}
+.delta.gainDelta{right:18px;left:auto;color:#85f1ad}.delta.lossDelta{left:18px;right:auto;color:#ff8b84}
+.delta.on{animation:lifeDelta .72s ease-out}
+@keyframes lifeDelta{0%{opacity:0;transform:translateY(10px) scale(.88)}22%{opacity:1;transform:translateY(-2px) scale(1.12)}72%{opacity:1}100%{opacity:0;transform:translateY(-20px) scale(.98)}}
+@keyframes lifeGainWash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+@keyframes lifeLossWash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.lifeStage.gainPulse::before,.lifeStage.lossPulse::before,.delta.on{animation-duration:.18s!important;transform:none!important}}
+
+
+
+/* Phase 64 — immersive deck HUD polish + centered contextual controls *
+
+
+TERM --deck-a OFFSET 43768
+-areas:"across across" "left right" "you you"}.bfBoard{grid-template-columns:1fr 1fr;grid-template-areas:"command library" "field field" "lands lands" "graveyard exile"}.bfField{min-height:120px}.bfZone{min-height:68px}}
+
+
+/* Phase 63 — deck identity theming + semantic life feedback */
+:root{--deck-a:var(--bl);--deck-b:var(--bl);--deck-c:var(--bl);--deck-glow:rgba(82,184,255,.22);--deck-glow-2:rgba(82,184,255,.12)}
+.playerHud{border-color:color-mix(in srgb,var(--deck-a) 48%,#244257);background:radial-gradient(circle at 12% 0,var(--deck-glow),transparent 38%),radial-gradient(circle at 92% 18%,var(--deck-glow-2),transparent 34%),linear-gradient(180deg,#0b1822,#071019)}
+.playerPageTab.active,.battlefieldPlayerTab.active,.contextualDock .dk:first-child,.dkPrimary{border-color:var(--deck-a)!important;box-shadow:0 0 16px var(--deck-glow);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 16%,#102333),color-mix(in srgb,var(--deck-b) 10%,#0b1720))!important}
+.priorityPill.mine{border-color:var(--deck-a);box-shadow:0 0 14px var(--deck-glow)}
+
+.turnStrip{border-top-color:color-mix(in srgb,var(--deck-a) 25%,#1b2e3a)}
+.lifeStage{position:relative;border-radius:18px;isolation:isolate;transition:background-color .16s ease,box-shadow .16s ease}
+.lifeStage::before{content:"";position:absolute;inset:0;border-radius:18px;opacity:0;pointer-events:none;z-index:-1}
+.lifeStage.gainPulse::before{animation:lifeGainWash .72s ease-out;background:radial-gradient(circle at 70% 50%,rgba(75,223,136,.34),rgba(23,91,51,.13) 52%,transparent 78%)}
+.lifeStage.lossPulse::before{animation:lifeLossWash .72s ease-out;background:radial-gradient(circle at 30% 50%,rgba(255,90,80,.34),rgba(116,29,29,.14) 52%,transparent 78%)}
+.delta{position:absolute;top:50%;font-size:31px;font-weight:950;opacity:0;pointer-events:none;text-shadow:0 2px 12px rgba(0,0,0,.55);z-index:3}
+.delta.gainDelta{right:18px;left:auto;color:#85f1ad}.delta.lossDelta{left:18px;right:auto;color:#ff8b84}
+.delta.on{animation:lifeDelta .72s ease-out}
+@keyframes lifeDelta{0%{opacity:0;transform:translateY(10px) scale(.88)}22%{opacity:1;transform:translateY(-2px) scale(1.12)}72%{opacity:1}100%{opacity:0;transform:translateY(-20px) scale(.98)}}
+@keyframes lifeGainWash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+@keyframes lifeLossWash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.lifeStage.gainPulse::before,.lifeStage.lossPulse::before,.delta.on{animation-duration:.18s!important;transform:none!important}}
+
+
+
+/* Phase 64 — immersive deck HUD polish + centered contextual controls */
+#app.battleActive{position:relative;isolation:isolate}
+#app.battleActive::before{content:"";position:fixed;inse
+
+
+TERM --deck-a OFFSET 43884
+brary" "field field" "lands lands" "graveyard exile"}.bfField{min-height:120px}.bfZone{min-height:68px}}
+
+
+/* Phase 63 — deck identity theming + semantic life feedback */
+:root{--deck-a:var(--bl);--deck-b:var(--bl);--deck-c:var(--bl);--deck-glow:rgba(82,184,255,.22);--deck-glow-2:rgba(82,184,255,.12)}
+.playerHud{border-color:color-mix(in srgb,var(--deck-a) 48%,#244257);background:radial-gradient(circle at 12% 0,var(--deck-glow),transparent 38%),radial-gradient(circle at 92% 18%,var(--deck-glow-2),transparent 34%),linear-gradient(180deg,#0b1822,#071019)}
+.playerPageTab.active,.battlefieldPlayerTab.active,.contextualDock .dk:first-child,.dkPrimary{border-color:var(--deck-a)!important;box-shadow:0 0 16px var(--deck-glow);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 16%,#102333),color-mix(in srgb,var(--deck-b) 10%,#0b1720))!important}
+.priorityPill.mine{border-color:var(--deck-a);box-shadow:0 0 14px var(--deck-glow)}
+
+.turnStrip{border-top-color:color-mix(in srgb,var(--deck-a) 25%,#1b2e3a)}
+.lifeStage{position:relative;border-radius:18px;isolation:isolate;transition:background-color .16s ease,box-shadow .16s ease}
+.lifeStage::before{content:"";position:absolute;inset:0;border-radius:18px;opacity:0;pointer-events:none;z-index:-1}
+.lifeStage.gainPulse::before{animation:lifeGainWash .72s ease-out;background:radial-gradient(circle at 70% 50%,rgba(75,223,136,.34),rgba(23,91,51,.13) 52%,transparent 78%)}
+.lifeStage.lossPulse::before{animation:lifeLossWash .72s ease-out;background:radial-gradient(circle at 30% 50%,rgba(255,90,80,.34),rgba(116,29,29,.14) 52%,transparent 78%)}
+.delta{position:absolute;top:50%;font-size:31px;font-weight:950;opacity:0;pointer-events:none;text-shadow:0 2px 12px rgba(0,0,0,.55);z-index:3}
+.delta.gainDelta{right:18px;left:auto;color:#85f1ad}.delta.lossDelta{left:18px;right:auto;color:#ff8b84}
+.delta.on{animation:lifeDelta .72s ease-out}
+@keyframes lifeDelta{0%{opacity:0;transform:translateY(10px) scale(.88)}22%{opacity:1;transform:translateY(-2px) scale(1.12)}72%{opacity:1}100%{opacity:0;transform:translateY(-20px) scale(.98)}}
+@keyframes lifeGainWash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+@keyframes lifeLossWash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.lifeStage.gainPulse::before,.lifeStage.lossPulse::before,.delta.on{animation-duration:.18s!important;transform:none!important}}
+
+
+
+/* Phase 64 — immersive deck HUD polish + centered contextual controls */
+#app.battleActive{position:relative;isolation:isolate}
+#app.battleActive::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:
+ radial-gradient(ellipse at 8% 8%,color-mix(in srgb,var(--deck-a) 19%
+
+
+TERM --deck-a OFFSET 43983
+8px}}
+
+
+/* Phase 63 — deck identity theming + semantic life feedback */
+:root{--deck-a:var(--bl);--deck-b:var(--bl);--deck-c:var(--bl);--deck-glow:rgba(82,184,255,.22);--deck-glow-2:rgba(82,184,255,.12)}
+.playerHud{border-color:color-mix(in srgb,var(--deck-a) 48%,#244257);background:radial-gradient(circle at 12% 0,var(--deck-glow),transparent 38%),radial-gradient(circle at 92% 18%,var(--deck-glow-2),transparent 34%),linear-gradient(180deg,#0b1822,#071019)}
+.playerPageTab.active,.battlefieldPlayerTab.active,.contextualDock .dk:first-child,.dkPrimary{border-color:var(--deck-a)!important;box-shadow:0 0 16px var(--deck-glow);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 16%,#102333),color-mix(in srgb,var(--deck-b) 10%,#0b1720))!important}
+.priorityPill.mine{border-color:var(--deck-a);box-shadow:0 0 14px var(--deck-glow)}
+
+.turnStrip{border-top-color:color-mix(in srgb,var(--deck-a) 25%,#1b2e3a)}
+.lifeStage{position:relative;border-radius:18px;isolation:isolate;transition:background-color .16s ease,box-shadow .16s ease}
+.lifeStage::before{content:"";position:absolute;inset:0;border-radius:18px;opacity:0;pointer-events:none;z-index:-1}
+.lifeStage.gainPulse::before{animation:lifeGainWash .72s ease-out;background:radial-gradient(circle at 70% 50%,rgba(75,223,136,.34),rgba(23,91,51,.13) 52%,transparent 78%)}
+.lifeStage.lossPulse::before{animation:lifeLossWash .72s ease-out;background:radial-gradient(circle at 30% 50%,rgba(255,90,80,.34),rgba(116,29,29,.14) 52%,transparent 78%)}
+.delta{position:absolute;top:50%;font-size:31px;font-weight:950;opacity:0;pointer-events:none;text-shadow:0 2px 12px rgba(0,0,0,.55);z-index:3}
+.delta.gainDelta{right:18px;left:auto;color:#85f1ad}.delta.lossDelta{left:18px;right:auto;color:#ff8b84}
+.delta.on{animation:lifeDelta .72s ease-out}
+@keyframes lifeDelta{0%{opacity:0;transform:translateY(10px) scale(.88)}22%{opacity:1;transform:translateY(-2px) scale(1.12)}72%{opacity:1}100%{opacity:0;transform:translateY(-20px) scale(.98)}}
+@keyframes lifeGainWash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+@keyframes lifeLossWash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.lifeStage.gainPulse::before,.lifeStage.lossPulse::before,.delta.on{animation-duration:.18s!important;transform:none!important}}
+
+
+
+/* Phase 64 — immersive deck HUD polish + centered contextual controls */
+#app.battleActive{position:relative;isolation:isolate}
+#app.battleActive::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:
+ radial-gradient(ellipse at 8% 8%,color-mix(in srgb,var(--deck-a) 19%,transparent),transparent 38%),
+ radial-gradient(ellipse at 96% 30%,color-mix(in srgb,var(--deck-b)
+
+
+TERM --deck-a OFFSET 45679
+olor:#85f1ad}.delta.lossDelta{left:18px;right:auto;color:#ff8b84}
+.delta.on{animation:lifeDelta .72s ease-out}
+@keyframes lifeDelta{0%{opacity:0;transform:translateY(10px) scale(.88)}22%{opacity:1;transform:translateY(-2px) scale(1.12)}72%{opacity:1}100%{opacity:0;transform:translateY(-20px) scale(.98)}}
+@keyframes lifeGainWash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+@keyframes lifeLossWash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.lifeStage.gainPulse::before,.lifeStage.lossPulse::before,.delta.on{animation-duration:.18s!important;transform:none!important}}
+
+
+
+/* Phase 64 — immersive deck HUD polish + centered contextual controls */
+#app.battleActive{position:relative;isolation:isolate}
+#app.battleActive::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:
+ radial-gradient(ellipse at 8% 8%,color-mix(in srgb,var(--deck-a) 19%,transparent),transparent 38%),
+ radial-gradient(ellipse at 96% 30%,color-mix(in srgb,var(--deck-b) 15%,transparent),transparent 42%),
+ radial-gradient(ellipse at 44% 95%,color-mix(in srgb,var(--deck-c) 10%,transparent),transparent 44%),
+ linear-gradient(180deg,#020609 0%,color-mix(in srgb,var(--deck-a) 4%,#05090d) 48%,#020507 100%)}
+#app.battleActive::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.52;background:linear-gradient(115deg,transparent 0 31%,color-mix(in srgb,var(--deck-a) 5%,transparent) 48%,transparent 67%)}
+.battleActive .playerHud{border-color:color-mix(in srgb,var(--deck-a) 68%,#465863);box-shadow:0 14px 42px rgba(0,0,0,.34),0 0 32px var(--deck-glow);background:
+ radial-gradient(circle at 7% 0,color-mix(in srgb,var(--deck-a) 25%,transparent),transparent 36%),
+ radial-gradient(circle at 96% 14%,color-mix(in srgb,var(--deck-b) 20%,transparent),transparent 42%),
+ linear-gradient(155deg,color-mix(in srgb,var(--deck-a) 9%,#0b151d),color-mix(in srgb,var(--deck-b) 8%,#071018) 48%,#061018)}
+.battleActive .card,.battleActive .bfZone,.battleActive .opp,.battleActive .res,.battleActive .so,.battleActive .mod{border-color:color-mix(in srgb,var(--deck-a) 30%,#243b4c);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 7%,#0b151d),color-mix(in srgb,var(--deck-b) 5%,#081119));box-shadow:inset 0 1px 0 color-mix(in srgb,var(--deck-a) 8%,transparent)}
+.battleActive .playerPageTabs{background:linear-gradient(color-mix(in srgb,var(--deck-a) 5%,var(--b)) 74%,transparent)}
+.battleActive .playerPageTab,.battleActive .battlefieldPlayerTab,.battleActive .battleExit,.battleActive .chip{border-color:color-mix(in srgb,var(--deck-a) 30%,#263f51);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 6%,#08131b),color-mix
+
+
+TERM --deck-a OFFSET 45987
+eyframes lifeGainWash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+@keyframes lifeLossWash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.lifeStage.gainPulse::before,.lifeStage.lossPulse::before,.delta.on{animation-duration:.18s!important;transform:none!important}}
+
+
+
+/* Phase 64 — immersive deck HUD polish + centered contextual controls */
+#app.battleActive{position:relative;isolation:isolate}
+#app.battleActive::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:
+ radial-gradient(ellipse at 8% 8%,color-mix(in srgb,var(--deck-a) 19%,transparent),transparent 38%),
+ radial-gradient(ellipse at 96% 30%,color-mix(in srgb,var(--deck-b) 15%,transparent),transparent 42%),
+ radial-gradient(ellipse at 44% 95%,color-mix(in srgb,var(--deck-c) 10%,transparent),transparent 44%),
+ linear-gradient(180deg,#020609 0%,color-mix(in srgb,var(--deck-a) 4%,#05090d) 48%,#020507 100%)}
+#app.battleActive::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.52;background:linear-gradient(115deg,transparent 0 31%,color-mix(in srgb,var(--deck-a) 5%,transparent) 48%,transparent 67%)}
+.battleActive .playerHud{border-color:color-mix(in srgb,var(--deck-a) 68%,#465863);box-shadow:0 14px 42px rgba(0,0,0,.34),0 0 32px var(--deck-glow);background:
+ radial-gradient(circle at 7% 0,color-mix(in srgb,var(--deck-a) 25%,transparent),transparent 36%),
+ radial-gradient(circle at 96% 14%,color-mix(in srgb,var(--deck-b) 20%,transparent),transparent 42%),
+ linear-gradient(155deg,color-mix(in srgb,var(--deck-a) 9%,#0b151d),color-mix(in srgb,var(--deck-b) 8%,#071018) 48%,#061018)}
+.battleActive .card,.battleActive .bfZone,.battleActive .opp,.battleActive .res,.battleActive .so,.battleActive .mod{border-color:color-mix(in srgb,var(--deck-a) 30%,#243b4c);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 7%,#0b151d),color-mix(in srgb,var(--deck-b) 5%,#081119));box-shadow:inset 0 1px 0 color-mix(in srgb,var(--deck-a) 8%,transparent)}
+.battleActive .playerPageTabs{background:linear-gradient(color-mix(in srgb,var(--deck-a) 5%,var(--b)) 74%,transparent)}
+.battleActive .playerPageTab,.battleActive .battlefieldPlayerTab,.battleActive .battleExit,.battleActive .chip{border-color:color-mix(in srgb,var(--deck-a) 30%,#263f51);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 6%,#08131b),color-mix(in srgb,var(--deck-b) 5%,#071018))}
+.battleActive .playerPageTab.active,.battleActive .battlefieldPlayerTab.active{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 80%,#fff);box-shadow:0 0 18px var(--deck-glow);background:linear-gradient(125deg,color-mix(in srgb,var(--deck-a) 28%,#11202a),color-mix(
+
+
+TERM --deck-a OFFSET 46204
+ulse::before,.delta.on{animation-duration:.18s!important;transform:none!important}}
+
+
+
+/* Phase 64 — immersive deck HUD polish + centered contextual controls */
+#app.battleActive{position:relative;isolation:isolate}
+#app.battleActive::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:
+ radial-gradient(ellipse at 8% 8%,color-mix(in srgb,var(--deck-a) 19%,transparent),transparent 38%),
+ radial-gradient(ellipse at 96% 30%,color-mix(in srgb,var(--deck-b) 15%,transparent),transparent 42%),
+ radial-gradient(ellipse at 44% 95%,color-mix(in srgb,var(--deck-c) 10%,transparent),transparent 44%),
+ linear-gradient(180deg,#020609 0%,color-mix(in srgb,var(--deck-a) 4%,#05090d) 48%,#020507 100%)}
+#app.battleActive::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.52;background:linear-gradient(115deg,transparent 0 31%,color-mix(in srgb,var(--deck-a) 5%,transparent) 48%,transparent 67%)}
+.battleActive .playerHud{border-color:color-mix(in srgb,var(--deck-a) 68%,#465863);box-shadow:0 14px 42px rgba(0,0,0,.34),0 0 32px var(--deck-glow);background:
+ radial-gradient(circle at 7% 0,color-mix(in srgb,var(--deck-a) 25%,transparent),transparent 36%),
+ radial-gradient(circle at 96% 14%,color-mix(in srgb,var(--deck-b) 20%,transparent),transparent 42%),
+ linear-gradient(155deg,color-mix(in srgb,var(--deck-a) 9%,#0b151d),color-mix(in srgb,var(--deck-b) 8%,#071018) 48%,#061018)}
+.battleActive .card,.battleActive .bfZone,.battleActive .opp,.battleActive .res,.battleActive .so,.battleActive .mod{border-color:color-mix(in srgb,var(--deck-a) 30%,#243b4c);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 7%,#0b151d),color-mix(in srgb,var(--deck-b) 5%,#081119));box-shadow:inset 0 1px 0 color-mix(in srgb,var(--deck-a) 8%,transparent)}
+.battleActive .playerPageTabs{background:linear-gradient(color-mix(in srgb,var(--deck-a) 5%,var(--b)) 74%,transparent)}
+.battleActive .playerPageTab,.battleActive .battlefieldPlayerTab,.battleActive .battleExit,.battleActive .chip{border-color:color-mix(in srgb,var(--deck-a) 30%,#263f51);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 6%,#08131b),color-mix(in srgb,var(--deck-b) 5%,#071018))}
+.battleActive .playerPageTab.active,.battleActive .battlefieldPlayerTab.active{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 80%,#fff);box-shadow:0 0 18px var(--deck-glow);background:linear-gradient(125deg,color-mix(in srgb,var(--deck-a) 28%,#11202a),color-mix(in srgb,var(--deck-b) 20%,#0b1821))!important}
+
+.battleActive .priorityPill{background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 8%,#08131b),color-mix(in srgb,var(--deck-b) 6%,#071018))}
+.battleActive .pr
+
+
+TERM --deck-a OFFSET 46312
+ve deck HUD polish + centered contextual controls */
+#app.battleActive{position:relative;isolation:isolate}
+#app.battleActive::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:
+ radial-gradient(ellipse at 8% 8%,color-mix(in srgb,var(--deck-a) 19%,transparent),transparent 38%),
+ radial-gradient(ellipse at 96% 30%,color-mix(in srgb,var(--deck-b) 15%,transparent),transparent 42%),
+ radial-gradient(ellipse at 44% 95%,color-mix(in srgb,var(--deck-c) 10%,transparent),transparent 44%),
+ linear-gradient(180deg,#020609 0%,color-mix(in srgb,var(--deck-a) 4%,#05090d) 48%,#020507 100%)}
+#app.battleActive::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.52;background:linear-gradient(115deg,transparent 0 31%,color-mix(in srgb,var(--deck-a) 5%,transparent) 48%,transparent 67%)}
+.battleActive .playerHud{border-color:color-mix(in srgb,var(--deck-a) 68%,#465863);box-shadow:0 14px 42px rgba(0,0,0,.34),0 0 32px var(--deck-glow);background:
+ radial-gradient(circle at 7% 0,color-mix(in srgb,var(--deck-a) 25%,transparent),transparent 36%),
+ radial-gradient(circle at 96% 14%,color-mix(in srgb,var(--deck-b) 20%,transparent),transparent 42%),
+ linear-gradient(155deg,color-mix(in srgb,var(--deck-a) 9%,#0b151d),color-mix(in srgb,var(--deck-b) 8%,#071018) 48%,#061018)}
+.battleActive .card,.battleActive .bfZone,.battleActive .opp,.battleActive .res,.battleActive .so,.battleActive .mod{border-color:color-mix(in srgb,var(--deck-a) 30%,#243b4c);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 7%,#0b151d),color-mix(in srgb,var(--deck-b) 5%,#081119));box-shadow:inset 0 1px 0 color-mix(in srgb,var(--deck-a) 8%,transparent)}
+.battleActive .playerPageTabs{background:linear-gradient(color-mix(in srgb,var(--deck-a) 5%,var(--b)) 74%,transparent)}
+.battleActive .playerPageTab,.battleActive .battlefieldPlayerTab,.battleActive .battleExit,.battleActive .chip{border-color:color-mix(in srgb,var(--deck-a) 30%,#263f51);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 6%,#08131b),color-mix(in srgb,var(--deck-b) 5%,#071018))}
+.battleActive .playerPageTab.active,.battleActive .battlefieldPlayerTab.active{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 80%,#fff);box-shadow:0 0 18px var(--deck-glow);background:linear-gradient(125deg,color-mix(in srgb,var(--deck-a) 28%,#11202a),color-mix(in srgb,var(--deck-b) 20%,#0b1821))!important}
+
+.battleActive .priorityPill{background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 8%,#08131b),color-mix(in srgb,var(--deck-b) 6%,#071018))}
+.battleActive .priorityPill.mine{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 82%,#fff);background:linear-gradient
+
+
+TERM --deck-a OFFSET 46466
+fixed;inset:0;z-index:-2;pointer-events:none;background:
+ radial-gradient(ellipse at 8% 8%,color-mix(in srgb,var(--deck-a) 19%,transparent),transparent 38%),
+ radial-gradient(ellipse at 96% 30%,color-mix(in srgb,var(--deck-b) 15%,transparent),transparent 42%),
+ radial-gradient(ellipse at 44% 95%,color-mix(in srgb,var(--deck-c) 10%,transparent),transparent 44%),
+ linear-gradient(180deg,#020609 0%,color-mix(in srgb,var(--deck-a) 4%,#05090d) 48%,#020507 100%)}
+#app.battleActive::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.52;background:linear-gradient(115deg,transparent 0 31%,color-mix(in srgb,var(--deck-a) 5%,transparent) 48%,transparent 67%)}
+.battleActive .playerHud{border-color:color-mix(in srgb,var(--deck-a) 68%,#465863);box-shadow:0 14px 42px rgba(0,0,0,.34),0 0 32px var(--deck-glow);background:
+ radial-gradient(circle at 7% 0,color-mix(in srgb,var(--deck-a) 25%,transparent),transparent 36%),
+ radial-gradient(circle at 96% 14%,color-mix(in srgb,var(--deck-b) 20%,transparent),transparent 42%),
+ linear-gradient(155deg,color-mix(in srgb,var(--deck-a) 9%,#0b151d),color-mix(in srgb,var(--deck-b) 8%,#071018) 48%,#061018)}
+.battleActive .card,.battleActive .bfZone,.battleActive .opp,.battleActive .res,.battleActive .so,.battleActive .mod{border-color:color-mix(in srgb,var(--deck-a) 30%,#243b4c);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 7%,#0b151d),color-mix(in srgb,var(--deck-b) 5%,#081119));box-shadow:inset 0 1px 0 color-mix(in srgb,var(--deck-a) 8%,transparent)}
+.battleActive .playerPageTabs{background:linear-gradient(color-mix(in srgb,var(--deck-a) 5%,var(--b)) 74%,transparent)}
+.battleActive .playerPageTab,.battleActive .battlefieldPlayerTab,.battleActive .battleExit,.battleActive .chip{border-color:color-mix(in srgb,var(--deck-a) 30%,#263f51);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 6%,#08131b),color-mix(in srgb,var(--deck-b) 5%,#071018))}
+.battleActive .playerPageTab.active,.battleActive .battlefieldPlayerTab.active{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 80%,#fff);box-shadow:0 0 18px var(--deck-glow);background:linear-gradient(125deg,color-mix(in srgb,var(--deck-a) 28%,#11202a),color-mix(in srgb,var(--deck-b) 20%,#0b1821))!important}
+
+.battleActive .priorityPill{background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 8%,#08131b),color-mix(in srgb,var(--deck-b) 6%,#071018))}
+.battleActive .priorityPill.mine{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 82%,#fff);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 24%,#10202a),color-mix(in srgb,var(--deck-b) 17%,#09151e));box-shadow:0 0 22px var(--deck-glow)}
+.battleActive .li
+
+
+TERM --deck-a OFFSET 46659
+,color-mix(in srgb,var(--deck-b) 15%,transparent),transparent 42%),
+ radial-gradient(ellipse at 44% 95%,color-mix(in srgb,var(--deck-c) 10%,transparent),transparent 44%),
+ linear-gradient(180deg,#020609 0%,color-mix(in srgb,var(--deck-a) 4%,#05090d) 48%,#020507 100%)}
+#app.battleActive::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.52;background:linear-gradient(115deg,transparent 0 31%,color-mix(in srgb,var(--deck-a) 5%,transparent) 48%,transparent 67%)}
+.battleActive .playerHud{border-color:color-mix(in srgb,var(--deck-a) 68%,#465863);box-shadow:0 14px 42px rgba(0,0,0,.34),0 0 32px var(--deck-glow);background:
+ radial-gradient(circle at 7% 0,color-mix(in srgb,var(--deck-a) 25%,transparent),transparent 36%),
+ radial-gradient(circle at 96% 14%,color-mix(in srgb,var(--deck-b) 20%,transparent),transparent 42%),
+ linear-gradient(155deg,color-mix(in srgb,var(--deck-a) 9%,#0b151d),color-mix(in srgb,var(--deck-b) 8%,#071018) 48%,#061018)}
+.battleActive .card,.battleActive .bfZone,.battleActive .opp,.battleActive .res,.battleActive .so,.battleActive .mod{border-color:color-mix(in srgb,var(--deck-a) 30%,#243b4c);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 7%,#0b151d),color-mix(in srgb,var(--deck-b) 5%,#081119));box-shadow:inset 0 1px 0 color-mix(in srgb,var(--deck-a) 8%,transparent)}
+.battleActive .playerPageTabs{background:linear-gradient(color-mix(in srgb,var(--deck-a) 5%,var(--b)) 74%,transparent)}
+.battleActive .playerPageTab,.battleActive .battlefieldPlayerTab,.battleActive .battleExit,.battleActive .chip{border-color:color-mix(in srgb,var(--deck-a) 30%,#263f51);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 6%,#08131b),color-mix(in srgb,var(--deck-b) 5%,#071018))}
+.battleActive .playerPageTab.active,.battleActive .battlefieldPlayerTab.active{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 80%,#fff);box-shadow:0 0 18px var(--deck-glow);background:linear-gradient(125deg,color-mix(in srgb,var(--deck-a) 28%,#11202a),color-mix(in srgb,var(--deck-b) 20%,#0b1821))!important}
+
+.battleActive .priorityPill{background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 8%,#08131b),color-mix(in srgb,var(--deck-b) 6%,#071018))}
+.battleActive .priorityPill.mine{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 82%,#fff);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 24%,#10202a),color-mix(in srgb,var(--deck-b) 17%,#09151e));box-shadow:0 0 22px var(--deck-glow)}
+.battleActive .lifeStage{background:radial-gradient(ellipse at center,color-mix(in srgb,var(--deck-a) 7%,transparent),transparent 67%);box-shadow:inset 0 0 28px color-mix(in srgb,var(--deck-b) 5%,transparent)}
+
+
+
+TERM --deck-a OFFSET 46891
+ck-a) 4%,#05090d) 48%,#020507 100%)}
+#app.battleActive::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.52;background:linear-gradient(115deg,transparent 0 31%,color-mix(in srgb,var(--deck-a) 5%,transparent) 48%,transparent 67%)}
+.battleActive .playerHud{border-color:color-mix(in srgb,var(--deck-a) 68%,#465863);box-shadow:0 14px 42px rgba(0,0,0,.34),0 0 32px var(--deck-glow);background:
+ radial-gradient(circle at 7% 0,color-mix(in srgb,var(--deck-a) 25%,transparent),transparent 36%),
+ radial-gradient(circle at 96% 14%,color-mix(in srgb,var(--deck-b) 20%,transparent),transparent 42%),
+ linear-gradient(155deg,color-mix(in srgb,var(--deck-a) 9%,#0b151d),color-mix(in srgb,var(--deck-b) 8%,#071018) 48%,#061018)}
+.battleActive .card,.battleActive .bfZone,.battleActive .opp,.battleActive .res,.battleActive .so,.battleActive .mod{border-color:color-mix(in srgb,var(--deck-a) 30%,#243b4c);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 7%,#0b151d),color-mix(in srgb,var(--deck-b) 5%,#081119));box-shadow:inset 0 1px 0 color-mix(in srgb,var(--deck-a) 8%,transparent)}
+.battleActive .playerPageTabs{background:linear-gradient(color-mix(in srgb,var(--deck-a) 5%,var(--b)) 74%,transparent)}
+.battleActive .playerPageTab,.battleActive .battlefieldPlayerTab,.battleActive .battleExit,.battleActive .chip{border-color:color-mix(in srgb,var(--deck-a) 30%,#263f51);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 6%,#08131b),color-mix(in srgb,var(--deck-b) 5%,#071018))}
+.battleActive .playerPageTab.active,.battleActive .battlefieldPlayerTab.active{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 80%,#fff);box-shadow:0 0 18px var(--deck-glow);background:linear-gradient(125deg,color-mix(in srgb,var(--deck-a) 28%,#11202a),color-mix(in srgb,var(--deck-b) 20%,#0b1821))!important}
+
+.battleActive .priorityPill{background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 8%,#08131b),color-mix(in srgb,var(--deck-b) 6%,#071018))}
+.battleActive .priorityPill.mine{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 82%,#fff);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 24%,#10202a),color-mix(in srgb,var(--deck-b) 17%,#09151e));box-shadow:0 0 22px var(--deck-glow)}
+.battleActive .lifeStage{background:radial-gradient(ellipse at center,color-mix(in srgb,var(--deck-a) 7%,transparent),transparent 67%);box-shadow:inset 0 0 28px color-mix(in srgb,var(--deck-b) 5%,transparent)}
+.battleActive .statusRail .st,.battleActive .globalStatusRail>*{border-color:color-mix(in srgb,var(--deck-a) 29%,#1d3443);background:linear-gradient(150deg,color-mix(in srgb,var(--deck-a) 7%,#08131b),color-mix(in srgb,var(--deck-b) 
+
+
+TERM --deck-a OFFSET 46970
+on:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.52;background:linear-gradient(115deg,transparent 0 31%,color-mix(in srgb,var(--deck-a) 5%,transparent) 48%,transparent 67%)}
+.battleActive .playerHud{border-color:color-mix(in srgb,var(--deck-a) 68%,#465863);box-shadow:0 14px 42px rgba(0,0,0,.34),0 0 32px var(--deck-glow);background:
+ radial-gradient(circle at 7% 0,color-mix(in srgb,var(--deck-a) 25%,transparent),transparent 36%),
+ radial-gradient(circle at 96% 14%,color-mix(in srgb,var(--deck-b) 20%,transparent),transparent 42%),
+ linear-gradient(155deg,color-mix(in srgb,var(--deck-a) 9%,#0b151d),color-mix(in srgb,var(--deck-b) 8%,#071018) 48%,#061018)}
+.battleActive .card,.battleActive .bfZone,.battleActive .opp,.battleActive .res,.battleActive .so,.battleActive .mod{border-color:color-mix(in srgb,var(--deck-a) 30%,#243b4c);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 7%,#0b151d),color-mix(in srgb,var(--deck-b) 5%,#081119));box-shadow:inset 0 1px 0 color-mix(in srgb,var(--deck-a) 8%,transparent)}
+.battleActive .playerPageTabs{background:linear-gradient(color-mix(in srgb,var(--deck-a) 5%,var(--b)) 74%,transparent)}
+.battleActive .playerPageTab,.battleActive .battlefieldPlayerTab,.battleActive .battleExit,.battleActive .chip{border-color:color-mix(in srgb,var(--deck-a) 30%,#263f51);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 6%,#08131b),color-mix(in srgb,var(--deck-b) 5%,#071018))}
+.battleActive .playerPageTab.active,.battleActive .battlefieldPlayerTab.active{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 80%,#fff);box-shadow:0 0 18px var(--deck-glow);background:linear-gradient(125deg,color-mix(in srgb,var(--deck-a) 28%,#11202a),color-mix(in srgb,var(--deck-b) 20%,#0b1821))!important}
+
+.battleActive .priorityPill{background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 8%,#08131b),color-mix(in srgb,var(--deck-b) 6%,#071018))}
+.battleActive .priorityPill.mine{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 82%,#fff);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 24%,#10202a),color-mix(in srgb,var(--deck-b) 17%,#09151e));box-shadow:0 0 22px var(--deck-glow)}
+.battleActive .lifeStage{background:radial-gradient(ellipse at center,color-mix(in srgb,var(--deck-a) 7%,transparent),transparent 67%);box-shadow:inset 0 0 28px color-mix(in srgb,var(--deck-b) 5%,transparent)}
+.battleActive .statusRail .st,.battleActive .globalStatusRail>*{border-color:color-mix(in srgb,var(--deck-a) 29%,#1d3443);background:linear-gradient(150deg,color-mix(in srgb,var(--deck-a) 7%,#08131b),color-mix(in srgb,var(--deck-b) 5%,#071018))}
+.battleActive .numericStep,.battleActive .mini,.battleActive .cmd
+
+
+TERM --deck-a OFFSET 47084
+lor-mix(in srgb,var(--deck-a) 5%,transparent) 48%,transparent 67%)}
+.battleActive .playerHud{border-color:color-mix(in srgb,var(--deck-a) 68%,#465863);box-shadow:0 14px 42px rgba(0,0,0,.34),0 0 32px var(--deck-glow);background:
+ radial-gradient(circle at 7% 0,color-mix(in srgb,var(--deck-a) 25%,transparent),transparent 36%),
+ radial-gradient(circle at 96% 14%,color-mix(in srgb,var(--deck-b) 20%,transparent),transparent 42%),
+ linear-gradient(155deg,color-mix(in srgb,var(--deck-a) 9%,#0b151d),color-mix(in srgb,var(--deck-b) 8%,#071018) 48%,#061018)}
+.battleActive .card,.battleActive .bfZone,.battleActive .opp,.battleActive .res,.battleActive .so,.battleActive .mod{border-color:color-mix(in srgb,var(--deck-a) 30%,#243b4c);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 7%,#0b151d),color-mix(in srgb,var(--deck-b) 5%,#081119));box-shadow:inset 0 1px 0 color-mix(in srgb,var(--deck-a) 8%,transparent)}
+.battleActive .playerPageTabs{background:linear-gradient(color-mix(in srgb,var(--deck-a) 5%,var(--b)) 74%,transparent)}
+.battleActive .playerPageTab,.battleActive .battlefieldPlayerTab,.battleActive .battleExit,.battleActive .chip{border-color:color-mix(in srgb,var(--deck-a) 30%,#263f51);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 6%,#08131b),color-mix(in srgb,var(--deck-b) 5%,#071018))}
+.battleActive .playerPageTab.active,.battleActive .battlefieldPlayerTab.active{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 80%,#fff);box-shadow:0 0 18px var(--deck-glow);background:linear-gradient(125deg,color-mix(in srgb,var(--deck-a) 28%,#11202a),color-mix(in srgb,var(--deck-b) 20%,#0b1821))!important}
+
+.battleActive .priorityPill{background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 8%,#08131b),color-mix(in srgb,var(--deck-b) 6%,#071018))}
+.battleActive .priorityPill.mine{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 82%,#fff);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 24%,#10202a),color-mix(in srgb,var(--deck-b) 17%,#09151e));box-shadow:0 0 22px var(--deck-glow)}
+.battleActive .lifeStage{background:radial-gradient(ellipse at center,color-mix(in srgb,var(--deck-a) 7%,transparent),transparent 67%);box-shadow:inset 0 0 28px color-mix(in srgb,var(--deck-b) 5%,transparent)}
+.battleActive .statusRail .st,.battleActive .globalStatusRail>*{border-color:color-mix(in srgb,var(--deck-a) 29%,#1d3443);background:linear-gradient(150deg,color-mix(in srgb,var(--deck-a) 7%,#08131b),color-mix(in srgb,var(--deck-b) 5%,#071018))}
+.battleActive .numericStep,.battleActive .mini,.battleActive .cmdHit,.battleActive .act{border-color:color-mix(in srgb,var(--deck-a) 35%,#31506a);background:linear-gradient(150deg
+
+
+TERM --deck-a OFFSET 47190
+color-mix(in srgb,var(--deck-a) 68%,#465863);box-shadow:0 14px 42px rgba(0,0,0,.34),0 0 32px var(--deck-glow);background:
+ radial-gradient(circle at 7% 0,color-mix(in srgb,var(--deck-a) 25%,transparent),transparent 36%),
+ radial-gradient(circle at 96% 14%,color-mix(in srgb,var(--deck-b) 20%,transparent),transparent 42%),
+ linear-gradient(155deg,color-mix(in srgb,var(--deck-a) 9%,#0b151d),color-mix(in srgb,var(--deck-b) 8%,#071018) 48%,#061018)}
+.battleActive .card,.battleActive .bfZone,.battleActive .opp,.battleActive .res,.battleActive .so,.battleActive .mod{border-color:color-mix(in srgb,var(--deck-a) 30%,#243b4c);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 7%,#0b151d),color-mix(in srgb,var(--deck-b) 5%,#081119));box-shadow:inset 0 1px 0 color-mix(in srgb,var(--deck-a) 8%,transparent)}
+.battleActive .playerPageTabs{background:linear-gradient(color-mix(in srgb,var(--deck-a) 5%,var(--b)) 74%,transparent)}
+.battleActive .playerPageTab,.battleActive .battlefieldPlayerTab,.battleActive .battleExit,.battleActive .chip{border-color:color-mix(in srgb,var(--deck-a) 30%,#263f51);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 6%,#08131b),color-mix(in srgb,var(--deck-b) 5%,#071018))}
+.battleActive .playerPageTab.active,.battleActive .battlefieldPlayerTab.active{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 80%,#fff);box-shadow:0 0 18px var(--deck-glow);background:linear-gradient(125deg,color-mix(in srgb,var(--deck-a) 28%,#11202a),color-mix(in srgb,var(--deck-b) 20%,#0b1821))!important}
+
+.battleActive .priorityPill{background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 8%,#08131b),color-mix(in srgb,var(--deck-b) 6%,#071018))}
+.battleActive .priorityPill.mine{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 82%,#fff);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 24%,#10202a),color-mix(in srgb,var(--deck-b) 17%,#09151e));box-shadow:0 0 22px var(--deck-glow)}
+.battleActive .lifeStage{background:radial-gradient(ellipse at center,color-mix(in srgb,var(--deck-a) 7%,transparent),transparent 67%);box-shadow:inset 0 0 28px color-mix(in srgb,var(--deck-b) 5%,transparent)}
+.battleActive .statusRail .st,.battleActive .globalStatusRail>*{border-color:color-mix(in srgb,var(--deck-a) 29%,#1d3443);background:linear-gradient(150deg,color-mix(in srgb,var(--deck-a) 7%,#08131b),color-mix(in srgb,var(--deck-b) 5%,#071018))}
+.battleActive .numericStep,.battleActive .mini,.battleActive .cmdHit,.battleActive .act{border-color:color-mix(in srgb,var(--deck-a) 35%,#31506a);background:linear-gradient(150deg,color-mix(in srgb,var(--deck-a) 7%,#0a1822),color-mix(in srgb,var(--deck-b) 5%,#08131b))}
+.battleActive .
+
+
+TERM --deck-a OFFSET 47377
+5%,transparent),transparent 36%),
+ radial-gradient(circle at 96% 14%,color-mix(in srgb,var(--deck-b) 20%,transparent),transparent 42%),
+ linear-gradient(155deg,color-mix(in srgb,var(--deck-a) 9%,#0b151d),color-mix(in srgb,var(--deck-b) 8%,#071018) 48%,#061018)}
+.battleActive .card,.battleActive .bfZone,.battleActive .opp,.battleActive .res,.battleActive .so,.battleActive .mod{border-color:color-mix(in srgb,var(--deck-a) 30%,#243b4c);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 7%,#0b151d),color-mix(in srgb,var(--deck-b) 5%,#081119));box-shadow:inset 0 1px 0 color-mix(in srgb,var(--deck-a) 8%,transparent)}
+.battleActive .playerPageTabs{background:linear-gradient(color-mix(in srgb,var(--deck-a) 5%,var(--b)) 74%,transparent)}
+.battleActive .playerPageTab,.battleActive .battlefieldPlayerTab,.battleActive .battleExit,.battleActive .chip{border-color:color-mix(in srgb,var(--deck-a) 30%,#263f51);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 6%,#08131b),color-mix(in srgb,var(--deck-b) 5%,#071018))}
+.battleActive .playerPageTab.active,.battleActive .battlefieldPlayerTab.active{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 80%,#fff);box-shadow:0 0 18px var(--deck-glow);background:linear-gradient(125deg,color-mix(in srgb,var(--deck-a) 28%,#11202a),color-mix(in srgb,var(--deck-b) 20%,#0b1821))!important}
+
+.battleActive .priorityPill{background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 8%,#08131b),color-mix(in srgb,var(--deck-b) 6%,#071018))}
+.battleActive .priorityPill.mine{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 82%,#fff);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 24%,#10202a),color-mix(in srgb,var(--deck-b) 17%,#09151e));box-shadow:0 0 22px var(--deck-glow)}
+.battleActive .lifeStage{background:radial-gradient(ellipse at center,color-mix(in srgb,var(--deck-a) 7%,transparent),transparent 67%);box-shadow:inset 0 0 28px color-mix(in srgb,var(--deck-b) 5%,transparent)}
+.battleActive .statusRail .st,.battleActive .globalStatusRail>*{border-color:color-mix(in srgb,var(--deck-a) 29%,#1d3443);background:linear-gradient(150deg,color-mix(in srgb,var(--deck-a) 7%,#08131b),color-mix(in srgb,var(--deck-b) 5%,#071018))}
+.battleActive .numericStep,.battleActive .mini,.battleActive .cmdHit,.battleActive .act{border-color:color-mix(in srgb,var(--deck-a) 35%,#31506a);background:linear-gradient(150deg,color-mix(in srgb,var(--deck-a) 7%,#0a1822),color-mix(in srgb,var(--deck-b) 5%,#08131b))}
+.battleActive .numericStep:active,.battleActive .dk:active,.battleActive .playerPageTab:active{box-shadow:0 0 20px var(--deck-glow);border-color:var(--deck-a)}
+.battleActive .opponentsCard> .sectionHead
+
+
+TERM --deck-a OFFSET 47456
+in srgb,var(--deck-b) 20%,transparent),transparent 42%),
+ linear-gradient(155deg,color-mix(in srgb,var(--deck-a) 9%,#0b151d),color-mix(in srgb,var(--deck-b) 8%,#071018) 48%,#061018)}
+.battleActive .card,.battleActive .bfZone,.battleActive .opp,.battleActive .res,.battleActive .so,.battleActive .mod{border-color:color-mix(in srgb,var(--deck-a) 30%,#243b4c);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 7%,#0b151d),color-mix(in srgb,var(--deck-b) 5%,#081119));box-shadow:inset 0 1px 0 color-mix(in srgb,var(--deck-a) 8%,transparent)}
+.battleActive .playerPageTabs{background:linear-gradient(color-mix(in srgb,var(--deck-a) 5%,var(--b)) 74%,transparent)}
+.battleActive .playerPageTab,.battleActive .battlefieldPlayerTab,.battleActive .battleExit,.battleActive .chip{border-color:color-mix(in srgb,var(--deck-a) 30%,#263f51);background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 6%,#08131b),color-mix(in srgb,var(--deck-b) 5%,#071018))}
+.battleActive .playerPageTab.active,.battleActive .battlefieldPlayerTab.active{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 80%,#fff);box-shadow:0 0 18px var(--deck-glow);background:linear-gradient(125deg,color-mix(in srgb,var(--deck-a) 28%,#11202a),color-mix(in srgb,var(--deck-b) 20%,#0b1821))!important}
+
+.battleActive .priorityPill{background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 8%,#08131b),color-mix(in srgb,var(--deck-b) 6%,#071018))}
+.battleActive .priorityPill.mine{color:#fff;border-color:color-mix(in srgb,var(--deck-a) 82%,#fff);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 24%,#10202a),color-mix(in srgb,var(--deck-b) 17%,#09151e));box-shadow:0 0 22px var(--deck-glow)}
+.battleActive .lifeStage{background:radial-gradient(ellipse at center,color-mix(in srgb,var(--deck-a) 7%,transparent),transparent 67%);box-shadow:inset 0 0 28px color-mix(in srgb,var(--deck-b) 5%,transparent)}
+.battleActive .statusRail .st,.battleActive .globalStatusRail>*{border-color:color-mix(in srgb,var(--deck-a) 29%,#1d3443);background:linear-gradient(150deg,color-mix(in srgb,var(--deck-a) 7%,#08131b),color-mix(in srgb,var(--deck-b) 5%,#071018))}
+.battleActive .numericStep,.battleActive .mini,.battleActive .cmdHit,.battleActive .act{border-color:color-mix(in srgb,var(--deck-a) 35%,#31506a);background:linear-gradient(150deg,color-mix(in srgb,var(--deck-a) 7%,#0a1822),color-mix(in srgb,var(--deck-b) 5%,#08131b))}
+.battleActive .numericStep:active,.battleActive .dk:active,.battleActive .playerPageTab:active{box-shadow:0 0 20px var(--deck-glow);border-color:var(--deck-a)}
+.battleActive .opponentsCard> .sectionHead b,.battleActive .quickActionsCard> .sectionHead b,.battleActive .battleTitle{ 
