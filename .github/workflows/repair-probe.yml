@@ -1,4 +1,4 @@
-name: Sidekick branch preview smoke
+name: Sidekick ready-up control probe
 
 on:
   push:
@@ -6,58 +6,45 @@ on:
       - sidekick-refactor
     paths:
       - .github/workflows/repair-probe.yml
-      - tools/preview_smoke_test.js
-      - scripts/inline-10.js
-      - sw.js
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  smoke:
+  probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    env:
-      PREVIEW_URL: https://mtg-table-engine1-git-sidekick-refactor-brylancreatesart-7523.vercel.app
     steps:
       - uses: actions/checkout@v4
         with:
           ref: sidekick-refactor
           fetch-depth: 0
-      - name: Verify transport and authoritative sync syntax
+      - name: Extract ready-up control functions
         run: |
-          node --check scripts/inline-10.js
-          node --check scripts/inline-95.js
-          node tools/run_authoritative_sync_qa.js
-      - name: Wait for current preview alias and service worker
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          text=Path('scripts/inline-101.js').read_text(errors='ignore')
+          names=['librarySetupForPlayer','showLibraryControl','markReadyNow']
+          out=[]
+          matches=list(re.finditer(r'(?m)^function\s+([A-Za-z_$][\w$]*)\s*\(',text))
+          by={m.group(1):(i,m) for i,m in enumerate(matches)}
+          for name in names:
+              if name not in by: continue
+              i,m=by[name]
+              end=matches[i+1].start() if i+1<len(matches) else len(text)
+              out.append('===== '+name+' =====\n'+text[m.start():end][:16000])
+          # also capture the ready/start handler area
+          pos=text.find("$('rdy').onclick")
+          if pos>=0: out.append('===== ready handlers =====\n'+text[max(0,pos-1500):pos+6000])
+          Path('ready-control-probe.txt').write_text('\n\n'.join(out)+'\n')
+          print('captured', [n for n in names if n in by])
+          PY
+      - name: Commit probe
         run: |
-          for i in $(seq 1 36); do
-            code=$(curl -L -s -o /tmp/preview.html -w '%{http_code}' "$PREVIEW_URL" || true)
-            sw=$(curl -L -s -o /tmp/sw.js -w '%{http_code}' "$PREVIEW_URL/sw.js" || true)
-            js=$(curl -L -s -o /tmp/gateway.js -w '%{http_code}' "$PREVIEW_URL/scripts/inline-10.js" || true)
-            if [ "$code" = "200" ] && [ "$sw" = "200" ] && [ "$js" = "200" ] && grep -q 'MTG Table Engine' /tmp/preview.html && grep -q 'phase108-live-transport-gateway-5' /tmp/gateway.js; then
-              echo "Preview with handshake repair ready"
-              exit 0
-            fi
-            echo "Preview not ready yet (page=$code sw=$sw gateway=$js), retry $i/36"
-            sleep 5
-          done
-          echo "Current repaired preview did not become ready" >&2
-          exit 1
-      - name: Install browser test runtime
-        run: |
-          npm install --no-save playwright@1.55.0
-          npx playwright install --with-deps chromium
-      - name: Run deployed Chromium smoke test
-        run: node tools/preview_smoke_test.js
-      - name: Commit smoke report
-        if: always()
-        run: |
-          test -f preview-smoke-report.json || exit 0
           git config user.name "sidekick-refactor-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add preview-smoke-report.json authoritative-sync-qa.json
+          git add ready-control-probe.txt
           git diff --cached --quiet && exit 0
-          git commit -m "Record repaired preview smoke results"
+          git commit -m "Record ready-up control probe"
           git push origin HEAD:sidekick-refactor
