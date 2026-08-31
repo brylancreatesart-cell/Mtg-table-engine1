@@ -6,6 +6,7 @@ on:
       - sidekick-refactor
     paths:
       - .github/workflows/repair-probe.yml
+      - tools/preview_smoke_test.js
   workflow_dispatch:
 
 permissions:
