@@ -1,0 +1,48 @@
+name: Repair batch 5 - active deck scope
+
+on:
+  push:
+    branches:
+      - sidekick-refactor
+    paths:
+      - .github/workflows/repair-batch5.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: sidekick-refactor
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Apply account-scoped active deck repair
+        run: python tools/apply_repair_batch5.py
+      - name: Rebuild generated runtime
+        run: python tools/build_runtime_from_source.py
+      - name: Verify JavaScript syntax
+        run: node --check scripts/inline-101.js
+      - name: Verify active deck scoping
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('scripts/inline-101.js').read_text()
+          assert "localStorage.setItem('mtgte_active_deck',activeDeckId)" not in s
+          assert "let key='mtgte_active_deck_'+playerProfile.id" in s
+          assert "sessionStorage.setItem('mtgte_guest_active_deck',activeDeckId)" in s
+          print('Active deck selection is account scoped; guest selection remains session scoped.')
+          PY
+      - name: Commit repair
+        run: |
+          git config user.name "sidekick-refactor-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/app-src scripts/inline-101.js runtime-build-report.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Keep active deck selection account scoped"
+          git push origin HEAD:sidekick-refactor
