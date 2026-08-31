@@ -1,0 +1,53 @@
+name: Probe first repair targets
+
+on:
+  push:
+    branches:
+      - sidekick-refactor
+    paths:
+      - .github/workflows/repair-probe.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: sidekick-refactor
+          fetch-depth: 0
+      - name: Extract repair targets
+        run: |
+          python - <<'PY'
+          import json,re
+          from pathlib import Path
+          p=Path('scripts/inline-101.js')
+          text=p.read_text()
+          names=['inviteFriend','joinRoomInvite','consumeInviteLink','joinRoom','finishVerify','startGuestIdentity','clearLegacyGuestPersistence','loadProfile']
+          out={'functions':{},'synthetic_clicks':[]}
+          pat=re.compile(r'(?m)^(?:async\s+)?function\s+([A-Za-z_$][\w$]*)\s*\(')
+          matches=list(pat.finditer(text))
+          byname={m.group(1):(m,i) for i,m in enumerate(matches)}
+          for name in names:
+            if name not in byname: continue
+            m,i=byname[name]
+            end=matches[i+1].start() if i+1<len(matches) else len(text)
+            body=text[m.start():end]
+            out['functions'][name]={'line':text.count('\n',0,m.start())+1,'body':body[:12000]}
+          for m in re.finditer(r'\.click\s*\(\s*\)',text):
+            s=max(0,m.start()-650); e=min(len(text),m.end()+650)
+            out['synthetic_clicks'].append({'line':text.count('\n',0,m.start())+1,'context':text[s:e]})
+          Path('repair-targets.json').write_text(json.dumps(out,indent=2)+'\n')
+          print('targets',list(out['functions']),'clicks',len(out['synthetic_clicks']))
+          PY
+      - name: Commit probe report
+        run: |
+          git config user.name "sidekick-refactor-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add repair-targets.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Record first repair targets"
+          git push origin HEAD:sidekick-refactor
