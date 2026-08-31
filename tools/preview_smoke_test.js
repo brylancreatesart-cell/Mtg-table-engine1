@@ -2,7 +2,7 @@ const { chromium } = require('playwright');
 
 const BASE = process.env.PREVIEW_URL || 'https://mtg-table-engine1-git-sidekick-refactor-brylancreatesart-7523.vercel.app';
 const deck = `1 Giada, Font of Hope\n99 Plains`;
-const report = { base: BASE, startedAt: new Date().toISOString(), checks: [], consoleErrors: [], pageErrors: [], badResponses: [], requestFailures: [] };
+const report = { base: BASE, startedAt: new Date().toISOString(), checks: [], consoleErrors: [], pageErrors: [], badResponses: [], requestFailures: [], diagnostics: {} };
 const check = (name, ok, details='') => { report.checks.push({ name, ok: !!ok, details }); if (!ok) throw new Error(`${name}${details ? ': '+details : ''}`); };
 
 async function captureErrors(page, label) {
@@ -12,10 +12,27 @@ async function captureErrors(page, label) {
   page.on('requestfailed', req => report.requestFailures.push({ label, url: req.url(), resourceType: req.resourceType(), error: req.failure()?.errorText || 'unknown' }));
 }
 
+async function runtimeSnapshot(page) {
+  try{return await page.evaluate(async()=>({
+    url:location.href,
+    net:document.querySelector('#net')?.textContent||null,
+    peerType:typeof window.Peer,
+    peerTransport:typeof peerTransportState!=='undefined'?peerTransportState:null,
+    peerOpen:typeof peer!=='undefined'&&peer?!!peer.open:null,
+    peerDisconnected:typeof peer!=='undefined'&&peer?!!peer.disconnected:null,
+    connOpen:typeof cc!=='undefined'&&cc?!!cc.open:null,
+    activeRoom:typeof activeRoom!=='undefined'?activeRoom:null,
+    host:typeof HST!=='undefined'?!!HST:null,
+    serviceWorkers:navigator.serviceWorker?await navigator.serviceWorker.getRegistrations().then(xs=>xs.map(x=>({scope:x.scope,active:x.active?.scriptURL||null}))):[]
+  }))}catch(e){return{error:String(e)}}
+}
+
 async function waitForApp(page) {
   await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 60000 });
   await page.waitForSelector('#authGuestBtn', { state: 'visible', timeout: 25000 });
   check('front door renders', await page.locator('#authGuestBtn').isVisible());
+  await page.waitForFunction(()=>typeof window.Peer==='function',null,{timeout:15000});
+  check('PeerJS runtime loads', await page.evaluate(()=>typeof window.Peer==='function'));
 }
 
 async function guestToLobby(page, name, username) {
@@ -40,11 +57,12 @@ async function guestToLobby(page, name, username) {
 
 async function main() {
   const browser = await chromium.launch({ headless: true });
+  let host,join,display;
   try {
     const hostCtx = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const joinCtx = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const displayCtx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
-    const host = await hostCtx.newPage(), join = await joinCtx.newPage(), display = await displayCtx.newPage();
+    host = await hostCtx.newPage(); join = await joinCtx.newPage(); display = await displayCtx.newPage();
     await captureErrors(host,'host'); await captureErrors(join,'join'); await captureErrors(display,'display');
 
     await guestToLobby(host, 'Smoke Host', 'smokehost');
@@ -52,26 +70,27 @@ async function main() {
     await host.waitForFunction(() => /^[A-Z0-9]{6}$/.test((document.querySelector('#code')?.textContent || '').trim()), null, { timeout: 20000 });
     const room = (await host.locator('#code').textContent()).trim();
     check('host creates six-character room', /^[A-Z0-9]{6}$/.test(room), room);
-    await host.waitForTimeout(1000);
+    await host.waitForFunction(() => /HOST ONLINE/.test((document.querySelector('#net')?.textContent || '').toUpperCase()), null, { timeout: 25000 });
+    check('host peer becomes online', /HOST ONLINE/.test(((await host.locator('#net').textContent())||'').toUpperCase()));
 
     await guestToLobby(join, 'Smoke Join', 'smokejoin');
     await join.click('#join');
     await join.fill('#jc', room);
     await join.click('#con');
-    await join.waitForFunction(() => /CONNECTED|ONLINE/.test((document.querySelector('#net')?.textContent || '').toUpperCase()), null, { timeout: 25000 });
-    check('second player connects to host', /CONNECTED|ONLINE/.test(((await join.locator('#net').textContent())||'').toUpperCase()));
+    await join.waitForFunction(() => /CONNECTED/.test((document.querySelector('#net')?.textContent || '').toUpperCase()), null, { timeout: 30000 });
+    check('second player connects to host', /CONNECTED/.test(((await join.locator('#net').textContent())||'').toUpperCase()));
     await host.waitForFunction(() => (document.querySelector('#slots')?.textContent || '').includes('Smoke Join'), null, { timeout: 15000 });
     check('host roster receives joined player', (await host.locator('#slots').textContent()).includes('Smoke Join'));
 
     await display.goto(`${BASE}/?display=${room}`, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await display.waitForSelector('#sharedDisplay', { state: 'visible', timeout: 20000 });
-    await display.waitForFunction(() => (document.querySelector('#sharedDisplayPlayers')?.textContent || '').includes('Smoke Host'), null, { timeout: 25000 });
+    await display.waitForFunction(() => (document.querySelector('#sharedDisplayPlayers')?.textContent || '').includes('Smoke Host'), null, { timeout: 30000 });
     check('shared display receives host roster', (await display.locator('#sharedDisplayPlayers').textContent()).includes('Smoke Host'));
     check('shared display receives joined player', (await display.locator('#sharedDisplayPlayers').textContent()).includes('Smoke Join'));
     check('shared display remains read-only', await display.evaluate(() => document.body.classList.contains('sharedTableDisplayMode') && document.querySelector('#game')?.classList.contains('h')));
 
     const assetStatuses = await host.evaluate(async () => {
-      const urls=['styles/inline-01.css','scripts/inline-100.js','scripts/inline-101.js'];
+      const urls=['styles/inline-01.css','scripts/inline-100.js','scripts/inline-101.js','sw.js'];
       const out={}; for (const u of urls) out[u]=(await fetch(u,{cache:'no-store'})).status; return out;
     });
     for (const [asset,status] of Object.entries(assetStatuses)) check(`asset ${asset} loads`, status===200, String(status));
@@ -81,6 +100,11 @@ async function main() {
     check('no required document/script/style 404s', important404s.length===0, JSON.stringify(important404s));
     report.ok = report.checks.every(c=>c.ok);
     report.room = room;
+  } catch(err) {
+    if(host)report.diagnostics.host=await runtimeSnapshot(host);
+    if(join)report.diagnostics.join=await runtimeSnapshot(join);
+    if(display)report.diagnostics.display=await runtimeSnapshot(display);
+    throw err;
   } finally {
     report.finishedAt = new Date().toISOString();
     require('fs').writeFileSync('preview-smoke-report.json', JSON.stringify(report,null,2)+'\n');
