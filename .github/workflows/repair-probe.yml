@@ -1,4 +1,4 @@
-name: Probe first repair targets
+name: Sidekick branch repair runner
 
 on:
   push:
@@ -12,52 +12,39 @@ permissions:
   contents: write
 
 jobs:
-  probe:
+  repair:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: sidekick-refactor
           fetch-depth: 0
-      - name: Map reconnect and host-transfer owners
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Apply live active deck propagation repair
+        run: python tools/apply_repair_batch8.py
+      - name: Rebuild generated runtime
+        run: python tools/build_runtime_from_source.py
+      - name: Verify JavaScript syntax
+        run: node --check scripts/inline-101.js
+      - name: Verify propagation invariants
         run: |
           python - <<'PY'
-          import json,re
           from pathlib import Path
-          terms=['function resumeNet','function attemptHostFailover','function demoteFormerHost','MTGLiveReconnect','hostEpoch','authorityEpoch','peer.on(\'disconnected\'','peer.on(\'close\'','cc.on(\'close\'','conn.on(\'close\'','connectionGuard','lastNetSeen']
-          out={'matches':[]}
-          for p in sorted(Path('scripts').glob('inline-*.js')):
-              text=p.read_text(errors='ignore')
-              hits=[]
-              for term in terms:
-                  for m in re.finditer(re.escape(term),text):
-                      s=max(0,m.start()-1600);e=min(len(text),m.end()+4200)
-                      hits.append({'term':term,'line':text.count('\n',0,m.start())+1,'context':text[s:e]})
-                      if len(hits)>=30:break
-                  if len(hits)>=30:break
-              if hits:out['matches'].append({'path':str(p),'hits':hits})
-          Path('reconnect-host-probe.json').write_text(json.dumps(out,indent=2)+'\n')
-          print('matched files:',[x['path'] for x in out['matches']])
+          s=Path('scripts/inline-101.js').read_text()
+          assert 'function propagateActiveDeckSelection()' in s
+          assert 'syncLocalProfilePresence({broadcast:true})' in s
+          assert 'hydrateProfileFromSavedDeck(d);propagateActiveDeckSelection();renderDeckLibrary()' in s
+          assert 'if(wasActive)propagateActiveDeckSelection()' in s
+          assert s.count('propagateActiveDeckSelection();') >= 5
+          print('Active deck changes propagate through live room presence.')
           PY
-      - name: Run reconnect-related module QA where available
-        run: |
-          node - <<'JS'
-          const fs=require('fs'),vm=require('vm');
-          const files=fs.readdirSync('scripts').filter(x=>/^inline-\d+\.js$/.test(x)).sort((a,b)=>Number(a.match(/\d+/)[0])-Number(b.match(/\d+/)[0]));
-          const sandbox={console,setTimeout,clearTimeout,structuredClone:global.structuredClone,crypto:require('crypto').webcrypto,globalThis:null,window:null,localStorage:{getItem(){return null},setItem(){},removeItem(){}},sessionStorage:{getItem(){return null},setItem(){},removeItem(){}}};sandbox.globalThis=sandbox;sandbox.window=sandbox;
-          vm.createContext(sandbox);
-          const wanted=['MTGLiveReconnect','MTGRoomResilience','MTGRoomSession','MTGAuthoritativeSync'];
-          let loaded=[];
-          for(const f of files){const src=fs.readFileSync('scripts/'+f,'utf8');if(wanted.some(n=>src.includes(n))){try{vm.runInContext(src,sandbox,{filename:f});loaded.push(f)}catch(e){console.log('skip',f,e.message)}}}
-          const out={loaded,qa:{}};
-          for(const n of wanted){const mod=sandbox[n];if(mod&&typeof mod.localQA==='function'){try{out.qa[n]=mod.localQA()}catch(e){out.qa[n]={error:e.message}}}}
-          fs.writeFileSync('reconnect-module-qa.json',JSON.stringify(out,null,2)+'\n');console.log(out);
-          JS
-      - name: Commit probe reports
+      - name: Commit repair
         run: |
           git config user.name "sidekick-refactor-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add reconnect-host-probe.json reconnect-module-qa.json
+          git add scripts/app-src scripts/inline-101.js runtime-build-report.json
           git diff --cached --quiet && exit 0
-          git commit -m "Map reconnect and host transfer failure paths"
+          git commit -m "Propagate active deck changes to live room presence"
           git push origin HEAD:sidekick-refactor
