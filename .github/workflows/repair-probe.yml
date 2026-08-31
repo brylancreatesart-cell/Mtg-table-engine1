@@ -19,33 +19,45 @@ jobs:
         with:
           ref: sidekick-refactor
           fetch-depth: 0
-      - name: Map post-verify deck-theme handoff
+      - name: Map reconnect and host-transfer owners
         run: |
           python - <<'PY'
-          import re
+          import json,re
           from pathlib import Path
-          terms=['MTGDeckTheme','applyDeckTheme','activeDeckTheme','--deck-a','--deck-b','showLobbyPage','Continue to Lobby','saveCurrentDeck','persistActiveDeckSelection']
-          rows=[]
-          for p in [*sorted(Path('scripts').glob('inline-*.js')),Path('styles/inline-01.css')]:
+          terms=['function resumeNet','function attemptHostFailover','function demoteFormerHost','MTGLiveReconnect','hostEpoch','authorityEpoch','peer.on(\'disconnected\'','peer.on(\'close\'','cc.on(\'close\'','conn.on(\'close\'','connectionGuard','lastNetSeen']
+          out={'matches':[]}
+          for p in sorted(Path('scripts').glob('inline-*.js')):
               text=p.read_text(errors='ignore')
               hits=[]
               for term in terms:
                   for m in re.finditer(re.escape(term),text):
-                      s=max(0,m.start()-900);e=min(len(text),m.end()+1800)
-                      hits.append((m.start(),term,text[s:e]))
+                      s=max(0,m.start()-1600);e=min(len(text),m.end()+4200)
+                      hits.append({'term':term,'line':text.count('\n',0,m.start())+1,'context':text[s:e]})
                       if len(hits)>=30:break
                   if len(hits)>=30:break
-              if hits:
-                  rows.append('FILE '+str(p))
-                  for pos,term,ctx in sorted(hits)[:30]:rows.append(f'\nTERM {term} OFFSET {pos}\n{ctx}\n')
-          Path('deck-theme-handoff-probe.txt').write_text('\n'.join(rows))
-          print('theme files mapped:',sum(1 for x in rows if x.startswith('FILE ')))
+              if hits:out['matches'].append({'path':str(p),'hits':hits})
+          Path('reconnect-host-probe.json').write_text(json.dumps(out,indent=2)+'\n')
+          print('matched files:',[x['path'] for x in out['matches']])
           PY
-      - name: Commit probe report
+      - name: Run reconnect-related module QA where available
+        run: |
+          node - <<'JS'
+          const fs=require('fs'),vm=require('vm');
+          const files=fs.readdirSync('scripts').filter(x=>/^inline-\d+\.js$/.test(x)).sort((a,b)=>Number(a.match(/\d+/)[0])-Number(b.match(/\d+/)[0]));
+          const sandbox={console,setTimeout,clearTimeout,structuredClone:global.structuredClone,crypto:require('crypto').webcrypto,globalThis:null,window:null,localStorage:{getItem(){return null},setItem(){},removeItem(){}},sessionStorage:{getItem(){return null},setItem(){},removeItem(){}}};sandbox.globalThis=sandbox;sandbox.window=sandbox;
+          vm.createContext(sandbox);
+          const wanted=['MTGLiveReconnect','MTGRoomResilience','MTGRoomSession','MTGAuthoritativeSync'];
+          let loaded=[];
+          for(const f of files){const src=fs.readFileSync('scripts/'+f,'utf8');if(wanted.some(n=>src.includes(n))){try{vm.runInContext(src,sandbox,{filename:f});loaded.push(f)}catch(e){console.log('skip',f,e.message)}}}
+          const out={loaded,qa:{}};
+          for(const n of wanted){const mod=sandbox[n];if(mod&&typeof mod.localQA==='function'){try{out.qa[n]=mod.localQA()}catch(e){out.qa[n]={error:e.message}}}}
+          fs.writeFileSync('reconnect-module-qa.json',JSON.stringify(out,null,2)+'\n');console.log(out);
+          JS
+      - name: Commit probe reports
         run: |
           git config user.name "sidekick-refactor-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add deck-theme-handoff-probe.txt
+          git add reconnect-host-probe.json reconnect-module-qa.json
           git diff --cached --quiet && exit 0
-          git commit -m "Map post-verify deck theme handoff"
+          git commit -m "Map reconnect and host transfer failure paths"
           git push origin HEAD:sidekick-refactor
