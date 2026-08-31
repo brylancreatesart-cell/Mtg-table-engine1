@@ -26,47 +26,54 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Extract inline CSS and JavaScript
-        run: python tools/split_monolith.py
-
-      - name: Syntax-check extracted JavaScript
-        shell: bash
-        run: |
-          shopt -s nullglob
-          files=(scripts/inline-*.js)
-          if (( ${#files[@]} == 0 )); then
-            echo "No JavaScript files extracted"
-          else
-            for file in "${files[@]}"; do
-              node --check "$file"
-            done
-          fi
-
-      - name: Structural safety checks
+      - name: Confirm mechanical index split is present
         shell: bash
         run: |
           test -s index.html
           test -s refactor-report.json
-          grep -q 'styles/inline-' index.html || true
-          grep -q 'scripts/inline-' index.html || true
+          test -s scripts/inline-101.js
+          test -s styles/inline-01.css
           python - <<'PY'
           import json
           from pathlib import Path
           report = json.loads(Path('refactor-report.json').read_text())
+          assert report['styles_extracted'] >= 1
+          assert report['scripts_extracted'] >= 1
           assert report['original_index_bytes'] > report['refactored_index_bytes']
-          assert report['styles_extracted'] + report['scripts_extracted'] > 0
-          print('Safety checks passed:', report)
+          print('Mechanical split already present; preserving runtime assets.')
           PY
 
-      - name: Commit refactor output to sidekick-refactor only
+      - name: Create byte-exact controller source fragments
+        run: python tools/split_controller_source.py
+
+      - name: Verify runtime controller syntax
+        run: node --check scripts/inline-101.js
+
+      - name: Verify controller reconstruction
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          report = json.loads(Path('controller-source-report.json').read_text())
+          source = Path(report['source']).read_bytes()
+          rebuilt = b''.join(Path(p['path']).read_bytes() for p in report['parts'])
+          assert rebuilt == source
+          assert report['byte_exact'] is True
+          assert hashlib.sha256(source).hexdigest() == report['source_sha256']
+          assert hashlib.sha256(rebuilt).hexdigest() == report['reconstructed_sha256']
+          print(f"Verified {len(report['parts'])} source fragments; browser runtime remains byte-identical.")
+          PY
+
+      - name: Commit maintainable controller source fragments
         shell: bash
         run: |
           git config user.name "sidekick-refactor-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html styles scripts refactor-report.json
+          git add scripts/app-src controller-source-report.json
           if git diff --cached --quiet; then
             echo "Nothing to commit"
             exit 0
           fi
-          git commit -m "Split monolithic index assets without behavior changes"
+          git commit -m "Create byte-exact controller source fragments"
           git push origin HEAD:sidekick-refactor
