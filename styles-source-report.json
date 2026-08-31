@@ -2,21 +2,21 @@
   "operation": "byte-exact-stylesheet-source-fragmentation",
   "runtime_file_changed": false,
   "source": "styles/inline-01.css",
-  "source_bytes": 2065553,
-  "source_sha256": "ad09f1ff1d1921b97a5eaec62c664ad27f1c35d8f8351b270e55bb4ea7c1c7c8",
+  "source_bytes": 2064560,
+  "source_sha256": "a60695ffb412035bdec1c5b8c239f82ae57611ef5b128db26c278779aa9427f2",
   "max_part_bytes": 70000,
   "parts": [
     {
       "order": 1,
       "path": "styles/app-src/styles-part-01.part.css",
-      "bytes": 69978,
-      "sha256": "a6b4a270ce6ffab44f7a6a43d699812f98b35038e8ae92ad95a3cf69a8f88c9d"
+      "bytes": 69852,
+      "sha256": "b0edd27c3b9f52cee7c4d3f39d8c83c40ddf045541a77008833aced328ac90ac"
     },
     {
       "order": 2,
       "path": "styles/app-src/styles-part-02.part.css",
-      "bytes": 30986,
-      "sha256": "4f0422d585d2109c9150461af2f7db67ec7ea10c545b72b798da03c0abcee639"
+      "bytes": 30119,
+      "sha256": "bc810e619fcdf3c293f83706577ae503f374fd9006195f033b92401513dc8d76"
     },
     {
       "order": 3,
@@ -79,8 +79,8 @@
       "sha256": "5eba3bdd4399a677aa584f2c72fd784f66c6ee56de6b1cebd9996e9685a3ac66"
     }
   ],
-  "reconstructed_bytes": 2065553,
-  "reconstructed_sha256": "ad09f1ff1d1921b97a5eaec62c664ad27f1c35d8f8351b270e55bb4ea7c1c7c8",
+  "reconstructed_bytes": 2064560,
+  "reconstructed_sha256": "a60695ffb412035bdec1c5b8c239f82ae57611ef5b128db26c278779aa9427f2",
   "byte_exact": true,
   "note": "Source fragments rebuild the existing stylesheet exactly; browser continues loading styles/inline-01.css."
 }
