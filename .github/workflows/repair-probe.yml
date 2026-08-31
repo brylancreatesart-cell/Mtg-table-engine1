@@ -19,27 +19,27 @@ jobs:
         with:
           ref: sidekick-refactor
           fetch-depth: 0
-      - name: Summarize avatar CSS owners
+      - name: Summarize portrait avatar base owners
         run: |
           python - <<'PY'
           import re
           from pathlib import Path
           css=Path('styles/inline-01.css').read_text(errors='ignore')
-          targets=['avatarHeroArt','avatarChoicePortrait','fantasyAvatar.characterAvatar.portraitAvatar','hudAvatar','oppMiniAvatar','bfSeatAvatar','#myAvatar']
+          targets=['portraitAvatar','fantasyAvatar','avatarAura']
           rows=[]
           for m in re.finditer(r'([^{}]+)\{([^{}]*)\}',css):
               sel=' '.join(m.group(1).split())
               if any(t in sel for t in targets):
                   body=' '.join(m.group(2).split())
                   rows.append(f'OFFSET {m.start()}\nSELECTOR {sel}\nDECL {body}\n')
-          Path('avatar-owner-summary.txt').write_text('\n'.join(rows))
-          print(f'avatar rules: {len(rows)}')
+          Path('portrait-avatar-owner-summary.txt').write_text('\n'.join(rows))
+          print(f'portrait avatar rules: {len(rows)}')
           PY
       - name: Commit probe report
         run: |
           git config user.name "sidekick-refactor-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add avatar-owner-summary.txt
+          git add portrait-avatar-owner-summary.txt
           git diff --cached --quiet && exit 0
-          git commit -m "Summarize avatar CSS owners"
+          git commit -m "Trace portrait avatar base owners"
           git push origin HEAD:sidekick-refactor
