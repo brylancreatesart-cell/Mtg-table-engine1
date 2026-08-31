@@ -1,0 +1,55 @@
+name: Sidekick preview battlefield smoke
+
+on:
+  push:
+    branches:
+      - sidekick-refactor
+    paths:
+      - index.html
+      - sw.js
+      - assets/**
+      - scripts/**
+      - styles/**
+      - tools/preview_smoke_test.js
+      - tools/run_authoritative_sync_qa.js
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PREVIEW_URL: https://mtg-table-engine1-git-sidekick-refactor-brylancreatesart-7523.vercel.app
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: sidekick-refactor
+      - name: Verify authoritative synchronization
+        run: |
+          node --check scripts/inline-10.js
+          node --check scripts/inline-95.js
+          node tools/run_authoritative_sync_qa.js
+      - name: Wait for Vercel preview
+        run: |
+          for i in $(seq 1 36); do
+            page=$(curl -L -s -o /tmp/page.html -w '%{http_code}' "$PREVIEW_URL" || true)
+            sw=$(curl -L -s -o /tmp/sw.js -w '%{http_code}' "$PREVIEW_URL/sw.js" || true)
+            gateway=$(curl -L -s -o /tmp/gateway.js -w '%{http_code}' "$PREVIEW_URL/scripts/inline-10.js" || true)
+            app=$(curl -L -s -o /tmp/app.js -w '%{http_code}' "$PREVIEW_URL/scripts/inline-101.js" || true)
+            if [ "$page" = "200" ] && [ "$sw" = "200" ] && [ "$gateway" = "200" ] && [ "$app" = "200" ]; then
+              echo "Preview ready"
+              exit 0
+            fi
+            echo "Preview not ready (page=$page sw=$sw gateway=$gateway app=$app), retry $i/36"
+            sleep 5
+          done
+          exit 1
+      - name: Install Chromium smoke runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Run guest, multiplayer, battlefield and display smoke
+        run: node tools/preview_smoke_test.js
