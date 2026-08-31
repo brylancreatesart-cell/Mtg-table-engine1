@@ -1,0 +1,62 @@
+name: Repair batch 1 - room flow
+
+on:
+  push:
+    branches:
+      - sidekick-refactor
+    paths:
+      - .github/workflows/repair-batch1.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: sidekick-refactor
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Apply direct room-flow repair
+        run: python tools/apply_repair_batch1.py
+      - name: Rebuild generated runtime
+        run: python tools/build_runtime_from_source.py
+      - name: Verify JavaScript syntax
+        run: node --check scripts/inline-101.js
+      - name: Verify room-flow invariants
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('scripts/inline-101.js').read_text()
+          assert "$('join').click()" not in s
+          assert "$('con').click()" not in s
+          assert 'function openJoinRoomPanel()' in s
+          assert 'function connectToRoomCode(raw)' in s
+          assert "$('join').onclick=openJoinRoomPanel" in s
+          print('Direct room flow verified; synthetic click indirection removed.')
+          PY
+      - name: Scan duplicate DOM ids
+        run: |
+          python - <<'PY'
+          import json,re
+          from collections import Counter
+          from pathlib import Path
+          html=Path('index.html').read_text()
+          ids=re.findall(r'\bid=["\']([^"\']+)["\']',html)
+          dup={k:v for k,v in Counter(ids).items() if v>1}
+          Path('duplicate-id-report.json').write_text(json.dumps({'total_ids':len(ids),'duplicates':dup},indent=2)+'\n')
+          print('duplicate ids:',dup)
+          PY
+      - name: Commit repaired source and generated runtime
+        run: |
+          git config user.name "sidekick-refactor-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/app-src scripts/inline-101.js runtime-build-report.json duplicate-id-report.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Fix invite and join room flow without synthetic clicks"
+          git push origin HEAD:sidekick-refactor
