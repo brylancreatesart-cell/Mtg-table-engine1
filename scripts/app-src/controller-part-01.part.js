@@ -228,7 +228,7 @@ function inviteFriend(code){
  c.on('open',()=>{c.send({t:'battle_invite',room:socialRoomCode(activeRoom),fromName:MTGSocialInvites?.safeName?.(playerProfile?.displayName||playerProfile?.name||'A friend')||(playerProfile?.displayName||playerProfile?.name||'A friend'),fromCode:socialFriendCode(playerProfile?.code||playerProfile?.friendCode)});toast('Invite sent to '+(f?.name||('TME-'+code)));setTimeout(()=>c.close(),500)})
  c.on('error',()=>toast('Friend is not reachable right now.'))
 }
-function joinRoomInvite(m){let room=socialRoomCode(m?.room);if(!room)return toast('That room invite is invalid.');$('modal').classList.add('h');$('room').classList.remove('h');$('jb').classList.remove('h');$('jc').value=room;$('join').click();setTimeout(()=>$('con').click(),100)}
+function joinRoomInvite(m){let room=socialRoomCode(m?.room);if(!room)return toast('That room invite is invalid.');$('modal').classList.add('h');openJoinRoomPanel();$('jc').value=room;connectToRoomCode(room)}
 function showIncomingInvite(m){
  let room=socialRoomCode(m?.room);if(!room)return toast('Invalid room invite ignored.');let fromName=MTGSocialInvites?.safeName?.(m?.fromName)||String(m?.fromName||'A friend').slice(0,64),fromCode=socialFriendCode(m?.fromCode);
  $('modal').classList.remove('h');
