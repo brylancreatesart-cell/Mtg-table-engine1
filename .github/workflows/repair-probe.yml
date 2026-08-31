@@ -19,33 +19,35 @@ jobs:
         with:
           ref: sidekick-refactor
           fetch-depth: 0
-      - name: Locate cloud-account implementation and startup callers
+      - name: Map avatar visual owners
         run: |
           python - <<'PY'
           import json,re
           from pathlib import Path
-          terms=['MTGCloudAccount','loadProfile()','clearMemory','signedIn','currentUser','loadProfileRow']
-          out={'matches':[]}
-          for p in sorted(Path('scripts').glob('inline-*.js')):
-              text=p.read_text(errors='ignore')
-              if not any(t in text for t in terms):
-                  continue
+          css=Path('styles/inline-01.css').read_text(errors='ignore')
+          html=Path('index.html').read_text(errors='ignore')
+          selectors=['.fantasyAvatar.characterAvatar.portraitAvatar','.avatarHeroArt','.avatarChoicePortrait','#myAvatar','.hudAvatar','.oppMiniAvatar','.bfSeatAvatar']
+          out={'css_bytes':len(css.encode()),'important_count':css.count('!important'),'selectors':{},'inline_premium_avatar_block':None}
+          for sel in selectors:
               hits=[]
-              for t in terms:
-                  for m in re.finditer(re.escape(t),text):
-                      s=max(0,m.start()-1200);e=min(len(text),m.end()+2800)
-                      hits.append({'term':t,'line':text.count('\n',0,m.start())+1,'context':text[s:e]})
-                      if len(hits)>=12: break
-                  if len(hits)>=12: break
-              if hits: out['matches'].append({'path':str(p),'hits':hits})
-          Path('account-runtime-probe.json').write_text(json.dumps(out,indent=2)+'\n')
-          print('matched files:',[x['path'] for x in out['matches']])
+              for m in re.finditer(re.escape(sel),css):
+                  s=max(0,m.start()-900);e=min(len(css),m.end()+1700)
+                  hits.append({'offset':m.start(),'context':css[s:e]})
+                  if len(hits)>=12:break
+              out['selectors'][sel]={'count':len(list(re.finditer(re.escape(sel),css))),'hits':hits}
+          marker='premiumExternalAvatarAssets'
+          pos=html.find(marker)
+          if pos>=0:
+              s=max(0,html.rfind('<style',0,pos));e=html.find('</style>',pos)
+              out['inline_premium_avatar_block']=html[s:e+8] if e>=0 else html[s:pos+6000]
+          Path('avatar-visual-owner-probe.json').write_text(json.dumps(out,indent=2)+'\n')
+          print('selector counts:',{k:v['count'] for k,v in out['selectors'].items()})
           PY
       - name: Commit probe report
         run: |
           git config user.name "sidekick-refactor-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add account-runtime-probe.json
+          git add avatar-visual-owner-probe.json
           git diff --cached --quiet && exit 0
-          git commit -m "Record account runtime probe"
+          git commit -m "Record avatar visual ownership probe"
           git push origin HEAD:sidekick-refactor
