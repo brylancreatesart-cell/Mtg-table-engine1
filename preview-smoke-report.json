@@ -1,9 +1,14 @@
 {
   "base": "https://mtg-table-engine1-git-sidekick-refactor-brylancreatesart-7523.vercel.app",
-  "startedAt": "2026-08-31T11:12:04.732Z",
+  "startedAt": "2026-08-31T11:16:23.280Z",
   "checks": [
     {
       "name": "front door renders",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "PeerJS runtime loads",
       "ok": true,
       "details": ""
     },
@@ -30,10 +35,20 @@
     {
       "name": "host creates six-character room",
       "ok": true,
-      "details": "SL7OZF"
+      "details": "1ZQ9MQ"
+    },
+    {
+      "name": "host peer becomes online",
+      "ok": true,
+      "details": ""
     },
     {
       "name": "front door renders",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "PeerJS runtime loads",
       "ok": true,
       "details": ""
     },
@@ -58,20 +73,59 @@
       "details": ""
     }
   ],
-  "consoleErrors": [
-    {
-      "label": "host",
-      "text": "A bad HTTP response code (404) was received when fetching the script."
-    },
-    {
-      "label": "join",
-      "text": "A bad HTTP response code (404) was received when fetching the script."
-    }
-  ],
+  "consoleErrors": [],
   "pageErrors": [],
   "badResponses": [],
   "requestFailures": [],
-  "finishedAt": "2026-08-31T11:12:45.484Z",
+  "diagnostics": {
+    "host": {
+      "url": "https://mtg-table-engine1-git-sidekick-refactor-brylancreatesart-7523.vercel.app/",
+      "net": "HOST ONLINE",
+      "peerType": "function",
+      "peerTransport": null,
+      "peerOpen": null,
+      "peerDisconnected": null,
+      "connOpen": null,
+      "activeRoom": null,
+      "host": null,
+      "serviceWorkers": [
+        {
+          "scope": "https://mtg-table-engine1-git-sidekick-refactor-brylancreatesart-7523.vercel.app/",
+          "active": "https://mtg-table-engine1-git-sidekick-refactor-brylancreatesart-7523.vercel.app/sw.js"
+        }
+      ]
+    },
+    "join": {
+      "url": "https://mtg-table-engine1-git-sidekick-refactor-brylancreatesart-7523.vercel.app/",
+      "net": "PACKET REJECTED",
+      "peerType": "function",
+      "peerTransport": null,
+      "peerOpen": null,
+      "peerDisconnected": null,
+      "connOpen": null,
+      "activeRoom": null,
+      "host": null,
+      "serviceWorkers": [
+        {
+          "scope": "https://mtg-table-engine1-git-sidekick-refactor-brylancreatesart-7523.vercel.app/",
+          "active": "https://mtg-table-engine1-git-sidekick-refactor-brylancreatesart-7523.vercel.app/sw.js"
+        }
+      ]
+    },
+    "display": {
+      "url": "about:blank",
+      "net": null,
+      "peerType": "undefined",
+      "peerTransport": null,
+      "peerOpen": null,
+      "peerDisconnected": null,
+      "connOpen": null,
+      "activeRoom": null,
+      "host": null,
+      "serviceWorkers": []
+    }
+  },
+  "finishedAt": "2026-08-31T11:17:07.450Z",
   "ok": false,
-  "fatal": "page.waitForFunction: Timeout 25000ms exceeded.\n    at main (/home/runner/work/Mtg-table-engine1/Mtg-table-engine1/tools/preview_smoke_test.js:61:16)"
+  "fatal": "page.waitForFunction: Timeout 30000ms exceeded.\n    at main (/home/runner/work/Mtg-table-engine1/Mtg-table-engine1/tools/preview_smoke_test.js:80:16)"
 }
