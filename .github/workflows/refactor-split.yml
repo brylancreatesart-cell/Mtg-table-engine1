@@ -1,6 +1,7 @@
 name: Refactor monolithic index
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - sidekick-refactor
