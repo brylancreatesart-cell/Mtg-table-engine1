@@ -1,4 +1,4 @@
-name: Sidekick multiplayer runtime probe
+name: Sidekick branch preview smoke
 
 on:
   push:
@@ -6,15 +6,17 @@ on:
       - sidekick-refactor
     paths:
       - .github/workflows/repair-probe.yml
+      - tools/preview_smoke_test.js
+      - sw.js
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  probe:
+  smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     env:
       PREVIEW_URL: https://mtg-table-engine1-git-sidekick-refactor-brylancreatesart-7523.vercel.app
     steps:
@@ -22,34 +24,33 @@ jobs:
         with:
           ref: sidekick-refactor
           fetch-depth: 0
-      - name: Probe external PeerJS and service worker references
+      - name: Wait for current preview alias and service worker
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          import json,re,subprocess
-          out={"references":[]}
-          for p in [Path('index.html'),*sorted(Path('scripts').glob('inline-*.js'))]:
-              text=p.read_text(errors='ignore')
-              for term in ['serviceWorker','sw.js','peerjs','unpkg.com/peerjs']:
-                  for m in re.finditer(re.escape(term),text,re.I):
-                      s=max(0,m.start()-450);e=min(len(text),m.end()+900)
-                      out['references'].append({'path':str(p),'term':term,'context':text[s:e]})
-                      if len(out['references'])>=50: break
-                  if len(out['references'])>=50: break
-              if len(out['references'])>=50: break
-          def curl(url):
-              cp=subprocess.run(['curl','-L','-sS','-o','/tmp/body','-w','%{http_code} %{url_effective}',url],capture_output=True,text=True)
-              return {'requested':url,'result':cp.stdout.strip(),'stderr':cp.stderr.strip()}
-          out['peerjs']=curl('https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js')
-          out['preview_sw']=curl('https://mtg-table-engine1-git-sidekick-refactor-brylancreatesart-7523.vercel.app/sw.js')
-          Path('multiplayer-runtime-probe.json').write_text(json.dumps(out,indent=2)+'\n')
-          print(json.dumps(out,indent=2))
-          PY
-      - name: Commit probe report
+          for i in $(seq 1 36); do
+            code=$(curl -L -s -o /tmp/preview.html -w '%{http_code}' "$PREVIEW_URL" || true)
+            sw=$(curl -L -s -o /tmp/sw.js -w '%{http_code}' "$PREVIEW_URL/sw.js" || true)
+            if [ "$code" = "200" ] && [ "$sw" = "200" ] && grep -q 'MTG Table Engine' /tmp/preview.html; then
+              echo "Preview and service worker ready"
+              exit 0
+            fi
+            echo "Preview not ready yet (page=$code sw=$sw), retry $i/36"
+            sleep 5
+          done
+          echo "Current preview did not become ready" >&2
+          exit 1
+      - name: Install browser test runtime
         run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Run deployed Chromium smoke test
+        run: node tools/preview_smoke_test.js
+      - name: Commit smoke report
+        if: always()
+        run: |
+          test -f preview-smoke-report.json || exit 0
           git config user.name "sidekick-refactor-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add multiplayer-runtime-probe.json
+          git add preview-smoke-report.json
           git diff --cached --quiet && exit 0
-          git commit -m "Record multiplayer runtime script probe"
+          git commit -m "Record deployed preview smoke results"
           git push origin HEAD:sidekick-refactor
