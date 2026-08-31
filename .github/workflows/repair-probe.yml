@@ -7,6 +7,7 @@ on:
     paths:
       - .github/workflows/repair-probe.yml
       - tools/preview_smoke_test.js
+      - scripts/inline-10.js
       - sw.js
   workflow_dispatch:
 
@@ -24,19 +25,25 @@ jobs:
         with:
           ref: sidekick-refactor
           fetch-depth: 0
+      - name: Verify transport and authoritative sync syntax
+        run: |
+          node --check scripts/inline-10.js
+          node --check scripts/inline-95.js
+          node tools/run_authoritative_sync_qa.js
       - name: Wait for current preview alias and service worker
         run: |
           for i in $(seq 1 36); do
             code=$(curl -L -s -o /tmp/preview.html -w '%{http_code}' "$PREVIEW_URL" || true)
             sw=$(curl -L -s -o /tmp/sw.js -w '%{http_code}' "$PREVIEW_URL/sw.js" || true)
-            if [ "$code" = "200" ] && [ "$sw" = "200" ] && grep -q 'MTG Table Engine' /tmp/preview.html; then
-              echo "Preview and service worker ready"
+            js=$(curl -L -s -o /tmp/gateway.js -w '%{http_code}' "$PREVIEW_URL/scripts/inline-10.js" || true)
+            if [ "$code" = "200" ] && [ "$sw" = "200" ] && [ "$js" = "200" ] && grep -q 'MTG Table Engine' /tmp/preview.html && grep -q 'phase108-live-transport-gateway-5' /tmp/gateway.js; then
+              echo "Preview with handshake repair ready"
               exit 0
             fi
-            echo "Preview not ready yet (page=$code sw=$sw), retry $i/36"
+            echo "Preview not ready yet (page=$code sw=$sw gateway=$js), retry $i/36"
             sleep 5
           done
-          echo "Current preview did not become ready" >&2
+          echo "Current repaired preview did not become ready" >&2
           exit 1
       - name: Install browser test runtime
         run: |
@@ -50,7 +57,7 @@ jobs:
           test -f preview-smoke-report.json || exit 0
           git config user.name "sidekick-refactor-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add preview-smoke-report.json
+          git add preview-smoke-report.json authoritative-sync-qa.json
           git diff --cached --quiet && exit 0
-          git commit -m "Record deployed preview smoke results"
+          git commit -m "Record repaired preview smoke results"
           git push origin HEAD:sidekick-refactor
