@@ -1,7 +1,7 @@
 
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.MTGTransportGateway=api})(typeof self!=='undefined'?self:this,function(){
 'use strict';
-const VERSION='phase108-live-transport-gateway-4';
+const VERSION='phase108-live-transport-gateway-5';
 const clone=x=>JSON.parse(JSON.stringify(x));
 
 function wireType(legacy={},policy=null){
@@ -20,6 +20,14 @@ function requiresHost(legacy={}){
 }
 function senderId({isHost=false,room='',clientId='',descriptor=null}={}){return isHost?(descriptor?'host:'+String(descriptor.room)+':epoch:'+Number(descriptor.epoch||0):'host:'+String(room)):String(clientId||'peer')}
 function hostId(room,descriptor=null){return descriptor?'host:'+String(descriptor.room)+':epoch:'+Number(descriptor.epoch||0):'host:'+String(room)}
+function bootstrapHostId(packet,legacy,room,descriptor=null){
+  if(descriptor)return hostId(room,descriptor);
+  const t=String(legacy?.t||''),epoch=Math.max(0,Math.trunc(Number(packet?.epoch||0)||0));
+  // These packets may legitimately arrive before a joining client has received the room descriptor.
+  // They carry no gameplay state; bind them to the packet epoch so a real host can start/reject bootstrap.
+  if(epoch&&['hello_request','room_full','reconnect_rejected'].includes(t))return'host:'+String(room)+':epoch:'+epoch;
+  return hostId(room,null);
+}
 function actionId(legacy={}){
   if(legacy.requestId)return String(legacy.requestId);
   if(legacy.actionId)return String(legacy.actionId);
@@ -51,7 +59,7 @@ function inspect(packet,{protocol,policy=null,verifier,room,sessionId,replayGuar
     const candidate=legacy.descriptor;
     if(!effectiveDescriptor||Number(candidate.epoch||0)>=Number(effectiveDescriptor.epoch||0))effectiveDescriptor=candidate;
   }
-  const expectedHost=hostId(room,effectiveDescriptor);
+  const expectedHost=bootstrapHostId(packet,legacy,room,effectiveDescriptor);
   if(policy){const pv=policy.inspect(packet,{expectedHostId:expectedHost,roomSession,descriptor:effectiveDescriptor});if(!pv.ok)return{accept:false,reason:pv.reason||'policy',errors:pv.errors||[]}}
   // Bind the packet to the expected room/session before any authority decision.
   const base=protocol.validateMessage(packet,{room,sessionId});
@@ -102,5 +110,5 @@ function createSession({protocol,policy=null,verifier,room,sessionId,clientId,is
   }
   return{encode,decode,stats,replayGuard,actionGuard,room,sessionId,clientId,isHost,descriptor};
 }
-return{VERSION,wireType,requiresHost,senderId,hostId,actionId,wrap,inspect,createSession};
+return{VERSION,wireType,requiresHost,senderId,hostId,bootstrapHostId,actionId,wrap,inspect,createSession};
 });
