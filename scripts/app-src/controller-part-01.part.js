@@ -76,14 +76,14 @@ function showIdentitySetup(mode,user=null){
  $('displayNameInput').value='';$('usernameInput').value='';profileSetupStatus();renderAccountAvatars();
 }
 function clearLegacyGuestPersistence(){
- try{localStorage.removeItem(MTGProfileStore.KEY);localStorage.removeItem('mtgte_profile');localStorage.removeItem('mtgte_active_deck')}catch{}
+ try{localStorage.removeItem(MTGProfileStore.KEY);localStorage.removeItem('mtgte_profile');localStorage.removeItem('mtgte_active_deck');localStorage.removeItem('mtgte_commander');localStorage.removeItem('mtgte_partner')}catch{}
 }
 async function enterAuthenticatedAccount(){
  let row=await MTGCloudAccount.loadProfileRow();let user=MTGCloudAccount.currentUser();
  if(!row||!row.profile_data||typeof row.profile_data!=='object'||!row.profile_data.id){showIdentitySetup('authenticated',user);return}
  bindAccountStorage(row.profile_data.id,'authenticated');playerProfile=MTGProfileStore.migrate(row.profile_data);playerProfile.auth={mode:'authenticated',provider:'supabase',subject:user.id,email:user.email||null};playerProfile.onboardingComplete=!!row.onboarding_complete;cloudOnboardingComplete=!!row.onboarding_complete;
- profileStorage.save(playerProfile);MTGAccounts.setActive(playerProfile.id,localStorage);MTGAccounts.saveAccount(playerProfile,localStorage);
- activeDeckId=localStorage.getItem('mtgte_active_deck_'+playerProfile.id)||null;startPresence();renderProfile();renderDeckLibrary();$('accountOverlay').classList.add('h');
+ profileStorage.save(playerProfile);MTGAccounts.setActive(playerProfile.id,localStorage);MTGAccounts.saveAccount(playerProfile,localStorage);clearLegacyGuestPersistence();
+ activeDeckId=localStorage.getItem('mtgte_active_deck_'+playerProfile.id)||null;let restoredDeck=activeDeckId?MTGProfileStore.activeDeck(playerProfile,activeDeckId):null;if(restoredDeck)hydrateProfileFromSavedDeck(restoredDeck);else prof={cards:[],mods:[],tags:[],capabilities:[],cardMap:new Map(),commander:null,partner:null};startPresence();renderProfile();renderDeckLibrary();$('accountOverlay').classList.add('h');
  if(cloudOnboardingComplete){$('setup').classList.add('h');showLobbyPage();setTimeout(offerLiveRecovery,350)}else{$('lobby').classList.add('h');$('setup').classList.remove('h');startVerifyAmbience();toast('Finish your first deck verification to complete setup.')}
 }
 async function accountSignIn(){
@@ -95,7 +95,7 @@ async function accountSignUp(){
  try{let data=await MTGCloudAccount.signUp(email,p1);if(data?.access_token){authStatus('Account created.','good');showIdentitySetup('authenticated',MTGCloudAccount.currentUser())}else{showAuthMode('signin');$('authSignInEmail').value=email;$('authSignInPassword').value='';authStatus('Account created. Check your email to confirm it, then sign in.','good')}}catch(e){authStatus(e.message||'Could not create account.','error')}finally{authBusy=false}
 }
 function startGuestIdentity(){
- MTGCloudAccount.clearMemory();
+ clearLegacyGuestPersistence();MTGCloudAccount.clearMemory();
  // Guest is intentionally non-persistent: every fresh Guest entry starts onboarding again.
  // Actual multiplayer recovery remains a separate match-recovery concern, not a saved guest account.
  try{sessionStorage.removeItem('mtgte_guest_profile_session_v2');sessionStorage.removeItem('mtgte_guest_active_deck')}catch{}
