@@ -1,0 +1,17 @@
+{
+  "operation": "deterministic-source-rebuild",
+  "outputs": [
+    {
+      "target": "scripts/inline-101.js",
+      "bytes": 557742,
+      "sha256": "b96f3ab7fe1876120638e75ac4dd5ce506668f7c735a4a7cd28fef65445d9ef6",
+      "parts": 8
+    },
+    {
+      "target": "styles/inline-01.css",
+      "bytes": 2064560,
+      "sha256": "a60695ffb412035bdec1c5b8c239f82ae57611ef5b128db26c278779aa9427f2",
+      "parts": 12
+    }
+  ]
+}

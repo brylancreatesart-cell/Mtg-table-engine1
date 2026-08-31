@@ -1,0 +1,189 @@
+{
+  "base": "https://mtg-table-engine1-git-sidekick-refactor-brylancreatesart-7523.vercel.app",
+  "startedAt": "2026-08-31T11:23:22.051Z",
+  "checks": [
+    {
+      "name": "front door renders",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "PeerJS runtime loads",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "Smoke Host guest reaches verify",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "Smoke Host commander options populate",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "Smoke Host verify-to-lobby",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "Smoke Host deck theme applied",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "host creates six-character room",
+      "ok": true,
+      "details": "1O8RBN"
+    },
+    {
+      "name": "host peer becomes online",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "front door renders",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "PeerJS runtime loads",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "Smoke Join guest reaches verify",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "Smoke Join commander options populate",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "Smoke Join verify-to-lobby",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "Smoke Join deck theme applied",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "second player connects to host",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "host roster receives joined player",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "shared display receives host roster",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "shared display receives joined player",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "shared display remains read-only",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "joining player opening hand confirmed",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "host opening hand confirmed",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "host start control is available",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "joining player enters battlefield",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "joining player battlefield route active",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "host enters battlefield",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "host battlefield route active",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "battlefield room code preserved for host",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "battlefield room code preserved for joiner",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "shared display updates into live battle",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "asset styles/inline-01.css loads",
+      "ok": true,
+      "details": "200"
+    },
+    {
+      "name": "asset scripts/inline-100.js loads",
+      "ok": true,
+      "details": "200"
+    },
+    {
+      "name": "asset scripts/inline-101.js loads",
+      "ok": true,
+      "details": "200"
+    },
+    {
+      "name": "asset sw.js loads",
+      "ok": true,
+      "details": "200"
+    },
+    {
+      "name": "no uncaught page errors",
+      "ok": true,
+      "details": "[]"
+    },
+    {
+      "name": "no required document/script/style 404s",
+      "ok": true,
+      "details": "[]"
+    }
+  ],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "badResponses": [],
+  "requestFailures": [],
+  "diagnostics": {},
+  "ok": true,
+  "room": "1O8RBN",
+  "finishedAt": "2026-08-31T11:23:48.578Z"
+}

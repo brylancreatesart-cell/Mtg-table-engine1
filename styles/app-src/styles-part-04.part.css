@@ -1,0 +1,13 @@
+.deckVaultDoor::before{content:none!important}
+#deckLibrary.deckVaultLobbyStatus{display:none!important}
+.deckVaultKeyLock{appearance:none;position:absolute;z-index:16;left:50%;top:50%;transform:translate(-50%,-50%);width:86px;height:86px;border:0;border-radius:50%;background:transparent;color:transparent;cursor:pointer;touch-action:manipulation;outline:none;box-shadow:none}
+.deckVaultKeyLock::before,.deckVaultKeyLock::after{content:none!important}
+.deckVaultKeyLock:active{transform:translate(-50%,-50%) scale(.97)}
+
+body.deckVaultPageOpen{background:#000;overflow-x:hidden}body.deckVaultPageOpen #app{display:none!important}#modal.deckVaultModal{position:relative;inset:auto;z-index:60;display:block;width:100%;min-height:100dvh;margin:0;padding:0;background:#000;overflow:visible;--vault-ambience-main:rgba(0,0,0,0);--vault-ambience-secondary:rgba(0,0,0,0);--vault-ambience-column:rgba(0,0,0,0);--vault-ambience-shelf:rgba(0,0,0,0);--vault-drawer-tint:rgba(0,0,0,0);}
+#modal.deckVaultModal .sheet{position:relative;width:min(864px,100%);min-height:100dvh;height:auto;max-height:none;margin:0 auto;padding:0;border:0;border-radius:0;overflow:visible;background:#000;box-shadow:0 0 90px #000}
+#modal.deckVaultModal #close{display:none!important}
+#modal.deckVaultModal #choices{height:auto;min-height:100dvh;max-height:none;overflow:visible;background:#000}
+
+/* Deck Vault premium reference implementation — single owner */
+.deckVaultPremiumExperience{position:relative;isolation:isolate;width:100%;max-width:836px;min-height:100dvh;margin:0 auto;padding-top:0;padding-bottom:max(16px,env(safe-area-inset-bottom));overflow-x:clip;background:radial-gradient(circle at 50% 10%,rgba(188,142,70,.08) 0%,transparent 22%),radial-gradient(circle at 50% 18%,rgba(86,133,104,.055) 0%,transparent 18%),linear-gradient(180deg,#010203 0%,#000 62%,#010202 100%);color:#efe4cf;box-sizing:border-box;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}

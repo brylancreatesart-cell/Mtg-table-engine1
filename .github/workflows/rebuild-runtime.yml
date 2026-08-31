@@ -1,0 +1,59 @@
+name: Rebuild runtime from refactor source
+
+on:
+  push:
+    branches:
+      - sidekick-refactor
+    paths:
+      - scripts/app-src/**
+      - styles/app-src/**
+      - controller-source-report.json
+      - styles-source-report.json
+      - tools/build_runtime_from_source.py
+      - .github/workflows/rebuild-runtime.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out refactor branch
+        uses: actions/checkout@v4
+        with:
+          ref: sidekick-refactor
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Rebuild generated runtime assets
+        run: python tools/build_runtime_from_source.py
+
+      - name: Verify JavaScript syntax
+        run: node --check scripts/inline-101.js
+
+      - name: Verify index references generated runtime
+        shell: bash
+        run: |
+          grep -q 'scripts/inline-101.js' index.html
+          grep -q 'styles/inline-01.css' index.html
+          test -s scripts/inline-101.js
+          test -s styles/inline-01.css
+
+      - name: Commit generated runtime only
+        shell: bash
+        run: |
+          git config user.name "sidekick-refactor-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/inline-101.js styles/inline-01.css runtime-build-report.json
+          if git diff --cached --quiet; then
+            echo "Generated runtime is already current"
+            exit 0
+          fi
+          git commit -m "Rebuild generated runtime from refactor source"
+          git push origin HEAD:sidekick-refactor

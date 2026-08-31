@@ -1,0 +1,99 @@
+{
+  "owners": {
+    "MTGRoomSession": "inline-05.js",
+    "MTGStateVerify": "inline-07.js",
+    "MTGProtocol": "inline-08.js",
+    "MTGProtocolPolicy": "inline-09.js",
+    "MTGTransportGateway": "inline-10.js",
+    "MTGAuthoritativeSync": "inline-95.js"
+  },
+  "loaded": [
+    "inline-05.js",
+    "inline-07.js",
+    "inline-08.js",
+    "inline-09.js",
+    "inline-10.js",
+    "inline-95.js"
+  ],
+  "result": {
+    "ok": true,
+    "checks": [
+      [
+        "state snapshots receive monotonic authority revision",
+        true
+      ],
+      [
+        "snapshot hash excludes transport revision metadata",
+        true
+      ],
+      [
+        "newer authority revision is accepted",
+        true
+      ],
+      [
+        "newer authority revision permits intentional event-sequence rollback",
+        true
+      ],
+      [
+        "older authority revision is rejected even when event seq is newer",
+        true
+      ],
+      [
+        "same revision and same content is idempotent",
+        true
+      ],
+      [
+        "same revision with different content is rejected",
+        true
+      ],
+      [
+        "stale host epoch is rejected",
+        true
+      ],
+      [
+        "legacy snapshot remains readable during migration",
+        true
+      ],
+      [
+        "lobby revisions reject out-of-order roster packets",
+        true
+      ],
+      [
+        "lobby revisions accept newer roster packets",
+        true
+      ],
+      [
+        "command result correlates request and authority revision",
+        true
+      ],
+      [
+        "resync request carries client authority revision and fingerprint",
+        true
+      ],
+      [
+        "connection generation invalidates superseded client connection",
+        true
+      ],
+      [
+        "strict protocol accepts Phase 108 resync requests",
+        true
+      ],
+      [
+        "strict protocol accepts correlated command results",
+        true
+      ],
+      [
+        "transport gateway accepts newer-revision authoritative rollback",
+        true
+      ],
+      [
+        "transport gateway rejects older authority revision before app handler",
+        true
+      ],
+      [
+        "version identifies Phase 108",
+        true
+      ]
+    ]
+  }
+}

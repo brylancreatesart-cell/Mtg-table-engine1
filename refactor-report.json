@@ -1,0 +1,693 @@
+{
+  "operation": "mechanical-inline-extraction",
+  "behavioral_intent": "no functional or visual changes",
+  "original_index_bytes": 3751277,
+  "refactored_index_bytes": 26430,
+  "styles_extracted": 1,
+  "scripts_extracted": 112,
+  "styles": [
+    {
+      "path": "styles/inline-01.css",
+      "bytes": 2065553,
+      "sha256": "ad09f1ff1d1921b97a5eaec62c664ad27f1c35d8f8351b270e55bb4ea7c1c7c8"
+    }
+  ],
+  "scripts": [
+    {
+      "path": "scripts/inline-01.js",
+      "bytes": 77757,
+      "sha256": "f3b42bb6ff4d24ed34993cc07c21dbb8b72bd8c45a47600f8c4013a81cf33e0e",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-02.js",
+      "bytes": 4340,
+      "sha256": "650c6219da4c7617547f519ea4caa2ecdae451677f64419c4aad76b77a88886d",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-03.js",
+      "bytes": 1902,
+      "sha256": "93c486d5fb902414fde57d9957f90e3cc4ec14e69b72b8c9f8ec34d69967556f",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-04.js",
+      "bytes": 3646,
+      "sha256": "5c220d5d19b5e0ab8e24defb011eecf55c4f2a715ea89a8cb8f28092df419285",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-05.js",
+      "bytes": 5380,
+      "sha256": "f76020ce95ca95ce5d189505815a021ef584078635d644bc4440ae9c6c82f67e",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-06.js",
+      "bytes": 4422,
+      "sha256": "0b515879eff525bbb0048a17ada1742377bcf9bdcd9dc6d4038a7e2da083d245",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-07.js",
+      "bytes": 3225,
+      "sha256": "13ecffa889fe8bc509077392a2a2c648e505b8f298d4a122e9e93146e5f0a214",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-08.js",
+      "bytes": 5040,
+      "sha256": "3d8e714e8b1b4484c90c922586a4a7adced8ccf933353e0228a1da377748a524",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-09.js",
+      "bytes": 5489,
+      "sha256": "bb8496a69f97d6a08dd413125a05eac65365a7a6d7fe1c18f41045745db87ab9",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-10.js",
+      "bytes": 7344,
+      "sha256": "cfeadf5ac2c3f7345e28b492a298922191aa255fe1421a77a97b4c935a974c4e",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-11.js",
+      "bytes": 3927,
+      "sha256": "cf41cc2f01bc5c89cfde7a3d102e78f6ee1a0a8d00feaab91af838ce99d04435",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-12.js",
+      "bytes": 2132,
+      "sha256": "b2c5720af72c3866c5e18d8c3e1e1a21c3ea0a1604f5316763d728215ac688b0",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-13.js",
+      "bytes": 628,
+      "sha256": "9c1494c3510f66e4f63d3793db4d183c833ed9c43460275b7f1e71e60f697f9b",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-14.js",
+      "bytes": 3135,
+      "sha256": "2751f581a58e3482be39f229574040e1b2870c93959e75db390d93ef2db845f5",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-15.js",
+      "bytes": 2857,
+      "sha256": "de6375d2449c7f177e06a524ca03b667ef157adaa6c7e1682dc4cc753bb7305c",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-16.js",
+      "bytes": 3337,
+      "sha256": "51c4f18eaf0a6957fda0c98630dbe5d51d6978abbee59b183e1c9233da13c650",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-17.js",
+      "bytes": 18138,
+      "sha256": "ac8413c33baedf6f0ce490d28d148642bd008d094436b090eecce98c5e33e0d8",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-18.js",
+      "bytes": 2127,
+      "sha256": "0913e6f86fead481e16fab2143196e81f86ad7ad95faafa052c93851c9eb48b1",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-19.js",
+      "bytes": 3685,
+      "sha256": "5dbd56291b0d81ce95833bf83c0a8293c18f8692986d32dfd21e1b2f068f5ac2",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-20.js",
+      "bytes": 9113,
+      "sha256": "cf12bbc5bfc01567481e6713130fc93c8ba70cc3ca5c3590cd668481312e62e6",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-21.js",
+      "bytes": 20666,
+      "sha256": "716850b08b9b9d7ecd1d879f1d6d27b21bca5bbe595c8c6e213f33a360b62fd0",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-22.js",
+      "bytes": 4223,
+      "sha256": "97edff71b9b851694af91006db7c7d15305a56a6b1642e59282c382b9cfa976f",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-23.js",
+      "bytes": 3723,
+      "sha256": "c043c4a734dc9c8c8b37a46a0bc20c63613e086470584c66691602b27b819376",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-24.js",
+      "bytes": 6710,
+      "sha256": "1869203fcb4effde84383e561269e951d30187736968aea75da33a44bfbb4df1",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-25.js",
+      "bytes": 8323,
+      "sha256": "d1a33dbb4ae89eaabbd0b312152186ee08cd8fd931e17099d2b868409ad0db46",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-26.js",
+      "bytes": 11880,
+      "sha256": "8f1e52f902d3622586b37b6e72045e7012bfa88581e903e2f35160c6a76519dd",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-27.js",
+      "bytes": 17740,
+      "sha256": "479e457e65637d97244a84e29b648eeef1d543a96c203c728ea26f77bb7a7c1c",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-28.js",
+      "bytes": 16675,
+      "sha256": "d054749b778b64d5c6d3fcbcab1e776cdf659c90168101bbdcda2fe2c18db5a5",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-29.js",
+      "bytes": 15289,
+      "sha256": "d7afb37aa83deb6edc739eff6f90de17e4e047b5df141e1490df5ba6376e6d2f",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-30.js",
+      "bytes": 11083,
+      "sha256": "04eefb2019e7cedddd2598e70e150bb63b18a1ffc853ceea82644ed289c639eb",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-31.js",
+      "bytes": 38121,
+      "sha256": "a72fd676a4b278b50fcdd12c1a2cf54270501d1966279df4caa7eaa89926be7e",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-32.js",
+      "bytes": 9552,
+      "sha256": "a84c9c228dc4e4c961e7511cc59874daeffcbceb2bbb28898f12a088c0cbf416",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-33.js",
+      "bytes": 19862,
+      "sha256": "c8b7561768565ffe733158e0978698192af6b193e1ed8b8cd1011075491cd70d",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-34.js",
+      "bytes": 33432,
+      "sha256": "2dffcfce5fda7f9cae420af661b4a8656ec278e832059d765da25770b5f315f1",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-35.js",
+      "bytes": 27306,
+      "sha256": "b719dc698f7d3ea81c297b4c43396429b0994e8014ec56e92bd85a92b8706c08",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-36.js",
+      "bytes": 19508,
+      "sha256": "cb1312fdb327fb225f8459ac7a146b9cc876294d3ca6bc8efee9c2e6c33a48af",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-37.js",
+      "bytes": 16993,
+      "sha256": "83fde8d9693c3b6c4b9b327f76c0bc927f268eb3fc64388d615d2e9a06b84f4c",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-38.js",
+      "bytes": 8886,
+      "sha256": "34ec193e450be072c2f6113b0e21ab8881a3b23a7e1de73b64258c5632f7adc6",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-39.js",
+      "bytes": 11920,
+      "sha256": "dad9aa45aa2692713ffe86be9c871c9586aaee3f7c16d7dd8f04327a236f0055",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-40.js",
+      "bytes": 15261,
+      "sha256": "b5e39f46cdd994a27b9421992956f52cde1d6530309cdddeb92b4c5e10d7c078",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-41.js",
+      "bytes": 15442,
+      "sha256": "c1dee82dee52cd1774cc372bda0cb4d3881fe063f9a53bbd03770071c47afe1f",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-42.js",
+      "bytes": 15966,
+      "sha256": "20ca69729ff9501979f0403b5531f7023a151e1bed57448050c5058d488d8c6d",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-43.js",
+      "bytes": 26648,
+      "sha256": "07f74f870964e13bd6c76ddc1d3711ccd4aa9e74a7e13d28e1716cdc9b71ee31",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-44.js",
+      "bytes": 19472,
+      "sha256": "111a47a28947ced9b94b41683060555496347722d98d8ba8bf7dcbc44d65e7f7",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-45.js",
+      "bytes": 22117,
+      "sha256": "f126be43d10a2d1c7095a87e955402b0d11417f18c0420b6003a82eb4409a2a4",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-46.js",
+      "bytes": 52398,
+      "sha256": "5694e77bf7430deaffd0c50dd93f8b84894135ce49b76da7d65899041b531310",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-47.js",
+      "bytes": 14787,
+      "sha256": "89b7fbc5ae46c17a7497b442edb33cd81aaa6c9128a4247658f1c65474fd74b8",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-48.js",
+      "bytes": 25601,
+      "sha256": "4f9567e91bd5ca4ba78a2e6bf7b612e85a629c1cdd480d4241fcbcb5ebb6a1b3",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-49.js",
+      "bytes": 26586,
+      "sha256": "dc3a0bd124a388832f9926bd93a7ed9d257aef7b268cf9931866dc503685a1b1",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-50.js",
+      "bytes": 8811,
+      "sha256": "624357c7943bbea241e9e68b5e0529739446db4cff0e51bcc2281fbd3617a51d",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-51.js",
+      "bytes": 7792,
+      "sha256": "979a1b2a33efa77fa3d5edcb9514295faa2f367a7cc1baee16a5a4a3fd5624be",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-52.js",
+      "bytes": 122978,
+      "sha256": "d7c92a0f69e3b449167de7909fed4c200a7f650c75db9cf5a99b2953f1cf3588",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-53.js",
+      "bytes": 3743,
+      "sha256": "75eeed102b3371fcb868b47a87810707aae191dc888cdb977315feaaa045f85b",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-54.js",
+      "bytes": 1785,
+      "sha256": "ac64051948005792223fe911763a859737136725412e819dcbde4099a854e20a",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-55.js",
+      "bytes": 2486,
+      "sha256": "17dc03b9b5b57b766a8a4386f7cad1ba4412517c98f1e91be4d96bd69f2d4adf",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-56.js",
+      "bytes": 4550,
+      "sha256": "107ebf1b30f444342a56ded144094923936d12cf7008bc04fc20fa175f51fd3a",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-57.js",
+      "bytes": 20665,
+      "sha256": "a2766e8ee2b94fe6da3b1cb568ff4fed8354a8f4f564e8d63cd25621f7a55f0b",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-58.js",
+      "bytes": 4165,
+      "sha256": "2ee656887e722c449c7c02b8de1dbf24b609a67f62cb6c561e3a6fed0ad6e66d",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-59.js",
+      "bytes": 5772,
+      "sha256": "e8b667ea38df8d644dd661f6db274f71afbf072970fde7803571a6a52d8f6ede",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-60.js",
+      "bytes": 4566,
+      "sha256": "550285b9edd1f72dbceaa7f20c15d41d22d2a94599e9266f31d4c230afc58702",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-61.js",
+      "bytes": 7637,
+      "sha256": "24dce7d8ad9c350694aa6d83a6089d49e7632d798d57ac417b286f545b5e255b",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-62.js",
+      "bytes": 6560,
+      "sha256": "fdb6d4a603f666d9798334239d6115cb0f162d9a54bc05a1af90d3619917c06e",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-63.js",
+      "bytes": 9102,
+      "sha256": "5f4ae66e9679084460525740aa37026de4273843af51c0334c6251ba27c1a599",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-64.js",
+      "bytes": 5376,
+      "sha256": "f76b0fd6a2369864400e9864a8603499dfdffc257c9fa102136656fba6d736e4",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-65.js",
+      "bytes": 4765,
+      "sha256": "b689297fde6d4ac1669f0e9afcb6ba984223017d0429c94c15aab79b37fa3adf",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-66.js",
+      "bytes": 4458,
+      "sha256": "34ae4b55487fdb6a090059bba5b28457e9614a4ff9b376abf5dfdf469a473a01",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-67.js",
+      "bytes": 3103,
+      "sha256": "eabf27033c15c940a65eb8f068d977872b0b5d322e1ea27ce6a66cad66930a21",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-68.js",
+      "bytes": 3356,
+      "sha256": "b5246c14f15e6f4b2486da402481031b123694f06f610490bb1e9cd517d874e4",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-69.js",
+      "bytes": 4978,
+      "sha256": "6b8fabecde60ad98b24ae954fe85ecddaf3d854db42b736fe690e1193ca6f0d9",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-70.js",
+      "bytes": 2747,
+      "sha256": "096aa68d6413fb866a8a9d81fc7173840bed1ba8b8068df43da464fc32b47872",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-71.js",
+      "bytes": 4152,
+      "sha256": "cb878777308e7dd29b958e76581b4aa8dc08890a57f44f02efe936451018325d",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-72.js",
+      "bytes": 2890,
+      "sha256": "44cadaffbf44059000371de0dff30718812a18ae384b5be67b3b58390022b062",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-73.js",
+      "bytes": 2887,
+      "sha256": "0f9e6c40557dc4eaef0720df9e5beae45c67f0f707b9b77d814cdf20c0b952a6",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-74.js",
+      "bytes": 6385,
+      "sha256": "effb05cac4a4550395997fdf6d17336ca2440eb6841ec39a0cddbcdffb356fcb",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-75.js",
+      "bytes": 4789,
+      "sha256": "49ac1d5fd01cec6e4acb94cbd40b5431661c5325a089fbc2855befe9c42aabb0",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-76.js",
+      "bytes": 5269,
+      "sha256": "7dc0baf806dc311f9125d620f529aae38d4a30367e908b921a50c748992f5db8",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-77.js",
+      "bytes": 5033,
+      "sha256": "da717d67b4c0f71bd2678e5a59c4dc992262fd2c6803fd0110f8825cd72814b6",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-78.js",
+      "bytes": 3142,
+      "sha256": "a9973c4d6b9af5f94071538948b847b670cb7ae3d2bf023c4e28189e406ed1bc",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-79.js",
+      "bytes": 4309,
+      "sha256": "8f184d55ac6a73a71f9ec75b928157732ea7337f20ceadb1dcf94c5335ee6bf0",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-80.js",
+      "bytes": 3586,
+      "sha256": "3364814f52787d6139dc3969620521e931122c327b94ac4ee270708a8eb29a5d",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-81.js",
+      "bytes": 3199,
+      "sha256": "c9987965e5a4af5a3d1a80df88130ee0a9c3147f650aa196a43d5d7340366585",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-82.js",
+      "bytes": 3507,
+      "sha256": "b58cd7d8f3bf50ae45c1d4d85f6f6d12d12c7dae09b0f70aad387048cdac38f3",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-83.js",
+      "bytes": 3269,
+      "sha256": "8b9a4f532d801956172050429a25e4b06c19e0a978bf524c2f2de5b87bcac697",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-84.js",
+      "bytes": 3273,
+      "sha256": "b7bad08d2a3225487bae938f3d24fa5fc8a3415b763e0c6e5fc80e426082c8d8",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-85.js",
+      "bytes": 5698,
+      "sha256": "429a2f8270fc1bd62ce00bf5b9b02867cb2517db9eeca72bc2360983840eaa7a",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-86.js",
+      "bytes": 1182,
+      "sha256": "e6d1d7c7e5d9b6164198f71cec75de3fd94bc3e117e41bee2a7d4b9490f42eb9",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-87.js",
+      "bytes": 2897,
+      "sha256": "154487c5cf1e1f4ec53c6b49d383ddd31943e82c121101ce46fbe9f3cdfb2933",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-88.js",
+      "bytes": 2474,
+      "sha256": "00ae44440223a78752529ef4abbb2ce5a83cc02bad5e57667f2e0a534724c2dc",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-89.js",
+      "bytes": 1198,
+      "sha256": "dfe3b16773b517257d3034134c922a9e95a769588d84cf0806b11b98dc4c0854",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-90.js",
+      "bytes": 3607,
+      "sha256": "0448833c10885ae650f1f689acbf15f923130b2771ed5d4e732b9b47fc317d43",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-91.js",
+      "bytes": 1657,
+      "sha256": "994701511ae0f13bafc904706bc955042a11b08107f863e5ba2faa029d26971e",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-92.js",
+      "bytes": 3875,
+      "sha256": "e68d26bd80bbb7a57bb0fca661cc7105dcc5015e90e841ffd3f7ce21c887eb8e",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-93.js",
+      "bytes": 20390,
+      "sha256": "f3a75f2ff64da66004ced94d5f1860a4017bd2a66c0eb38fed46fac87c7cd153",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-94.js",
+      "bytes": 16458,
+      "sha256": "901b4ba8dcbdfb8b35a724605bc59060c418e4b4ec9bed2eaa1bede9926dede3",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-95.js",
+      "bytes": 9453,
+      "sha256": "8765277d3131c7abdb1284a6a82c5ae7c441167da7375b58313daaed94732765",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-96.js",
+      "bytes": 3296,
+      "sha256": "385a7c68a43c7a91da03c3b2565909e1fad5c8a711eb196da5e51085fbc69150",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-97.js",
+      "bytes": 9383,
+      "sha256": "e4618811f080f9e7e3d6287f25ebdd1af1335954322ecac1e222df046fd31657",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-98.js",
+      "bytes": 5487,
+      "sha256": "1630e7b12236ceca26d1da49fe4dd328632b2ed0ddb4127d35a19f8bebf391bf",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-99.js",
+      "bytes": 11251,
+      "sha256": "ad11de59b67ea6e81337b7cd835ac54ddff2fb8ddffde254d65585ea9748fdc7",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-100.js",
+      "bytes": 3384,
+      "sha256": "2e8e72b53e47de83a9119643e08501e4bcbe7f92b1450b8be295a5e5f88863cb",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-101.js",
+      "bytes": 554464,
+      "sha256": "029bbc4a3c8fb726cbc42958cc116ca8882ffb8001caad0ddeb41cf4aa79adc4",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-102.js",
+      "bytes": 141,
+      "sha256": "fa22b361be525f4c7bab56f63e81d41138ce720ec232450f1d06af59b6340e00",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-103.js",
+      "bytes": 141,
+      "sha256": "a33be30cd8c0cb1229ace9e83749ce95c4fa3d0a38f4de6f67bee444d3bd135f",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-104.js",
+      "bytes": 178,
+      "sha256": "cb87f9c76791b718c0ea9d081bd178f298ca4c88c951050e91a498ea1ed07dfe",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-105.js",
+      "bytes": 167,
+      "sha256": "9b855669c2dee04b8e24fbee9f89fb6333cf1768a7399ef1eb6297da50fd414d",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-106.js",
+      "bytes": 486,
+      "sha256": "72214f621175887940890463945f109ac0bcc5f94c884610b0be97ebc13ef82f",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-107.js",
+      "bytes": 88,
+      "sha256": "4f272fc650c6e9a354085aa175402d95ca2baee7076343e099ea62fa493d6414",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-108.js",
+      "bytes": 85,
+      "sha256": "9cb076e88fbb93c56b65039f31dbabcadda3882fee53cb7503f592372590497b",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-109.js",
+      "bytes": 5790,
+      "sha256": "1c545b458597f09d7027de64b832cfe1fd8449b3d188b95b93b4db6b0c1e99fb",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-110.js",
+      "bytes": 89,
+      "sha256": "3f6ea962e4ff01eba368d7f572c7b3b1af589cf40af01f4f274516269ffc48f0",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-111.js",
+      "bytes": 86,
+      "sha256": "15417b23f4a287a06c86d650e9c0365715ede986b31dae492792b87ff57fb56f",
+      "attrs": ""
+    },
+    {
+      "path": "scripts/inline-112.js",
+      "bytes": 83,
+      "sha256": "da79a2a241cd164bcc3c633e1615826d8d005abf12b208043e76c017e166d852",
+      "attrs": ""
+    }
+  ],
+  "remaining_inline_style_tags": 1,
+  "remaining_inline_script_tags": 0,
+  "original_sha256": "6cc91478dd08aadfbdbe240e489fc2a43116a1029519c7fe093057be24b33ed8",
+  "refactored_index_sha256": "01c574cde279768bf9fc67fca955d39e7fdad81d37de7bdbdeabf5a15497f4fe"
+}

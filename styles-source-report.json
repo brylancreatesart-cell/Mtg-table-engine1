@@ -1,0 +1,86 @@
+{
+  "operation": "byte-exact-stylesheet-source-fragmentation",
+  "runtime_file_changed": false,
+  "source": "styles/inline-01.css",
+  "source_bytes": 2064560,
+  "source_sha256": "a60695ffb412035bdec1c5b8c239f82ae57611ef5b128db26c278779aa9427f2",
+  "max_part_bytes": 70000,
+  "parts": [
+    {
+      "order": 1,
+      "path": "styles/app-src/styles-part-01.part.css",
+      "bytes": 69852,
+      "sha256": "b0edd27c3b9f52cee7c4d3f39d8c83c40ddf045541a77008833aced328ac90ac"
+    },
+    {
+      "order": 2,
+      "path": "styles/app-src/styles-part-02.part.css",
+      "bytes": 30119,
+      "sha256": "bc810e619fcdf3c293f83706577ae503f374fd9006195f033b92401513dc8d76"
+    },
+    {
+      "order": 3,
+      "path": "styles/app-src/styles-part-03.part.css",
+      "bytes": 153905,
+      "sha256": "0af855839eb3ad06f1514538e4115327a2a1af2a1fa32edefacd53f7695a68d6"
+    },
+    {
+      "order": 4,
+      "path": "styles/app-src/styles-part-04.part.css",
+      "bytes": 1961,
+      "sha256": "8f2482f09ea095f754c38d3c63fc71046b7359698d9d0886148ac4a1315740d4"
+    },
+    {
+      "order": 5,
+      "path": "styles/app-src/styles-part-05.part.css",
+      "bytes": 160780,
+      "sha256": "613a5e2441fe5448c9f9b7b3e188eab6458702450f7828bd294f85a7078174e5"
+    },
+    {
+      "order": 6,
+      "path": "styles/app-src/styles-part-06.part.css",
+      "bytes": 547,
+      "sha256": "c5e0c8e931d8fa6161454f5d21f27b1e7c1d9fb4343147fd34e8f3e3810c1604"
+    },
+    {
+      "order": 7,
+      "path": "styles/app-src/styles-part-07.part.css",
+      "bytes": 812739,
+      "sha256": "8f9607bfeac1727079b82865566ac314084f21131d6a3cb01e988bfe1d70899e"
+    },
+    {
+      "order": 8,
+      "path": "styles/app-src/styles-part-08.part.css",
+      "bytes": 2453,
+      "sha256": "1dae2824ac27e900077109c90b0a5276c2df32677daf48cb29067fb1fb185ae2"
+    },
+    {
+      "order": 9,
+      "path": "styles/app-src/styles-part-09.part.css",
+      "bytes": 72895,
+      "sha256": "5fae71408c008ee62e986cfbc47b908b7be09db1195f125003a72ca15b4418a6"
+    },
+    {
+      "order": 10,
+      "path": "styles/app-src/styles-part-10.part.css",
+      "bytes": 2248,
+      "sha256": "86a6a950dc02210c4b638c7e4bebc197bccae5f2d08d19bb7b6fbc281c49cf18"
+    },
+    {
+      "order": 11,
+      "path": "styles/app-src/styles-part-11.part.css",
+      "bytes": 723472,
+      "sha256": "01e95a9d52785e1c79f6518c701853abbb58031fa87b5180d3a3e16a9e3c1d5d"
+    },
+    {
+      "order": 12,
+      "path": "styles/app-src/styles-part-12.part.css",
+      "bytes": 33589,
+      "sha256": "5eba3bdd4399a677aa584f2c72fd784f66c6ee56de6b1cebd9996e9685a3ac66"
+    }
+  ],
+  "reconstructed_bytes": 2064560,
+  "reconstructed_sha256": "a60695ffb412035bdec1c5b8c239f82ae57611ef5b128db26c278779aa9427f2",
+  "byte_exact": true,
+  "note": "Source fragments rebuild the existing stylesheet exactly; browser continues loading styles/inline-01.css."
+}

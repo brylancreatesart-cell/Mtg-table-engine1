@@ -1,0 +1,1 @@
+/* Phase 108 marker: authoritative multiplayer synchronization hardening candidate. */

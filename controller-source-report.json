@@ -1,0 +1,62 @@
+{
+  "operation": "byte-exact-controller-source-fragmentation",
+  "runtime_file_changed": false,
+  "source": "scripts/inline-101.js",
+  "source_bytes": 554464,
+  "source_sha256": "029bbc4a3c8fb726cbc42958cc116ca8882ffb8001caad0ddeb41cf4aa79adc4",
+  "max_part_bytes": 70000,
+  "parts": [
+    {
+      "order": 1,
+      "path": "scripts/app-src/controller-part-01.part.js",
+      "bytes": 68357,
+      "sha256": "67c313a76ba58c93f223d9229d5856c4bdea16943201456f8a3f0d00ef8bb6eb"
+    },
+    {
+      "order": 2,
+      "path": "scripts/app-src/controller-part-02.part.js",
+      "bytes": 69952,
+      "sha256": "588f6e0d49ce12500a37600cb5f13c68b7deea0123e8fa26b1291a1bac2dc762"
+    },
+    {
+      "order": 3,
+      "path": "scripts/app-src/controller-part-03.part.js",
+      "bytes": 69443,
+      "sha256": "355d8b04283266ab43d3e947deaf031ddbd8e9460fa9e2f704ae8d9e048a3662"
+    },
+    {
+      "order": 4,
+      "path": "scripts/app-src/controller-part-04.part.js",
+      "bytes": 69689,
+      "sha256": "227152aa0a9528e6246499983d2569d3c3d3811dba774f04f2545abd1ebabc0a"
+    },
+    {
+      "order": 5,
+      "path": "scripts/app-src/controller-part-05.part.js",
+      "bytes": 69805,
+      "sha256": "2daf0a1e445db0166203153cac7d11684532ca89290bc40d74b321736930c3b0"
+    },
+    {
+      "order": 6,
+      "path": "scripts/app-src/controller-part-06.part.js",
+      "bytes": 68461,
+      "sha256": "fa76f1ecc18f6fbfd976f4ef654a760542d01b0bf5f60042bc03501eade401be"
+    },
+    {
+      "order": 7,
+      "path": "scripts/app-src/controller-part-07.part.js",
+      "bytes": 69180,
+      "sha256": "89742046ce197eca915c64a9dcca2682b40c94ce68ba64aebbd0a3e84c345057"
+    },
+    {
+      "order": 8,
+      "path": "scripts/app-src/controller-part-08.part.js",
+      "bytes": 69577,
+      "sha256": "312836ad6da35cb3c26f9328cc8a759f173b26ef741655246a4e16d97d27df2d"
+    }
+  ],
+  "reconstructed_bytes": 554464,
+  "reconstructed_sha256": "029bbc4a3c8fb726cbc42958cc116ca8882ffb8001caad0ddeb41cf4aa79adc4",
+  "byte_exact": true,
+  "note": "These fragments preserve the existing single-IIFE lexical scope by rebuilding the runtime controller; they are not loaded independently by the browser."
+}
