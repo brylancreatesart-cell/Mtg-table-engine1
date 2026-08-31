@@ -1,0 +1,26 @@
+{
+  "base": "https://mtg-table-engine1-git-sidekick-refactor-brylancreatesart-7523.vercel.app",
+  "startedAt": "2026-08-31T11:09:32.520Z",
+  "checks": [
+    {
+      "name": "front door renders",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "Smoke Host guest reaches verify",
+      "ok": true,
+      "details": ""
+    }
+  ],
+  "consoleErrors": [
+    {
+      "label": "host",
+      "text": "A bad HTTP response code (404) was received when fetching the script."
+    }
+  ],
+  "pageErrors": [],
+  "finishedAt": "2026-08-31T11:10:11.603Z",
+  "ok": false,
+  "fatal": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#commanderSelect option') to be visible\n    6 × locator resolved to hidden <option value=\"\">Choose your commander</option>\n    59 × locator resolved to 3 elements. Proceeding with the first one: <option value=\"\">Choose your commander</option>\n\n    at guestToLobby (/home/runner/work/Mtg-table-engine1/Mtg-table-engine1/tools/preview_smoke_test.js:30:14)\n    at async main (/home/runner/work/Mtg-table-engine1/Mtg-table-engine1/tools/preview_smoke_test.js:48:5)"
+}
