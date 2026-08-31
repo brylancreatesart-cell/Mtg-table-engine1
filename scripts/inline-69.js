@@ -1,0 +1,24 @@
+
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.MTGPlayerHUD=api})(typeof self!=='undefined'?self:this,function(){
+'use strict';
+const VERSION='phase61-mobile-hud-pages-1';
+const DEFAULT_FLAGS=Object.freeze({newPlayerHud:true,contextualActions:true,lowAttention:true,universalNumeric:true,spatialOpponents:true,quickCommanderDamage:true,eventBasedInput:true,quickActionIntelligence:true,criticalStateAwareness:true,opponentDetailDrawer:true,battlefieldQuickActions:true,smartResourceRail:true,deckAdaptiveHud:true});
+const FLAG_KEY='mtgte_feature_flags_v1';
+const clone=x=>JSON.parse(JSON.stringify(x));
+function normalizeFlags(input={}){let out={...DEFAULT_FLAGS};for(const k of Object.keys(DEFAULT_FLAGS))if(typeof input[k]==='boolean')out[k]=input[k];return out}
+function loadFlags(storage){if(!storage?.getItem)return normalizeFlags();try{return normalizeFlags(JSON.parse(storage.getItem(FLAG_KEY)||'{}'))}catch{return normalizeFlags()}}
+function saveFlags(storage,flags){const next=normalizeFlags(flags);storage?.setItem?.(FLAG_KEY,JSON.stringify(next));return next}
+function phaseGroup(phase=''){if(typeof MTGTurnStructure!=='undefined')return MTGTurnStructure.group(phase);const p=String(phase).toUpperCase();if(p.includes('COMBAT')||p.includes('DECLARE'))return'combat';if(p.includes('MAIN'))return'main';if(p.includes('END'))return'ending';return'beginning'}
+function context(state={},playerId){const me=Number(playerId),active=Number(state.active),priority=state.priority??state.respond??null,stackSize=Array.isArray(state.stack)?state.stack.length:0,phase=String(state.phase||'');return{playerId:me,isActive:active===me,hasPriority:Number(priority)===me,priorityPlayer:priority==null?null:Number(priority),stackActive:stackSize>0,stackSize,phase,phaseGroup:phaseGroup(phase),fallen:!!state.fallen?.[me]}}
+function actionsFor(state={},playerId){const c=context(state,playerId);if(c.fallen)return[{id:'inspect',label:'SPECTATE'},{id:'more',label:'•••'}];if(c.stackActive){return c.hasPriority||c.priorityPlayer==null?[{id:'respond',label:'RESPOND'},{id:'add-stack',label:'ADD TO STACK'},{id:'inspect',label:'INSPECT'},{id:'pass',label:'PASS PRIORITY'}]:[{id:'inspect',label:'INSPECT'},{id:'more',label:'•••'}]}
+ if(!c.isActive){return[{id:'respond',label:'RESPOND'},{id:'activate',label:'ACTIVATE'},{id:'pass',label:'PASS'},{id:'more',label:'•••'}]}
+ if(c.phaseGroup==='combat')return[{id:'attack',label:'ATTACK'},{id:'damage',label:'DAMAGE'},{id:'counter',label:'COUNTERS'},{id:'pass',label:'PASS'}];
+ if(c.phaseGroup==='main')return[{id:'land',label:'PLAY LAND'},{id:'cast',label:'CAST'},{id:'quick',label:'QUICK ACTION'},{id:'pass',label:'PASS'}];
+ return[{id:'activate',label:'ACTION'},{id:'pass',label:'PASS'},{id:'more',label:'•••'}]}
+function lowAttention(state={},playerId,{forcedAwake=false}={}){const c=context(state,playerId);if(forcedAwake||c.fallen)return false;return !c.isActive&&!c.hasPriority&&!c.stackActive&&c.priorityPlayer!==Number(playerId)}
+function numericDelta(current,delta,{min=null,max=null}={}){let n=(Number(current)||0)+(Number(delta)||0);if(min!==null)n=Math.max(Number(min),n);if(max!==null)n=Math.min(Number(max),n);return n}
+function directDelta(current,next,{min=null,max=null}={}){let n=Number(next);if(!Number.isFinite(n))return null;if(min!==null)n=Math.max(Number(min),n);if(max!==null)n=Math.min(Number(max),n);return n-(Number(current)||0)}
+function localQA(){const s={active:1,phase:'MAIN 1',priority:null,stack:[],fallen:{}};let checks=[];checks.push(['main phase exposes cast',actionsFor(s,1).some(x=>x.id==='cast')]);checks.push(['main phase exposes quick action',actionsFor(s,1).some(x=>x.id==='quick')]);checks.push(['combat changes controls',actionsFor({...s,phase:'DECLARE ATTACKERS'},1)[0].id==='attack']);checks.push(['opponent turn exposes respond',actionsFor({...s,active:2},1)[0].id==='respond']);checks.push(['stack exposes inspect',actionsFor({...s,stack:[{id:'x'}],priority:1},1).some(x=>x.id==='inspect')]);checks.push(['stack priority says pass priority',actionsFor({...s,stack:[{id:'x'}],priority:1},1).some(x=>x.label==='PASS PRIORITY')]);checks.push(['idle opponent enters low attention',lowAttention({...s,active:2},1)]);checks.push(['priority exits low attention',!lowAttention({...s,active:2,priority:1},1)]);checks.push(['forced awake exits low attention',!lowAttention({...s,active:2},1,{forcedAwake:true})]);checks.push(['numeric delta increases',numericDelta(40,1)===41]);checks.push(['numeric direct edit returns delta',directDelta(40,35)===-5]);checks.push(['flags normalize unknown values safely',normalizeFlags({newPlayerHud:false,bad:true}).newPlayerHud===false&&!('bad'in normalizeFlags({bad:true}))]);return{ok:checks.every(x=>x[1]),checks}}
+return{VERSION,DEFAULT_FLAGS,FLAG_KEY,normalizeFlags,loadFlags,saveFlags,phaseGroup,context,actionsFor,lowAttention,numericDelta,directDelta,localQA};
+});
+
