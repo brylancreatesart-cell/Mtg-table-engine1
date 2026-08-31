@@ -19,35 +19,33 @@ jobs:
         with:
           ref: sidekick-refactor
           fetch-depth: 0
-      - name: Extract repair targets
+      - name: Locate cloud-account implementation and startup callers
         run: |
           python - <<'PY'
           import json,re
           from pathlib import Path
-          p=Path('scripts/inline-101.js')
-          text=p.read_text()
-          names=['inviteFriend','joinRoomInvite','consumeInviteLink','joinRoom','finishVerify','startGuestIdentity','clearLegacyGuestPersistence','loadProfile']
-          out={'functions':{},'synthetic_clicks':[]}
-          pat=re.compile(r'(?m)^(?:async\s+)?function\s+([A-Za-z_$][\w$]*)\s*\(')
-          matches=list(pat.finditer(text))
-          byname={m.group(1):(m,i) for i,m in enumerate(matches)}
-          for name in names:
-            if name not in byname: continue
-            m,i=byname[name]
-            end=matches[i+1].start() if i+1<len(matches) else len(text)
-            body=text[m.start():end]
-            out['functions'][name]={'line':text.count('\n',0,m.start())+1,'body':body[:12000]}
-          for m in re.finditer(r'\.click\s*\(\s*\)',text):
-            s=max(0,m.start()-650); e=min(len(text),m.end()+650)
-            out['synthetic_clicks'].append({'line':text.count('\n',0,m.start())+1,'context':text[s:e]})
-          Path('repair-targets.json').write_text(json.dumps(out,indent=2)+'\n')
-          print('targets',list(out['functions']),'clicks',len(out['synthetic_clicks']))
+          terms=['MTGCloudAccount','loadProfile()','clearMemory','signedIn','currentUser','loadProfileRow']
+          out={'matches':[]}
+          for p in sorted(Path('scripts').glob('inline-*.js')):
+              text=p.read_text(errors='ignore')
+              if not any(t in text for t in terms):
+                  continue
+              hits=[]
+              for t in terms:
+                  for m in re.finditer(re.escape(t),text):
+                      s=max(0,m.start()-1200);e=min(len(text),m.end()+2800)
+                      hits.append({'term':t,'line':text.count('\n',0,m.start())+1,'context':text[s:e]})
+                      if len(hits)>=12: break
+                  if len(hits)>=12: break
+              if hits: out['matches'].append({'path':str(p),'hits':hits})
+          Path('account-runtime-probe.json').write_text(json.dumps(out,indent=2)+'\n')
+          print('matched files:',[x['path'] for x in out['matches']])
           PY
       - name: Commit probe report
         run: |
           git config user.name "sidekick-refactor-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add repair-targets.json
+          git add account-runtime-probe.json
           git diff --cached --quiet && exit 0
-          git commit -m "Record first repair targets"
+          git commit -m "Record account runtime probe"
           git push origin HEAD:sidekick-refactor
