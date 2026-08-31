@@ -1,4 +1,4 @@
-name: Sidekick branch repair runner
+name: Sidekick branch preview smoke
 
 on:
   push:
@@ -12,24 +12,42 @@ permissions:
   contents: write
 
 jobs:
-  qa:
+  smoke:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PREVIEW_URL: https://mtg-table-engine1-git-sidekick-refactor-brylancreatesart-7523.vercel.app
     steps:
       - uses: actions/checkout@v4
         with:
           ref: sidekick-refactor
           fetch-depth: 0
-      - name: Verify module syntax
+      - name: Wait for current preview alias
         run: |
-          node --check scripts/inline-95.js
-          node --check tools/run_authoritative_sync_qa.js
-      - name: Run dependency-aware authoritative sync QA
-        run: node tools/run_authoritative_sync_qa.js
-      - name: Commit QA report
+          for i in $(seq 1 30); do
+            code=$(curl -L -s -o /tmp/preview.html -w '%{http_code}' "$PREVIEW_URL" || true)
+            if [ "$code" = "200" ] && grep -q 'MTG Table Engine' /tmp/preview.html; then
+              echo "Preview ready"
+              exit 0
+            fi
+            echo "Preview not ready yet ($code), retry $i/30"
+            sleep 5
+          done
+          echo "Preview alias did not become ready" >&2
+          exit 1
+      - name: Install browser test runtime
         run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Run deployed Chromium smoke test
+        run: node tools/preview_smoke_test.js
+      - name: Commit smoke report
+        if: always()
+        run: |
+          test -f preview-smoke-report.json || exit 0
           git config user.name "sidekick-refactor-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add authoritative-sync-qa.json
+          git add preview-smoke-report.json
           git diff --cached --quiet && exit 0
-          git commit -m "Record dependency-aware authoritative sync QA"
+          git commit -m "Record deployed preview smoke results"
           git push origin HEAD:sidekick-refactor
