@@ -16,13 +16,10 @@ async function runtimeSnapshot(page) {
   try{return await page.evaluate(async()=>({
     url:location.href,
     net:document.querySelector('#net')?.textContent||null,
-    peerType:typeof window.Peer,
-    peerTransport:typeof peerTransportState!=='undefined'?peerTransportState:null,
-    peerOpen:typeof peer!=='undefined'&&peer?!!peer.open:null,
-    peerDisconnected:typeof peer!=='undefined'&&peer?!!peer.disconnected:null,
-    connOpen:typeof cc!=='undefined'&&cc?!!cc.open:null,
-    activeRoom:typeof activeRoom!=='undefined'?activeRoom:null,
-    host:typeof HST!=='undefined'?!!HST:null,
+    lobbyVisible:!!document.querySelector('#lobby')&&!document.querySelector('#lobby').classList.contains('h'),
+    gameVisible:!!document.querySelector('#game')&&!document.querySelector('#game').classList.contains('h'),
+    introVisible:!!document.querySelector('#battleIntro')&&!document.querySelector('#battleIntro').classList.contains('h'),
+    roomCode:document.querySelector('#battleRoomCode')?.textContent||document.querySelector('#code')?.textContent||null,
     serviceWorkers:navigator.serviceWorker?await navigator.serviceWorker.getRegistrations().then(xs=>xs.map(x=>({scope:x.scope,active:x.active?.scriptURL||null}))):[]
   }))}catch(e){return{error:String(e)}}
 }
@@ -53,6 +50,25 @@ async function guestToLobby(page, name, username) {
   await page.waitForSelector('#lobby:not(.h)', { timeout: 12000 });
   check(`${name} verify-to-lobby`, await page.locator('#lobby').isVisible());
   check(`${name} deck theme applied`, await page.evaluate(() => !!getComputedStyle(document.documentElement).getPropertyValue('--deck-a').trim() || !!document.documentElement.style.getPropertyValue('--deck-a')));
+}
+
+async function readyPlayer(page, label) {
+  await page.click('#rdy');
+  await page.waitForSelector('#modal:not(.h)', { timeout: 10000 });
+  const keep = page.getByRole('button', { name: 'KEEP 7 · 0 MULLIGANS', exact: true });
+  await keep.waitFor({ state: 'visible', timeout: 10000 });
+  await keep.click();
+  await page.waitForTimeout(700);
+  check(`${label} opening hand confirmed`, await page.evaluate(() => document.querySelector('#modal')?.classList.contains('h')));
+}
+
+async function finishIntro(page, label) {
+  await page.waitForSelector('#battleIntro:not(.h), #game:not(.h)', { timeout: 20000 });
+  const skip = page.locator('#battleIntroSkip');
+  if (await skip.count() && await skip.isVisible()) await skip.click();
+  await page.waitForSelector('#game:not(.h)', { timeout: 10000 });
+  check(`${label} enters battlefield`, await page.locator('#game').isVisible());
+  check(`${label} battlefield route active`, (await page.url()).includes('#battle'));
 }
 
 async function main() {
@@ -88,6 +104,24 @@ async function main() {
     check('shared display receives host roster', (await display.locator('#sharedDisplayPlayers').textContent()).includes('Smoke Host'));
     check('shared display receives joined player', (await display.locator('#sharedDisplayPlayers').textContent()).includes('Smoke Join'));
     check('shared display remains read-only', await display.evaluate(() => document.body.classList.contains('sharedTableDisplayMode') && document.querySelector('#game')?.classList.contains('h')));
+
+    // Confirm opening hands and ready both live players using the actual lobby UI.
+    await readyPlayer(join, 'joining player');
+    await host.waitForTimeout(500);
+    await readyPlayer(host, 'host');
+    await host.waitForFunction(() => {
+      const t=document.querySelector('#slots')?.textContent||'';
+      return (t.match(/READY/g)||[]).length>=2;
+    }, null, { timeout: 12000 }).catch(()=>{});
+    check('host start control is available', await host.locator('#start').isVisible());
+
+    await host.click('#start');
+    await Promise.all([finishIntro(host,'host'), finishIntro(join,'joining player')]);
+    check('battlefield room code preserved for host', ((await host.locator('#battleRoomCode').textContent())||'').trim()===room);
+    check('battlefield room code preserved for joiner', ((await join.locator('#battleRoomCode').textContent())||'').trim()===room);
+
+    await display.waitForFunction(() => /TURN\s+1/i.test(document.querySelector('#sharedDisplayTurnSub')?.textContent||''), null, { timeout: 15000 });
+    check('shared display updates into live battle', /TURN\s+1/i.test((await display.locator('#sharedDisplayTurnSub').textContent())||''));
 
     const assetStatuses = await host.evaluate(async () => {
       const urls=['styles/inline-01.css','scripts/inline-100.js','scripts/inline-101.js','sw.js'];
