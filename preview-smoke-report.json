@@ -1,6 +1,6 @@
 {
   "base": "https://mtg-table-engine1-git-sidekick-refactor-brylancreatesart-7523.vercel.app",
-  "startedAt": "2026-08-31T11:19:33.404Z",
+  "startedAt": "2026-08-31T11:23:22.051Z",
   "checks": [
     {
       "name": "front door renders",
@@ -35,7 +35,7 @@
     {
       "name": "host creates six-character room",
       "ok": true,
-      "details": "X562EE"
+      "details": "1O8RBN"
     },
     {
       "name": "host peer becomes online",
@@ -98,6 +98,56 @@
       "details": ""
     },
     {
+      "name": "joining player opening hand confirmed",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "host opening hand confirmed",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "host start control is available",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "joining player enters battlefield",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "joining player battlefield route active",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "host enters battlefield",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "host battlefield route active",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "battlefield room code preserved for host",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "battlefield room code preserved for joiner",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "shared display updates into live battle",
+      "ok": true,
+      "details": ""
+    },
+    {
       "name": "asset styles/inline-01.css loads",
       "ok": true,
       "details": "200"
@@ -134,6 +184,6 @@
   "requestFailures": [],
   "diagnostics": {},
   "ok": true,
-  "room": "X562EE",
-  "finishedAt": "2026-08-31T11:19:56.810Z"
+  "room": "1O8RBN",
+  "finishedAt": "2026-08-31T11:23:48.578Z"
 }
