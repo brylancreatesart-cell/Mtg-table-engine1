@@ -1,6 +1,6 @@
 {
   "base": "https://mtg-table-engine1-git-sidekick-refactor-brylancreatesart-7523.vercel.app",
-  "startedAt": "2026-08-31T11:09:32.520Z",
+  "startedAt": "2026-08-31T11:12:04.732Z",
   "checks": [
     {
       "name": "front door renders",
@@ -11,16 +11,67 @@
       "name": "Smoke Host guest reaches verify",
       "ok": true,
       "details": ""
+    },
+    {
+      "name": "Smoke Host commander options populate",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "Smoke Host verify-to-lobby",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "Smoke Host deck theme applied",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "host creates six-character room",
+      "ok": true,
+      "details": "SL7OZF"
+    },
+    {
+      "name": "front door renders",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "Smoke Join guest reaches verify",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "Smoke Join commander options populate",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "Smoke Join verify-to-lobby",
+      "ok": true,
+      "details": ""
+    },
+    {
+      "name": "Smoke Join deck theme applied",
+      "ok": true,
+      "details": ""
     }
   ],
   "consoleErrors": [
     {
       "label": "host",
       "text": "A bad HTTP response code (404) was received when fetching the script."
+    },
+    {
+      "label": "join",
+      "text": "A bad HTTP response code (404) was received when fetching the script."
     }
   ],
   "pageErrors": [],
-  "finishedAt": "2026-08-31T11:10:11.603Z",
+  "badResponses": [],
+  "requestFailures": [],
+  "finishedAt": "2026-08-31T11:12:45.484Z",
   "ok": false,
-  "fatal": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#commanderSelect option') to be visible\n    6 × locator resolved to hidden <option value=\"\">Choose your commander</option>\n    59 × locator resolved to 3 elements. Proceeding with the first one: <option value=\"\">Choose your commander</option>\n\n    at guestToLobby (/home/runner/work/Mtg-table-engine1/Mtg-table-engine1/tools/preview_smoke_test.js:30:14)\n    at async main (/home/runner/work/Mtg-table-engine1/Mtg-table-engine1/tools/preview_smoke_test.js:48:5)"
+  "fatal": "page.waitForFunction: Timeout 25000ms exceeded.\n    at main (/home/runner/work/Mtg-table-engine1/Mtg-table-engine1/tools/preview_smoke_test.js:61:16)"
 }
