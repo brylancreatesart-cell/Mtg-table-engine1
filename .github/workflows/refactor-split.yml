@@ -36,44 +36,54 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
-          report = json.loads(Path('refactor-report.json').read_text())
-          assert report['styles_extracted'] >= 1
-          assert report['scripts_extracted'] >= 1
-          assert report['original_index_bytes'] > report['refactored_index_bytes']
-          print('Mechanical split already present; preserving runtime assets.')
+          report=json.loads(Path('refactor-report.json').read_text())
+          assert report['styles_extracted']>=1
+          assert report['scripts_extracted']>=1
+          assert report['original_index_bytes']>report['refactored_index_bytes']
+          print('Mechanical split present; runtime assets remain unchanged.')
           PY
 
       - name: Create byte-exact controller source fragments
         run: python tools/split_controller_source.py
 
-      - name: Verify runtime controller syntax
+      - name: Map controller ownership
+        run: python tools/map_controller_source.py
+
+      - name: Create byte-exact stylesheet source fragments
+        run: python tools/split_styles_source.py
+
+      - name: Verify runtime JavaScript syntax
         run: node --check scripts/inline-101.js
 
-      - name: Verify controller reconstruction
+      - name: Verify byte-exact reconstructions
         shell: bash
         run: |
           python - <<'PY'
-          import hashlib, json
+          import hashlib,json
           from pathlib import Path
-          report = json.loads(Path('controller-source-report.json').read_text())
-          source = Path(report['source']).read_bytes()
-          rebuilt = b''.join(Path(p['path']).read_bytes() for p in report['parts'])
-          assert rebuilt == source
-          assert report['byte_exact'] is True
-          assert hashlib.sha256(source).hexdigest() == report['source_sha256']
-          assert hashlib.sha256(rebuilt).hexdigest() == report['reconstructed_sha256']
-          print(f"Verified {len(report['parts'])} source fragments; browser runtime remains byte-identical.")
+          for report_path in ('controller-source-report.json','styles-source-report.json'):
+              report=json.loads(Path(report_path).read_text())
+              source=Path(report['source']).read_bytes()
+              rebuilt=b''.join(Path(p['path']).read_bytes() for p in report['parts'])
+              assert rebuilt==source
+              assert report['byte_exact'] is True
+              assert hashlib.sha256(source).hexdigest()==report['source_sha256']
+              assert hashlib.sha256(rebuilt).hexdigest()==report['reconstructed_sha256']
+              print(f"Verified {report_path}: {len(report['parts'])} fragments, byte-identical runtime.")
+          ownership=json.loads(Path('controller-ownership-map.json').read_text())
+          assert ownership['functions_found']>0
+          print(f"Mapped {ownership['functions_found']} controller definitions.")
           PY
 
-      - name: Commit maintainable controller source fragments
+      - name: Commit maintainable source structure
         shell: bash
         run: |
           git config user.name "sidekick-refactor-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add scripts/app-src controller-source-report.json
+          git add scripts/app-src styles/app-src controller-source-report.json styles-source-report.json controller-ownership-map.json
           if git diff --cached --quiet; then
             echo "Nothing to commit"
             exit 0
           fi
-          git commit -m "Create byte-exact controller source fragments"
+          git commit -m "Add byte-exact app source structure and ownership map"
           git push origin HEAD:sidekick-refactor
