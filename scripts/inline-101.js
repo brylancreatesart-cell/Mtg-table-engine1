@@ -95,15 +95,17 @@ async function accountSignUp(){
  try{let data=await MTGCloudAccount.signUp(email,p1);if(data?.access_token){authStatus('Account created.','good');showIdentitySetup('authenticated',MTGCloudAccount.currentUser())}else{showAuthMode('signin');$('authSignInEmail').value=email;$('authSignInPassword').value='';authStatus('Account created. Check your email to confirm it, then sign in.','good')}}catch(e){authStatus(e.message||'Could not create account.','error')}finally{authBusy=false}
 }
 function startGuestIdentity(){
- clearLegacyGuestPersistence();MTGCloudAccount.clearMemory();
+ clearLegacyGuestPersistence();MTGCloudAccount.forgetSession?.();MTGCloudAccount.clearMemory();
  // Guest is intentionally non-persistent: every fresh Guest entry starts onboarding again.
  // Actual multiplayer recovery remains a separate match-recovery concern, not a saved guest account.
  try{sessionStorage.removeItem('mtgte_guest_profile_session_v2');sessionStorage.removeItem('mtgte_guest_active_deck')}catch{}
  bindAccountStorage(null,'guest');playerProfile=null;activeDeckId=null;showIdentitySetup('guest',null)
 }
-function loadProfile(){
+async function loadProfile(){
  if(sharedDisplayMode){MTGCloudAccount.clearMemory();startSharedDisplayMode();return}
- clearLegacyGuestPersistence();MTGCloudAccount.clearMemory();showFrontDoor();
+ clearLegacyGuestPersistence();
+ try{if(await MTGCloudAccount.restoreSession?.()){await enterAuthenticatedAccount();return}}catch(e){console.warn('Account session restore failed',e)}
+ MTGCloudAccount.clearMemory();showFrontDoor();
 }
 if($('authSignInTab'))$('authSignInTab').onclick=()=>showAuthMode('signin');
 if($('authCreateTab'))$('authCreateTab').onclick=()=>showAuthMode('create');
