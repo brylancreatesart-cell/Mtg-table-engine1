@@ -1,0 +1,5512 @@
+{
+  "source": "scripts/inline-101.js",
+  "functions_found": 408,
+  "feature_terms": {
+    "auth-profile": [
+      "auth",
+      "profile",
+      "avatar",
+      "account",
+      "identity",
+      "friend"
+    ],
+    "verification-decks": [
+      "verify",
+      "verification",
+      "deck",
+      "commander",
+      "library",
+      "vault"
+    ],
+    "multiplayer-sync": [
+      "presence",
+      "peer",
+      "sync",
+      "room",
+      "lobby",
+      "host",
+      "invite"
+    ],
+    "battlefield": [
+      "battle",
+      "battlefield",
+      "life",
+      "counter",
+      "priority",
+      "turn",
+      "combat",
+      "permanent"
+    ],
+    "display": [
+      "display",
+      "sharedDisplay",
+      "spectator",
+      "screen"
+    ],
+    "recovery": [
+      "recovery",
+      "checkpoint",
+      "resume",
+      "restore"
+    ],
+    "audio": [
+      "audio",
+      "music",
+      "sound",
+      "spatial",
+      "announcer"
+    ]
+  },
+  "feature_functions": {
+    "auth-profile": [
+      "avatarMarkup",
+      "avatarStageMarkup",
+      "renderAccountAvatars",
+      "bindAccountStorage",
+      "authStatus",
+      "profileSetupStatus",
+      "showAuthMode",
+      "showFrontDoor",
+      "showIdentitySetup",
+      "clearLegacyGuestPersistence",
+      "enterAuthenticatedAccount",
+      "accountSignIn",
+      "accountSignUp",
+      "startGuestIdentity",
+      "loadProfile",
+      "offerLiveRecovery",
+      "syncDeviceId",
+      "saveProfile",
+      "renderProfile",
+      "probeFriendDetails",
+      "probeFriend",
+      "refreshPresence",
+      "renderFriends",
+      "showIncomingInvite",
+      "addFriendByCode",
+      "esc",
+      "fmtDuration",
+      "showMatchHistory",
+      "showMatchDetail",
+      "showReplay",
+      "showAnalytics",
+      "persistFinalMatch",
+      "finalizeMatchIfReady",
+      "switchAccount",
+      "showAccounts",
+      "showRuntimeStatus",
+      "showProtocolPolicy",
+      "showReliableDelivery",
+      "showProtocolStatus",
+      "showAppStatus",
+      "showDataHealth",
+      "showSyncQueue",
+      "showAccountLinkStatus",
+      "downloadProfileBackup",
+      "importProfileBackup",
+      "showPlaygroups",
+      "showPlaygroupDetail",
+      "showAvatarPicker",
+      "profileHubAchievements",
+      "profileHubTitles",
+      "profileHubSelectedTitle",
+      "profileHubSummary",
+      "profileHubHeader",
+      "profileHubAvatarGridMarkup",
+      "profileHubOverview",
+      "profileHubDecks",
+      "profileHubFriends",
+      "profileHubPlaygroups",
+      "profileHubHistory",
+      "profileHubStats",
+      "profileHubAchievementsMarkup",
+      "profileHubTitlesMarkup",
+      "profileHubSettings",
+      "profileHubPanel",
+      "renderProfileHub",
+      "bindProfileHub",
+      "showProfileCenter",
+      "runActionPlaybackQA",
+      "runAutomatedQA",
+      "showSoloChecklist",
+      "scoreIdentity",
+      "ensureExactScoreElement",
+      "fadeExactScore",
+      "deckIdentity",
+      "deckManaGlyph",
+      "roomIdentity",
+      "inspectPublicKnownCard"
+    ],
+    "verification-decks": [
+      "runCommanderCombatQA",
+      "runCommanderZoneQA",
+      "showCommanderZoneStatus",
+      "runCommanderReturnQA",
+      "startSoloTest",
+      "currentSavedDeck",
+      "deckListText",
+      "deckManaPips",
+      "persistActiveDeckSelection",
+      "hydrateProfileFromSavedDeck",
+      "renderDeckLibrary",
+      "closeDeckVault",
+      "deckVaultThemeColor",
+      "deckVaultRgba",
+      "deckVaultDominantIdentity",
+      "deckVaultPalette",
+      "deckVaultSetAmbience",
+      "deckVaultFrameKey",
+      "deckVaultCrestIndex",
+      "deckVaultManaPips",
+      "deckVaultRowsHtml",
+      "deckVaultBoxHtml",
+      "deckVaultDetailHtml",
+      "closeDeckVaultDrawer",
+      "renderDeckVault",
+      "openDeckVault",
+      "activateSavedDeck",
+      "loadSavedDeck",
+      "beginEditSavedDeck",
+      "beginNewDeckFromVault",
+      "renameSavedDeck",
+      "removeSavedDeck",
+      "handleDeckVaultCommand",
+      "saveCurrentDeck",
+      "groupHtml",
+      "renderLegality",
+      "adoptRoomDescriptor",
+      "saveRoomIdentity",
+      "localDeckCardCount",
+      "slotByCid",
+      "nextSeat",
+      "initSeatState",
+      "kickPlayer",
+      "hostApply",
+      "commanderName",
+      "renderDeckAdaptiveHud",
+      "resourceRailState",
+      "showIncomingCommanderDamage",
+      "registeredCommandersFor",
+      "commanderDamageSummaryFrom",
+      "quickCommanderDamageFrom",
+      "runEventInputQA",
+      "librarySetupForPlayer",
+      "showLibraryControl"
+    ],
+    "multiplayer-sync": [
+      "socialFriendCode",
+      "socialRoomCode",
+      "presenceId",
+      "startPresence",
+      "inviteFriend",
+      "joinRoomInvite",
+      "installPWA",
+      "runRuntimeChecks",
+      "showRoomSessionStatus",
+      "showDiagnostics",
+      "showReleaseGate",
+      "runLiveReconnectQA",
+      "showLiveReconnect",
+      "runProtocolPolicyQA",
+      "showLiveTransport",
+      "showStateVerification",
+      "showRoomHealth",
+      "showSyncStatus",
+      "leaveBattleFromHud",
+      "consumeInviteLink",
+      "createRenderedScoreBus",
+      "startRenderedSources",
+      "updateRenderedScoreMix",
+      "startWarScore",
+      "startVerifyAmbience",
+      "startLobbyAmbience",
+      "netload",
+      "syncLocalProfilePresence",
+      "clientHello",
+      "bindConn",
+      "bindHostIncoming",
+      "resumeNet",
+      "attemptHostFailover",
+      "demoteFormerHost",
+      "publicDeckName",
+      "rosterAvatar",
+      "slots",
+      "flash",
+      "applyStateBasedFixedPoint",
+      "fallen",
+      "showHostControl",
+      "renderHost"
+    ],
+    "battlefield": [
+      "loadAssistHistory",
+      "saveAssistHistory",
+      "markAssistSeen",
+      "dismissAssistKey",
+      "avatarRoleLabel",
+      "avatarLoreBlurb",
+      "initPWA",
+      "runTargetingQA",
+      "runAttachmentQA",
+      "showCommanderReturnStatus",
+      "runCombatDamageEffectsQA",
+      "runZoneQA",
+      "runBattlefieldInteractionQA",
+      "chooseSoloTest",
+      "scheduleSoloNpc",
+      "soloNpcPlayer",
+      "soloNpcDeck",
+      "turnDrawRule",
+      "soloNpcPass",
+      "soloNpcPlayLand",
+      "soloNpcCastSpell",
+      "soloNpcDeclareAttackers",
+      "soloNpcIncomingAttackers",
+      "soloNpcDeclareBlockers",
+      "soloNpcAssignCombatDamage",
+      "soloNpcPower",
+      "soloNpcReconcileBoard",
+      "soloNpcResolveCombat",
+      "soloNpcTick",
+      "runPhase95LkiQA",
+      "runPhase96PhasingQA",
+      "runPhase97LinkedQA",
+      "runPhase98CardFormQA",
+      "chooseSoloScenario",
+      "showSoloSeatControls",
+      "endSoloTest",
+      "showProfileAdvancedTools",
+      "MTGAudioTableContext",
+      "loadRenderedScoreAssets",
+      "unlockScoreAudio",
+      "MTGSpokenHerald",
+      "cue",
+      "oid",
+      "send",
+      "handle",
+      "showBattlePage",
+      "showLobbyPage",
+      "introRosterHtml",
+      "playBattleIntro",
+      "game",
+      "numericControl",
+      "showWhy",
+      "hudForcedAwake",
+      "wakePlayerHud",
+      "bindHoldDelta",
+      "executeRankedQuickAction",
+      "quickActionMenu",
+      "playLandQuick",
+      "combatQuick",
+      "inspectStackQuick",
+      "hostPrefs",
+      "combatGateDefenders",
+      "combatGateDamageControllers",
+      "combatActionGateSpec",
+      "ensureCombatActionGate",
+      "combatDamageGateAudit",
+      "rulesShouldAutoYieldHolder",
+      "continueAutomaticPriorityYield",
+      "authoritativeAdvanceRulesNode",
+      "authoritativeRulesPump",
+      "priorityOpen",
+      "showPriorityStops",
+      "runPhase99FaceDownQA",
+      "runPhase100CastPermissionQA",
+      "runPhase102SuspendQA",
+      "runPhase101PreparedExileQA",
+      "moreQuick",
+      "faceDownPrivateKey",
+      "storeFaceDownPrivate",
+      "loadFaceDownPrivate",
+      "faceDownCardMechanisms",
+      "chooseFaceDownCast",
+      "chooseManifestOrCloak",
+      "revealCardForFaceDownObject",
+      "turnFaceDownObjectUp",
+      "zoneMoveRevealPayload",
+      "adventureCastChoices",
+      "castAdventureChoice",
+      "phase101PrivateKey",
+      "phase101SavePrivate",
+      "phase101LoadPrivate",
+      "phase101LookupCard",
+      "prepareExileAction",
+      "preparePhase103AlternateCast",
+      "runPhase103AlternateZoneQA",
+      "runPhase105AltCastQA",
+      "castTrackedPermission",
+      "runContextAction",
+      "renderPlayerAlerts",
+      "runPlayerAlertQA",
+      "setPlayerHudPage",
+      "renderBattlefieldPlayerTabs",
+      "renderSpatialBattlefieldOverview",
+      "inspectPublicCard",
+      "runPlayerPagesQA",
+      "assistEnabled",
+      "setAssistEnabled",
+      "handleAssistAction",
+      "showAssistWhy",
+      "showAssistQueue",
+      "renderAssistCoach",
+      "runAssistModeQA",
+      "refreshContextHud",
+      "runQuickActionQA",
+      "runPlayerHudQA",
+      "showPlayerHudStatus",
+      "editRailResource",
+      "showAllResources",
+      "renderResourceRail",
+      "runResourceRailQA",
+      "hud",
+      "runBattlefieldQuickActionQA",
+      "showOpponentDetail",
+      "runSpatialOpponentsQA",
+      "commanderDamageFrom",
+      "castingTargetPreflight",
+      "startCastingCostFlow",
+      "projectCastingPayments",
+      "phase91TriggerCandidatesForEvent",
+      "phase94ResolveCombatEvent",
+      "finalizeCastingCostFlow",
+      "applyCastingCostChoiceCommand",
+      "castingCostCancelButton",
+      "showCastingCostPrompt",
+      "maybePromptCastingCost",
+      "phase92ResumeAfterResolution",
+      "phase92WardCandidatesForCopy",
+      "phase92PlaceCopy",
+      "beginPhase92Copy",
+      "beginPhase92Cascade",
+      "phase92CascadePrivateCandidates",
+      "showAdvancedResolutionPrompt",
+      "maybePromptAdvancedResolution",
+      "applyAdvancedResolutionChoiceCommand",
+      "structuredCloneSafe",
+      "findPublicCard",
+      "renderBattlefieldBoardSummary",
+      "battle",
+      "setR",
+      "extraTriggersFor",
+      "triggerCandidateFromHit",
+      "oracleSetupSpecForItem",
+      "oracleResumeSeat",
+      "primeOracleSetupChoice",
+      "beginPhase102SuspendCast",
+      "beginPhase103MadnessCast",
+      "beginPhase104ReboundCast",
+      "resolvePhase103WarpTrigger",
+      "resolveAdvancedOracleEffect",
+      "applyReplacementOrderCommand",
+      "applyOracleChoiceCommand",
+      "showReplacementOrderPrompt",
+      "maybePromptReplacementOrder",
+      "showOracleChoicePrompt",
+      "maybePromptOracleChoice",
+      "continueOracleResolution",
+      "commitTriggerCandidates",
+      "cleanupLoopPatch",
+      "beginCleanupIteration",
+      "safeCleanupStateBasedSweep",
+      "deferredCleanupTriggerCount",
+      "releaseCleanupDeferredTriggers",
+      "finishCleanupCheckpoint",
+      "startRepeatedCleanup",
+      "pendingTriggerGroup",
+      "finalizePendingTriggerOrder",
+      "queueTriggerCandidates",
+      "gatherPublicTriggerHits",
+      "observePublicTriggerEvent",
+      "spellCastCandidates",
+      "showTriggerOrderPrompt",
+      "maybePromptTriggerOrder",
+      "enter",
+      "resolveTriggerItem",
+      "resolveTrig",
+      "postResolutionFlow",
+      "resolveSpell",
+      "cast",
+      "resolveTop",
+      "markPlayerFallenAuthoritative",
+      "hostAdjustPlayer",
+      "hostCommanderDamage",
+      "hostUndo",
+      "eventLabel"
+    ],
+    "display": [
+      "sharedDisplaySpectators",
+      "ensureSharedDisplayRealtimeGate",
+      "scheduleSharedDisplayState",
+      "cancelSharedDisplayState",
+      "sendSharedDisplayState",
+      "showSharedDisplayPage",
+      "requestSharedDisplayWakeLock",
+      "sharedDisplayIsLandscape",
+      "syncSharedDisplayOrientation",
+      "queueSharedDisplayOrientationSync",
+      "sharedDisplayPlayerHtml",
+      "renderSharedDisplay",
+      "connectSharedDisplay",
+      "startSharedDisplayMode",
+      "showSharedDisplayLink"
+    ],
+    "recovery": [
+      "recoverySessionId",
+      "recoveryDecisionKey",
+      "recoveryDecision",
+      "markRecoveryDecision",
+      "isActualMultiplayerCheckpoint",
+      "isActualMultiplayerRuntime",
+      "discardLiveRecovery",
+      "discardNonMultiplayerRecovery",
+      "persistRecoveryCheckpoint",
+      "restoreLiveRecovery",
+      "showRecoveryStatus"
+    ],
+    "audio": [
+      "ensureAudio",
+      "lobbyMusicSeatCount",
+      "lobbyMusicPerDevice",
+      "scoreModeMaster",
+      "refreshAudioTableContext",
+      "fadeWarScore",
+      "stopLobbyAmbience",
+      "duckWarScore",
+      "removeScoreUnlockListeners",
+      "announce",
+      "say",
+      "MTGAnnouncerEngine",
+      "runOpponentDetailQA",
+      "refreshSpatialSeatMap",
+      "arrangeOpponents"
+    ],
+    "core-other": []
+  },
+  "definitions": [
+    {
+      "name": "loadAssistHistory",
+      "kind": "function",
+      "line": 8,
+      "byte_offset": 1033,
+      "feature_scores": {
+        "battlefield": 5,
+        "auth-profile": 4,
+        "audio": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "saveAssistHistory",
+      "kind": "function",
+      "line": 9,
+      "byte_offset": 1320,
+      "feature_scores": {
+        "battlefield": 5,
+        "auth-profile": 4,
+        "audio": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "markAssistSeen",
+      "kind": "function",
+      "line": 10,
+      "byte_offset": 1646,
+      "feature_scores": {
+        "battlefield": 5,
+        "auth-profile": 4,
+        "audio": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "dismissAssistKey",
+      "kind": "function",
+      "line": 11,
+      "byte_offset": 1748,
+      "feature_scores": {
+        "battlefield": 5,
+        "auth-profile": 4,
+        "audio": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "avatarMarkup",
+      "kind": "function",
+      "line": 14,
+      "byte_offset": 1989,
+      "feature_scores": {
+        "auth-profile": 5,
+        "battlefield": 5
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "avatarRoleLabel",
+      "kind": "function",
+      "line": 15,
+      "byte_offset": 2061,
+      "feature_scores": {
+        "battlefield": 4,
+        "auth-profile": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "avatarLoreBlurb",
+      "kind": "function",
+      "line": 16,
+      "byte_offset": 2371,
+      "feature_scores": {
+        "battlefield": 3,
+        "auth-profile": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "avatarStageMarkup",
+      "kind": "function",
+      "line": 34,
+      "byte_offset": 6519,
+      "feature_scores": {
+        "auth-profile": 42,
+        "battlefield": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "renderAccountAvatars",
+      "kind": "function",
+      "line": 57,
+      "byte_offset": 8291,
+      "feature_scores": {
+        "auth-profile": 48,
+        "battlefield": 4,
+        "multiplayer-sync": 1,
+        "verification-decks": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "bindAccountStorage",
+      "kind": "function",
+      "line": 58,
+      "byte_offset": 8605,
+      "feature_scores": {
+        "auth-profile": 42,
+        "battlefield": 3,
+        "multiplayer-sync": 2,
+        "verification-decks": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "authStatus",
+      "kind": "function",
+      "line": 63,
+      "byte_offset": 8935,
+      "feature_scores": {
+        "auth-profile": 39,
+        "battlefield": 3,
+        "multiplayer-sync": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "profileSetupStatus",
+      "kind": "function",
+      "line": 64,
+      "byte_offset": 9120,
+      "feature_scores": {
+        "auth-profile": 36,
+        "verification-decks": 4,
+        "multiplayer-sync": 2,
+        "battlefield": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showAuthMode",
+      "kind": "function",
+      "line": 65,
+      "byte_offset": 9263,
+      "feature_scores": {
+        "auth-profile": 36,
+        "verification-decks": 4,
+        "multiplayer-sync": 2,
+        "display": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showFrontDoor",
+      "kind": "function",
+      "line": 68,
+      "byte_offset": 9648,
+      "feature_scores": {
+        "auth-profile": 34,
+        "verification-decks": 5,
+        "multiplayer-sync": 3,
+        "display": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showIdentitySetup",
+      "kind": "function",
+      "line": 73,
+      "byte_offset": 10108,
+      "feature_scores": {
+        "auth-profile": 42,
+        "verification-decks": 4,
+        "battlefield": 1,
+        "display": 1,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "clearLegacyGuestPersistence",
+      "kind": "function",
+      "line": 78,
+      "byte_offset": 10834,
+      "feature_scores": {
+        "auth-profile": 39,
+        "verification-decks": 8,
+        "multiplayer-sync": 5,
+        "battlefield": 3,
+        "recovery": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "enterAuthenticatedAccount",
+      "kind": "function",
+      "line": 81,
+      "byte_offset": 11020,
+      "feature_scores": {
+        "auth-profile": 45,
+        "verification-decks": 7,
+        "multiplayer-sync": 5,
+        "battlefield": 3,
+        "recovery": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "accountSignIn",
+      "kind": "function",
+      "line": 89,
+      "byte_offset": 12191,
+      "feature_scores": {
+        "auth-profile": 42,
+        "battlefield": 6,
+        "multiplayer-sync": 2,
+        "recovery": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "accountSignUp",
+      "kind": "function",
+      "line": 93,
+      "byte_offset": 12648,
+      "feature_scores": {
+        "auth-profile": 36,
+        "battlefield": 5,
+        "display": 4,
+        "recovery": 2,
+        "verification-decks": 2,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "startGuestIdentity",
+      "kind": "function",
+      "line": 97,
+      "byte_offset": 13567,
+      "feature_scores": {
+        "auth-profile": 32,
+        "recovery": 6,
+        "display": 4,
+        "multiplayer-sync": 4,
+        "battlefield": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "loadProfile",
+      "kind": "function",
+      "line": 104,
+      "byte_offset": 14055,
+      "feature_scores": {
+        "auth-profile": 26,
+        "recovery": 11,
+        "battlefield": 7,
+        "display": 4,
+        "multiplayer-sync": 4
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "recoverySessionId",
+      "kind": "function",
+      "line": 117,
+      "byte_offset": 14899,
+      "feature_scores": {
+        "recovery": 19,
+        "battlefield": 14,
+        "multiplayer-sync": 10,
+        "auth-profile": 3
+      },
+      "primary_feature": "recovery"
+    },
+    {
+      "name": "recoveryDecisionKey",
+      "kind": "function",
+      "line": 120,
+      "byte_offset": 15189,
+      "feature_scores": {
+        "recovery": 24,
+        "battlefield": 14,
+        "multiplayer-sync": 6,
+        "auth-profile": 3
+      },
+      "primary_feature": "recovery"
+    },
+    {
+      "name": "recoveryDecision",
+      "kind": "function",
+      "line": 121,
+      "byte_offset": 15381,
+      "feature_scores": {
+        "recovery": 24,
+        "battlefield": 13,
+        "multiplayer-sync": 9,
+        "auth-profile": 3
+      },
+      "primary_feature": "recovery"
+    },
+    {
+      "name": "markRecoveryDecision",
+      "kind": "function",
+      "line": 122,
+      "byte_offset": 15480,
+      "feature_scores": {
+        "recovery": 26,
+        "battlefield": 12,
+        "multiplayer-sync": 9,
+        "auth-profile": 3
+      },
+      "primary_feature": "recovery"
+    },
+    {
+      "name": "isActualMultiplayerCheckpoint",
+      "kind": "function",
+      "line": 123,
+      "byte_offset": 15629,
+      "feature_scores": {
+        "recovery": 24,
+        "multiplayer-sync": 14,
+        "battlefield": 11,
+        "auth-profile": 5
+      },
+      "primary_feature": "recovery"
+    },
+    {
+      "name": "isActualMultiplayerRuntime",
+      "kind": "function",
+      "line": 126,
+      "byte_offset": 15934,
+      "feature_scores": {
+        "recovery": 24,
+        "multiplayer-sync": 15,
+        "battlefield": 12,
+        "auth-profile": 7
+      },
+      "primary_feature": "recovery"
+    },
+    {
+      "name": "discardLiveRecovery",
+      "kind": "function",
+      "line": 127,
+      "byte_offset": 16202,
+      "feature_scores": {
+        "recovery": 31,
+        "multiplayer-sync": 12,
+        "battlefield": 9,
+        "auth-profile": 8
+      },
+      "primary_feature": "recovery"
+    },
+    {
+      "name": "discardNonMultiplayerRecovery",
+      "kind": "function",
+      "line": 128,
+      "byte_offset": 16352,
+      "feature_scores": {
+        "recovery": 30,
+        "multiplayer-sync": 12,
+        "battlefield": 11,
+        "auth-profile": 7
+      },
+      "primary_feature": "recovery"
+    },
+    {
+      "name": "persistRecoveryCheckpoint",
+      "kind": "function",
+      "line": 129,
+      "byte_offset": 16610,
+      "feature_scores": {
+        "recovery": 30,
+        "multiplayer-sync": 15,
+        "battlefield": 12,
+        "auth-profile": 6
+      },
+      "primary_feature": "recovery"
+    },
+    {
+      "name": "restoreLiveRecovery",
+      "kind": "function",
+      "line": 133,
+      "byte_offset": 16969,
+      "feature_scores": {
+        "recovery": 27,
+        "multiplayer-sync": 14,
+        "battlefield": 12,
+        "auth-profile": 5
+      },
+      "primary_feature": "recovery"
+    },
+    {
+      "name": "offerLiveRecovery",
+      "kind": "function",
+      "line": 138,
+      "byte_offset": 17652,
+      "feature_scores": {
+        "auth-profile": 17,
+        "recovery": 17,
+        "multiplayer-sync": 15,
+        "battlefield": 9
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "syncDeviceId",
+      "kind": "function",
+      "line": 147,
+      "byte_offset": 18440,
+      "feature_scores": {
+        "auth-profile": 47,
+        "multiplayer-sync": 13,
+        "display": 4,
+        "battlefield": 3
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "saveProfile",
+      "kind": "function",
+      "line": 148,
+      "byte_offset": 18693,
+      "feature_scores": {
+        "auth-profile": 59,
+        "multiplayer-sync": 9,
+        "display": 4,
+        "battlefield": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "renderProfile",
+      "kind": "function",
+      "line": 162,
+      "byte_offset": 19695,
+      "feature_scores": {
+        "auth-profile": 57,
+        "display": 6,
+        "battlefield": 2,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "socialFriendCode",
+      "kind": "function",
+      "line": 180,
+      "byte_offset": 22244,
+      "feature_scores": {
+        "multiplayer-sync": 45,
+        "auth-profile": 18,
+        "battlefield": 13
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "socialRoomCode",
+      "kind": "function",
+      "line": 181,
+      "byte_offset": 22422,
+      "feature_scores": {
+        "multiplayer-sync": 47,
+        "auth-profile": 15,
+        "battlefield": 13
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "presenceId",
+      "kind": "function",
+      "line": 182,
+      "byte_offset": 22576,
+      "feature_scores": {
+        "multiplayer-sync": 44,
+        "auth-profile": 16,
+        "battlefield": 13
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "startPresence",
+      "kind": "function",
+      "line": 183,
+      "byte_offset": 22674,
+      "feature_scores": {
+        "multiplayer-sync": 43,
+        "auth-profile": 19,
+        "battlefield": 12
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "probeFriendDetails",
+      "kind": "function",
+      "line": 200,
+      "byte_offset": 23700,
+      "feature_scores": {
+        "auth-profile": 33,
+        "multiplayer-sync": 13,
+        "battlefield": 8
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "probeFriend",
+      "kind": "function",
+      "line": 211,
+      "byte_offset": 24555,
+      "feature_scores": {
+        "auth-profile": 35,
+        "multiplayer-sync": 20,
+        "battlefield": 8
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "refreshPresence",
+      "kind": "function",
+      "line": 212,
+      "byte_offset": 24666,
+      "feature_scores": {
+        "auth-profile": 28,
+        "multiplayer-sync": 25,
+        "battlefield": 8
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "renderFriends",
+      "kind": "function",
+      "line": 217,
+      "byte_offset": 24913,
+      "feature_scores": {
+        "auth-profile": 32,
+        "multiplayer-sync": 23,
+        "battlefield": 7,
+        "display": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "inviteFriend",
+      "kind": "function",
+      "line": 222,
+      "byte_offset": 25676,
+      "feature_scores": {
+        "multiplayer-sync": 37,
+        "auth-profile": 22,
+        "battlefield": 7,
+        "display": 2
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "joinRoomInvite",
+      "kind": "function",
+      "line": 231,
+      "byte_offset": 26623,
+      "feature_scores": {
+        "multiplayer-sync": 33,
+        "auth-profile": 21,
+        "battlefield": 6
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "showIncomingInvite",
+      "kind": "function",
+      "line": 232,
+      "byte_offset": 26904,
+      "feature_scores": {
+        "auth-profile": 32,
+        "multiplayer-sync": 23,
+        "battlefield": 5,
+        "display": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "addFriendByCode",
+      "kind": "function",
+      "line": 239,
+      "byte_offset": 27678,
+      "feature_scores": {
+        "auth-profile": 40,
+        "battlefield": 6,
+        "multiplayer-sync": 6,
+        "display": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "esc",
+      "kind": "function",
+      "line": 246,
+      "byte_offset": 28848,
+      "feature_scores": {
+        "auth-profile": 4,
+        "battlefield": 4,
+        "multiplayer-sync": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "fmtDuration",
+      "kind": "function",
+      "line": 247,
+      "byte_offset": 28977,
+      "feature_scores": {
+        "auth-profile": 6,
+        "battlefield": 3,
+        "multiplayer-sync": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showMatchHistory",
+      "kind": "function",
+      "line": 248,
+      "byte_offset": 29126,
+      "feature_scores": {
+        "auth-profile": 7,
+        "battlefield": 4,
+        "multiplayer-sync": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showMatchDetail",
+      "kind": "function",
+      "line": 249,
+      "byte_offset": 30041,
+      "feature_scores": {
+        "auth-profile": 6,
+        "battlefield": 4,
+        "verification-decks": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showReplay",
+      "kind": "function",
+      "line": 250,
+      "byte_offset": 31153,
+      "feature_scores": {
+        "auth-profile": 4,
+        "battlefield": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showAnalytics",
+      "kind": "function",
+      "line": 251,
+      "byte_offset": 32474,
+      "feature_scores": {
+        "auth-profile": 13,
+        "verification-decks": 12,
+        "battlefield": 4,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "persistFinalMatch",
+      "kind": "function",
+      "line": 252,
+      "byte_offset": 33703,
+      "feature_scores": {
+        "auth-profile": 17,
+        "battlefield": 11,
+        "recovery": 8,
+        "verification-decks": 3,
+        "multiplayer-sync": 2,
+        "audio": 1,
+        "display": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "finalizeMatchIfReady",
+      "kind": "function",
+      "line": 253,
+      "byte_offset": 34166,
+      "feature_scores": {
+        "auth-profile": 22,
+        "recovery": 9,
+        "battlefield": 8,
+        "verification-decks": 4,
+        "display": 2,
+        "audio": 1,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "switchAccount",
+      "kind": "function",
+      "line": 258,
+      "byte_offset": 34478,
+      "feature_scores": {
+        "auth-profile": 26,
+        "recovery": 9,
+        "battlefield": 7,
+        "verification-decks": 4,
+        "display": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showAccounts",
+      "kind": "function",
+      "line": 274,
+      "byte_offset": 35698,
+      "feature_scores": {
+        "auth-profile": 31,
+        "recovery": 7,
+        "battlefield": 3,
+        "verification-decks": 2,
+        "display": 1,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "initPWA",
+      "kind": "function",
+      "line": 291,
+      "byte_offset": 37331,
+      "feature_scores": {
+        "battlefield": 5,
+        "multiplayer-sync": 5,
+        "auth-profile": 1,
+        "recovery": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "installPWA",
+      "kind": "function",
+      "line": 299,
+      "byte_offset": 37846,
+      "feature_scores": {
+        "multiplayer-sync": 8,
+        "auth-profile": 4,
+        "battlefield": 4
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "runRuntimeChecks",
+      "kind": "function",
+      "line": 311,
+      "byte_offset": 38146,
+      "feature_scores": {
+        "multiplayer-sync": 12,
+        "auth-profile": 5,
+        "battlefield": 3
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "showRoomSessionStatus",
+      "kind": "function",
+      "line": 323,
+      "byte_offset": 38765,
+      "feature_scores": {
+        "multiplayer-sync": 13,
+        "auth-profile": 9,
+        "battlefield": 2
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "showRuntimeStatus",
+      "kind": "function",
+      "line": 330,
+      "byte_offset": 39721,
+      "feature_scores": {
+        "auth-profile": 6,
+        "multiplayer-sync": 6,
+        "verification-decks": 2,
+        "battlefield": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showDiagnostics",
+      "kind": "function",
+      "line": 336,
+      "byte_offset": 40787,
+      "feature_scores": {
+        "multiplayer-sync": 8,
+        "auth-profile": 7,
+        "verification-decks": 3
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "showReleaseGate",
+      "kind": "function",
+      "line": 348,
+      "byte_offset": 42715,
+      "feature_scores": {
+        "multiplayer-sync": 16,
+        "auth-profile": 4,
+        "recovery": 2,
+        "verification-decks": 1
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "runLiveReconnectQA",
+      "kind": "function",
+      "line": 363,
+      "byte_offset": 44040,
+      "feature_scores": {
+        "multiplayer-sync": 41,
+        "auth-profile": 2,
+        "recovery": 1
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "showLiveReconnect",
+      "kind": "function",
+      "line": 366,
+      "byte_offset": 45914,
+      "feature_scores": {
+        "multiplayer-sync": 24,
+        "auth-profile": 6,
+        "recovery": 2,
+        "display": 1,
+        "verification-decks": 1
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "runProtocolPolicyQA",
+      "kind": "function",
+      "line": 373,
+      "byte_offset": 47061,
+      "feature_scores": {
+        "multiplayer-sync": 31,
+        "display": 4,
+        "auth-profile": 1
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "showProtocolPolicy",
+      "kind": "function",
+      "line": 391,
+      "byte_offset": 49319,
+      "feature_scores": {
+        "auth-profile": 9,
+        "battlefield": 2,
+        "multiplayer-sync": 2,
+        "display": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showReliableDelivery",
+      "kind": "function",
+      "line": 399,
+      "byte_offset": 50329,
+      "feature_scores": {
+        "auth-profile": 8,
+        "multiplayer-sync": 4,
+        "battlefield": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showLiveTransport",
+      "kind": "function",
+      "line": 405,
+      "byte_offset": 51380,
+      "feature_scores": {
+        "multiplayer-sync": 10,
+        "auth-profile": 6,
+        "battlefield": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "showProtocolStatus",
+      "kind": "function",
+      "line": 411,
+      "byte_offset": 52515,
+      "feature_scores": {
+        "auth-profile": 8,
+        "multiplayer-sync": 7,
+        "verification-decks": 7,
+        "battlefield": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showStateVerification",
+      "kind": "function",
+      "line": 419,
+      "byte_offset": 53572,
+      "feature_scores": {
+        "multiplayer-sync": 13,
+        "auth-profile": 6,
+        "verification-decks": 6,
+        "battlefield": 2
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "showRoomHealth",
+      "kind": "function",
+      "line": 426,
+      "byte_offset": 54706,
+      "feature_scores": {
+        "multiplayer-sync": 19,
+        "auth-profile": 6,
+        "battlefield": 1
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "showAppStatus",
+      "kind": "function",
+      "line": 437,
+      "byte_offset": 55802,
+      "feature_scores": {
+        "auth-profile": 11,
+        "multiplayer-sync": 2,
+        "battlefield": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showDataHealth",
+      "kind": "function",
+      "line": 444,
+      "byte_offset": 56884,
+      "feature_scores": {
+        "auth-profile": 18,
+        "multiplayer-sync": 5,
+        "battlefield": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showSyncQueue",
+      "kind": "function",
+      "line": 452,
+      "byte_offset": 58183,
+      "feature_scores": {
+        "auth-profile": 18,
+        "multiplayer-sync": 15,
+        "battlefield": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showAccountLinkStatus",
+      "kind": "function",
+      "line": 460,
+      "byte_offset": 59312,
+      "feature_scores": {
+        "auth-profile": 17,
+        "recovery": 9,
+        "battlefield": 4,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showRecoveryStatus",
+      "kind": "function",
+      "line": 467,
+      "byte_offset": 60203,
+      "feature_scores": {
+        "recovery": 25,
+        "multiplayer-sync": 9,
+        "auth-profile": 5,
+        "battlefield": 4
+      },
+      "primary_feature": "recovery"
+    },
+    {
+      "name": "showSyncStatus",
+      "kind": "function",
+      "line": 477,
+      "byte_offset": 61769,
+      "feature_scores": {
+        "multiplayer-sync": 16,
+        "auth-profile": 14,
+        "battlefield": 1
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "downloadProfileBackup",
+      "kind": "function",
+      "line": 486,
+      "byte_offset": 63415,
+      "feature_scores": {
+        "auth-profile": 14,
+        "battlefield": 5,
+        "multiplayer-sync": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "importProfileBackup",
+      "kind": "function",
+      "line": 491,
+      "byte_offset": 63893,
+      "feature_scores": {
+        "auth-profile": 11,
+        "battlefield": 4,
+        "multiplayer-sync": 3,
+        "verification-decks": 3
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showPlaygroups",
+      "kind": "function",
+      "line": 497,
+      "byte_offset": 64678,
+      "feature_scores": {
+        "auth-profile": 12,
+        "battlefield": 3,
+        "verification-decks": 3,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showPlaygroupDetail",
+      "kind": "function",
+      "line": 498,
+      "byte_offset": 65747,
+      "feature_scores": {
+        "auth-profile": 13,
+        "battlefield": 4,
+        "verification-decks": 3,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "runTargetingQA",
+      "kind": "function",
+      "line": 499,
+      "byte_offset": 67254,
+      "feature_scores": {
+        "battlefield": 5,
+        "auth-profile": 3,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runAttachmentQA",
+      "kind": "function",
+      "line": 500,
+      "byte_offset": 68357,
+      "feature_scores": {
+        "battlefield": 9,
+        "auth-profile": 3,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runCommanderCombatQA",
+      "kind": "function",
+      "line": 501,
+      "byte_offset": 80262,
+      "feature_scores": {
+        "verification-decks": 23,
+        "battlefield": 21,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "runCommanderZoneQA",
+      "kind": "function",
+      "line": 502,
+      "byte_offset": 81622,
+      "feature_scores": {
+        "verification-decks": 18,
+        "auth-profile": 5,
+        "battlefield": 2,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "showCommanderZoneStatus",
+      "kind": "function",
+      "line": 503,
+      "byte_offset": 82236,
+      "feature_scores": {
+        "verification-decks": 21,
+        "battlefield": 7,
+        "auth-profile": 5,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "runCommanderReturnQA",
+      "kind": "function",
+      "line": 504,
+      "byte_offset": 83392,
+      "feature_scores": {
+        "verification-decks": 16,
+        "battlefield": 15,
+        "auth-profile": 3,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "showCommanderReturnStatus",
+      "kind": "function",
+      "line": 505,
+      "byte_offset": 84004,
+      "feature_scores": {
+        "battlefield": 16,
+        "verification-decks": 13,
+        "auth-profile": 3,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runCombatDamageEffectsQA",
+      "kind": "function",
+      "line": 506,
+      "byte_offset": 85081,
+      "feature_scores": {
+        "battlefield": 15,
+        "multiplayer-sync": 3,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runZoneQA",
+      "kind": "function",
+      "line": 507,
+      "byte_offset": 91000,
+      "feature_scores": {
+        "battlefield": 17,
+        "auth-profile": 2,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runBattlefieldInteractionQA",
+      "kind": "function",
+      "line": 508,
+      "byte_offset": 92024,
+      "feature_scores": {
+        "battlefield": 32,
+        "auth-profile": 9,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "showAvatarPicker",
+      "kind": "function",
+      "line": 509,
+      "byte_offset": 93266,
+      "feature_scores": {
+        "auth-profile": 35,
+        "battlefield": 4,
+        "multiplayer-sync": 3,
+        "verification-decks": 3
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "profileHubAchievements",
+      "kind": "function",
+      "line": 510,
+      "byte_offset": 94099,
+      "feature_scores": {
+        "auth-profile": 15,
+        "verification-decks": 14,
+        "battlefield": 4
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "profileHubTitles",
+      "kind": "function",
+      "line": 524,
+      "byte_offset": 95435,
+      "feature_scores": {
+        "auth-profile": 11,
+        "verification-decks": 8,
+        "battlefield": 6
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "profileHubSelectedTitle",
+      "kind": "function",
+      "line": 536,
+      "byte_offset": 96297,
+      "feature_scores": {
+        "auth-profile": 35,
+        "verification-decks": 5,
+        "battlefield": 4
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "profileHubSummary",
+      "kind": "function",
+      "line": 537,
+      "byte_offset": 96466,
+      "feature_scores": {
+        "auth-profile": 37,
+        "verification-decks": 8,
+        "battlefield": 5
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "profileHubHeader",
+      "kind": "function",
+      "line": 542,
+      "byte_offset": 97135,
+      "feature_scores": {
+        "auth-profile": 43,
+        "verification-decks": 11,
+        "battlefield": 4
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "profileHubAvatarGridMarkup",
+      "kind": "function",
+      "line": 543,
+      "byte_offset": 97343,
+      "feature_scores": {
+        "auth-profile": 42,
+        "verification-decks": 11,
+        "battlefield": 3
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "profileHubOverview",
+      "kind": "function",
+      "line": 544,
+      "byte_offset": 97810,
+      "feature_scores": {
+        "auth-profile": 36,
+        "verification-decks": 11,
+        "battlefield": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "profileHubDecks",
+      "kind": "function",
+      "line": 548,
+      "byte_offset": 99598,
+      "feature_scores": {
+        "auth-profile": 31,
+        "verification-decks": 26,
+        "battlefield": 2,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "profileHubFriends",
+      "kind": "function",
+      "line": 549,
+      "byte_offset": 100631,
+      "feature_scores": {
+        "auth-profile": 36,
+        "battlefield": 2,
+        "multiplayer-sync": 2,
+        "verification-decks": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "profileHubPlaygroups",
+      "kind": "function",
+      "line": 550,
+      "byte_offset": 101921,
+      "feature_scores": {
+        "auth-profile": 23,
+        "verification-decks": 3,
+        "battlefield": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "profileHubHistory",
+      "kind": "function",
+      "line": 551,
+      "byte_offset": 102908,
+      "feature_scores": {
+        "auth-profile": 19,
+        "verification-decks": 5,
+        "battlefield": 4
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "profileHubStats",
+      "kind": "function",
+      "line": 552,
+      "byte_offset": 103954,
+      "feature_scores": {
+        "auth-profile": 18,
+        "verification-decks": 13,
+        "battlefield": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "profileHubAchievementsMarkup",
+      "kind": "function",
+      "line": 553,
+      "byte_offset": 105564,
+      "feature_scores": {
+        "auth-profile": 22,
+        "battlefield": 3,
+        "verification-decks": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "profileHubTitlesMarkup",
+      "kind": "function",
+      "line": 554,
+      "byte_offset": 106243,
+      "feature_scores": {
+        "auth-profile": 28,
+        "battlefield": 2,
+        "display": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "profileHubSettings",
+      "kind": "function",
+      "line": 555,
+      "byte_offset": 107051,
+      "feature_scores": {
+        "auth-profile": 32,
+        "display": 2,
+        "verification-decks": 2,
+        "battlefield": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "profileHubPanel",
+      "kind": "function",
+      "line": 556,
+      "byte_offset": 111040,
+      "feature_scores": {
+        "auth-profile": 47,
+        "battlefield": 10,
+        "verification-decks": 4,
+        "display": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "renderProfileHub",
+      "kind": "function",
+      "line": 557,
+      "byte_offset": 111487,
+      "feature_scores": {
+        "auth-profile": 42,
+        "verification-decks": 4,
+        "battlefield": 1,
+        "display": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "bindProfileHub",
+      "kind": "function",
+      "line": 562,
+      "byte_offset": 113176,
+      "feature_scores": {
+        "auth-profile": 43,
+        "verification-decks": 6,
+        "battlefield": 2,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showProfileCenter",
+      "kind": "function",
+      "line": 574,
+      "byte_offset": 116600,
+      "feature_scores": {
+        "auth-profile": 14,
+        "verification-decks": 13,
+        "battlefield": 9,
+        "multiplayer-sync": 4,
+        "recovery": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "startSoloTest",
+      "kind": "function",
+      "line": 577,
+      "byte_offset": 116668,
+      "feature_scores": {
+        "verification-decks": 13,
+        "auth-profile": 11,
+        "battlefield": 11,
+        "multiplayer-sync": 4,
+        "recovery": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "chooseSoloTest",
+      "kind": "function",
+      "line": 598,
+      "byte_offset": 118436,
+      "feature_scores": {
+        "battlefield": 10,
+        "verification-decks": 4
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "scheduleSoloNpc",
+      "kind": "function",
+      "line": 605,
+      "byte_offset": 118865,
+      "feature_scores": {
+        "battlefield": 12,
+        "verification-decks": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "soloNpcPlayer",
+      "kind": "function",
+      "line": 609,
+      "byte_offset": 119112,
+      "feature_scores": {
+        "battlefield": 14,
+        "verification-decks": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "soloNpcDeck",
+      "kind": "function",
+      "line": 610,
+      "byte_offset": 119215,
+      "feature_scores": {
+        "battlefield": 13,
+        "verification-decks": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "turnDrawRule",
+      "kind": "function",
+      "line": 611,
+      "byte_offset": 119287,
+      "feature_scores": {
+        "battlefield": 13
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "soloNpcPass",
+      "kind": "function",
+      "line": 633,
+      "byte_offset": 122735,
+      "feature_scores": {
+        "battlefield": 27,
+        "verification-decks": 12
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "soloNpcPlayLand",
+      "kind": "function",
+      "line": 637,
+      "byte_offset": 122860,
+      "feature_scores": {
+        "battlefield": 26,
+        "verification-decks": 12
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "soloNpcCastSpell",
+      "kind": "function",
+      "line": 638,
+      "byte_offset": 123253,
+      "feature_scores": {
+        "battlefield": 22,
+        "verification-decks": 11,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "soloNpcDeclareAttackers",
+      "kind": "function",
+      "line": 645,
+      "byte_offset": 124134,
+      "feature_scores": {
+        "battlefield": 23,
+        "multiplayer-sync": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "soloNpcIncomingAttackers",
+      "kind": "function",
+      "line": 651,
+      "byte_offset": 124741,
+      "feature_scores": {
+        "battlefield": 20,
+        "multiplayer-sync": 2,
+        "verification-decks": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "soloNpcDeclareBlockers",
+      "kind": "function",
+      "line": 652,
+      "byte_offset": 125109,
+      "feature_scores": {
+        "battlefield": 23,
+        "multiplayer-sync": 2,
+        "verification-decks": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "soloNpcAssignCombatDamage",
+      "kind": "function",
+      "line": 653,
+      "byte_offset": 126109,
+      "feature_scores": {
+        "battlefield": 30,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "soloNpcPower",
+      "kind": "function",
+      "line": 654,
+      "byte_offset": 127659,
+      "feature_scores": {
+        "battlefield": 21,
+        "verification-decks": 9
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "soloNpcReconcileBoard",
+      "kind": "function",
+      "line": 655,
+      "byte_offset": 127892,
+      "feature_scores": {
+        "battlefield": 21,
+        "verification-decks": 9
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "soloNpcResolveCombat",
+      "kind": "function",
+      "line": 656,
+      "byte_offset": 128349,
+      "feature_scores": {
+        "battlefield": 21,
+        "verification-decks": 8,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "soloNpcTick",
+      "kind": "function",
+      "line": 657,
+      "byte_offset": 128435,
+      "feature_scores": {
+        "battlefield": 19,
+        "verification-decks": 9,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runActionPlaybackQA",
+      "kind": "function",
+      "line": 681,
+      "byte_offset": 131513,
+      "feature_scores": {
+        "auth-profile": 4,
+        "battlefield": 4,
+        "verification-decks": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "runAutomatedQA",
+      "kind": "function",
+      "line": 694,
+      "byte_offset": 132917,
+      "feature_scores": {
+        "auth-profile": 4,
+        "battlefield": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "runPhase95LkiQA",
+      "kind": "function",
+      "line": 708,
+      "byte_offset": 134789,
+      "feature_scores": {
+        "battlefield": 6
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runPhase96PhasingQA",
+      "kind": "function",
+      "line": 714,
+      "byte_offset": 135444,
+      "feature_scores": {
+        "battlefield": 6
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runPhase97LinkedQA",
+      "kind": "function",
+      "line": 720,
+      "byte_offset": 136131,
+      "feature_scores": {
+        "battlefield": 6
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runPhase98CardFormQA",
+      "kind": "function",
+      "line": 726,
+      "byte_offset": 136842,
+      "feature_scores": {
+        "battlefield": 7,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "chooseSoloScenario",
+      "kind": "function",
+      "line": 732,
+      "byte_offset": 137539,
+      "feature_scores": {
+        "battlefield": 5,
+        "auth-profile": 4,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "showSoloChecklist",
+      "kind": "function",
+      "line": 744,
+      "byte_offset": 138061,
+      "feature_scores": {
+        "auth-profile": 4,
+        "battlefield": 4,
+        "verification-decks": 2,
+        "multiplayer-sync": 1,
+        "recovery": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "showSoloSeatControls",
+      "kind": "function",
+      "line": 753,
+      "byte_offset": 139126,
+      "feature_scores": {
+        "battlefield": 20,
+        "verification-decks": 6,
+        "recovery": 2,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "endSoloTest",
+      "kind": "function",
+      "line": 770,
+      "byte_offset": 141029,
+      "feature_scores": {
+        "battlefield": 15,
+        "multiplayer-sync": 10,
+        "recovery": 7,
+        "auth-profile": 6,
+        "verification-decks": 5
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "leaveBattleFromHud",
+      "kind": "function",
+      "line": 779,
+      "byte_offset": 142011,
+      "feature_scores": {
+        "multiplayer-sync": 16,
+        "battlefield": 12,
+        "recovery": 9,
+        "verification-decks": 8,
+        "auth-profile": 7
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "showProfileAdvancedTools",
+      "kind": "function",
+      "line": 792,
+      "byte_offset": 143786,
+      "feature_scores": {
+        "battlefield": 17,
+        "auth-profile": 13,
+        "multiplayer-sync": 6,
+        "verification-decks": 4,
+        "recovery": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "consumeInviteLink",
+      "kind": "function",
+      "line": 795,
+      "byte_offset": 148182,
+      "feature_scores": {
+        "multiplayer-sync": 17,
+        "audio": 15,
+        "battlefield": 6,
+        "recovery": 3,
+        "auth-profile": 2
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "ensureAudio",
+      "kind": "function",
+      "line": 801,
+      "byte_offset": 148963,
+      "feature_scores": {
+        "audio": 13,
+        "battlefield": 11,
+        "recovery": 3,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "audio"
+    },
+    {
+      "name": "MTGAudioTableContext",
+      "kind": "arrow",
+      "line": 808,
+      "byte_offset": 149671,
+      "feature_scores": {
+        "battlefield": 8,
+        "multiplayer-sync": 8,
+        "audio": 7
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "lobbyMusicSeatCount",
+      "kind": "function",
+      "line": 821,
+      "byte_offset": 152049,
+      "feature_scores": {
+        "audio": 13,
+        "multiplayer-sync": 12,
+        "battlefield": 6,
+        "auth-profile": 5,
+        "verification-decks": 4,
+        "display": 1
+      },
+      "primary_feature": "audio"
+    },
+    {
+      "name": "lobbyMusicPerDevice",
+      "kind": "function",
+      "line": 822,
+      "byte_offset": 152117,
+      "feature_scores": {
+        "audio": 11,
+        "multiplayer-sync": 11,
+        "auth-profile": 5,
+        "battlefield": 5,
+        "verification-decks": 4,
+        "display": 1
+      },
+      "primary_feature": "audio"
+    },
+    {
+      "name": "scoreModeMaster",
+      "kind": "function",
+      "line": 823,
+      "byte_offset": 152251,
+      "feature_scores": {
+        "audio": 8,
+        "multiplayer-sync": 6,
+        "auth-profile": 5,
+        "battlefield": 4,
+        "verification-decks": 4,
+        "display": 1
+      },
+      "primary_feature": "audio"
+    },
+    {
+      "name": "refreshAudioTableContext",
+      "kind": "function",
+      "line": 824,
+      "byte_offset": 152376,
+      "feature_scores": {
+        "audio": 7,
+        "auth-profile": 5,
+        "multiplayer-sync": 4,
+        "verification-decks": 4,
+        "battlefield": 3,
+        "display": 1
+      },
+      "primary_feature": "audio"
+    },
+    {
+      "name": "scoreIdentity",
+      "kind": "function",
+      "line": 825,
+      "byte_offset": 152706,
+      "feature_scores": {
+        "auth-profile": 6,
+        "battlefield": 4,
+        "verification-decks": 4,
+        "audio": 2,
+        "multiplayer-sync": 2,
+        "display": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "ensureExactScoreElement",
+      "kind": "function",
+      "line": 826,
+      "byte_offset": 153012,
+      "feature_scores": {
+        "auth-profile": 5,
+        "audio": 4,
+        "battlefield": 4,
+        "multiplayer-sync": 2,
+        "display": 1,
+        "verification-decks": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "fadeExactScore",
+      "kind": "function",
+      "line": 827,
+      "byte_offset": 153404,
+      "feature_scores": {
+        "auth-profile": 5,
+        "battlefield": 5,
+        "multiplayer-sync": 3,
+        "audio": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "loadRenderedScoreAssets",
+      "kind": "function",
+      "line": 828,
+      "byte_offset": 153978,
+      "feature_scores": {
+        "battlefield": 9,
+        "multiplayer-sync": 9,
+        "auth-profile": 5,
+        "verification-decks": 5,
+        "audio": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "createRenderedScoreBus",
+      "kind": "function",
+      "line": 829,
+      "byte_offset": 154198,
+      "feature_scores": {
+        "multiplayer-sync": 11,
+        "battlefield": 8,
+        "auth-profile": 5,
+        "verification-decks": 5,
+        "audio": 3
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "startRenderedSources",
+      "kind": "function",
+      "line": 830,
+      "byte_offset": 154271,
+      "feature_scores": {
+        "multiplayer-sync": 11,
+        "battlefield": 8,
+        "auth-profile": 5,
+        "verification-decks": 5,
+        "audio": 3
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "updateRenderedScoreMix",
+      "kind": "function",
+      "line": 831,
+      "byte_offset": 154316,
+      "feature_scores": {
+        "multiplayer-sync": 11,
+        "battlefield": 7,
+        "auth-profile": 5,
+        "verification-decks": 5,
+        "audio": 3
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "startWarScore",
+      "kind": "function",
+      "line": 832,
+      "byte_offset": 154631,
+      "feature_scores": {
+        "multiplayer-sync": 11,
+        "battlefield": 6,
+        "verification-decks": 4,
+        "audio": 2
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "startVerifyAmbience",
+      "kind": "function",
+      "line": 833,
+      "byte_offset": 155159,
+      "feature_scores": {
+        "multiplayer-sync": 8,
+        "audio": 6,
+        "battlefield": 5,
+        "verification-decks": 4,
+        "recovery": 1
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "startLobbyAmbience",
+      "kind": "function",
+      "line": 834,
+      "byte_offset": 155278,
+      "feature_scores": {
+        "multiplayer-sync": 9,
+        "audio": 6,
+        "battlefield": 6,
+        "recovery": 1
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "fadeWarScore",
+      "kind": "function",
+      "line": 835,
+      "byte_offset": 155434,
+      "feature_scores": {
+        "audio": 5,
+        "battlefield": 5,
+        "multiplayer-sync": 5,
+        "recovery": 1
+      },
+      "primary_feature": "audio"
+    },
+    {
+      "name": "stopLobbyAmbience",
+      "kind": "function",
+      "line": 836,
+      "byte_offset": 155706,
+      "feature_scores": {
+        "audio": 5,
+        "battlefield": 5,
+        "multiplayer-sync": 5,
+        "auth-profile": 1,
+        "recovery": 1
+      },
+      "primary_feature": "audio"
+    },
+    {
+      "name": "duckWarScore",
+      "kind": "function",
+      "line": 837,
+      "byte_offset": 155754,
+      "feature_scores": {
+        "audio": 5,
+        "battlefield": 5,
+        "multiplayer-sync": 3,
+        "auth-profile": 1,
+        "recovery": 1
+      },
+      "primary_feature": "audio"
+    },
+    {
+      "name": "removeScoreUnlockListeners",
+      "kind": "function",
+      "line": 838,
+      "byte_offset": 156119,
+      "feature_scores": {
+        "audio": 5,
+        "battlefield": 5,
+        "multiplayer-sync": 3,
+        "auth-profile": 1,
+        "recovery": 1
+      },
+      "primary_feature": "audio"
+    },
+    {
+      "name": "unlockScoreAudio",
+      "kind": "function",
+      "line": 839,
+      "byte_offset": 156347,
+      "feature_scores": {
+        "battlefield": 6,
+        "audio": 3,
+        "multiplayer-sync": 3,
+        "auth-profile": 1,
+        "recovery": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "MTGSpokenHerald",
+      "kind": "arrow",
+      "line": 842,
+      "byte_offset": 157013,
+      "feature_scores": {
+        "battlefield": 7,
+        "auth-profile": 3,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "cue",
+      "kind": "function",
+      "line": 863,
+      "byte_offset": 160076,
+      "feature_scores": {
+        "battlefield": 12,
+        "audio": 6
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "announce",
+      "kind": "function",
+      "line": 864,
+      "byte_offset": 160697,
+      "feature_scores": {
+        "audio": 5,
+        "battlefield": 5,
+        "auth-profile": 2
+      },
+      "primary_feature": "audio"
+    },
+    {
+      "name": "say",
+      "kind": "function",
+      "line": 865,
+      "byte_offset": 161311,
+      "feature_scores": {
+        "audio": 4,
+        "battlefield": 4,
+        "auth-profile": 2
+      },
+      "primary_feature": "audio"
+    },
+    {
+      "name": "MTGAnnouncerEngine",
+      "kind": "arrow",
+      "line": 867,
+      "byte_offset": 161358,
+      "feature_scores": {
+        "audio": 5,
+        "battlefield": 5,
+        "auth-profile": 2
+      },
+      "primary_feature": "audio"
+    },
+    {
+      "name": "currentSavedDeck",
+      "kind": "function",
+      "line": 1020,
+      "byte_offset": 176149,
+      "feature_scores": {
+        "verification-decks": 18,
+        "auth-profile": 6,
+        "battlefield": 4
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "deckListText",
+      "kind": "function",
+      "line": 1022,
+      "byte_offset": 176479,
+      "feature_scores": {
+        "verification-decks": 4,
+        "auth-profile": 3,
+        "battlefield": 2
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "deckIdentity",
+      "kind": "function",
+      "line": 1023,
+      "byte_offset": 176635,
+      "feature_scores": {
+        "auth-profile": 4,
+        "verification-decks": 3,
+        "battlefield": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "deckManaGlyph",
+      "kind": "function",
+      "line": 1024,
+      "byte_offset": 176827,
+      "feature_scores": {
+        "auth-profile": 5,
+        "verification-decks": 4,
+        "battlefield": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "deckManaPips",
+      "kind": "function",
+      "line": 1025,
+      "byte_offset": 178301,
+      "feature_scores": {
+        "verification-decks": 31,
+        "auth-profile": 13,
+        "battlefield": 5
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "persistActiveDeckSelection",
+      "kind": "function",
+      "line": 1026,
+      "byte_offset": 178767,
+      "feature_scores": {
+        "verification-decks": 45,
+        "auth-profile": 8,
+        "battlefield": 7
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "hydrateProfileFromSavedDeck",
+      "kind": "function",
+      "line": 1027,
+      "byte_offset": 179327,
+      "feature_scores": {
+        "verification-decks": 33,
+        "battlefield": 7,
+        "auth-profile": 4
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "renderDeckLibrary",
+      "kind": "function",
+      "line": 1028,
+      "byte_offset": 179864,
+      "feature_scores": {
+        "verification-decks": 27,
+        "battlefield": 6,
+        "auth-profile": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "closeDeckVault",
+      "kind": "function",
+      "line": 1029,
+      "byte_offset": 180055,
+      "feature_scores": {
+        "verification-decks": 20,
+        "battlefield": 9,
+        "auth-profile": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "deckVaultThemeColor",
+      "kind": "function",
+      "line": 1030,
+      "byte_offset": 180423,
+      "feature_scores": {
+        "verification-decks": 15,
+        "battlefield": 5,
+        "auth-profile": 3
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "deckVaultRgba",
+      "kind": "function",
+      "line": 1031,
+      "byte_offset": 181427,
+      "feature_scores": {
+        "verification-decks": 39,
+        "battlefield": 4,
+        "auth-profile": 3
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "deckVaultDominantIdentity",
+      "kind": "function",
+      "line": 1032,
+      "byte_offset": 181511,
+      "feature_scores": {
+        "verification-decks": 41,
+        "auth-profile": 4,
+        "battlefield": 3
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "deckVaultPalette",
+      "kind": "function",
+      "line": 1033,
+      "byte_offset": 181655,
+      "feature_scores": {
+        "verification-decks": 45,
+        "auth-profile": 2
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "deckVaultSetAmbience",
+      "kind": "function",
+      "line": 1034,
+      "byte_offset": 184781,
+      "feature_scores": {
+        "verification-decks": 21,
+        "battlefield": 5,
+        "auth-profile": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "deckVaultFrameKey",
+      "kind": "function",
+      "line": 1035,
+      "byte_offset": 185337,
+      "feature_scores": {
+        "verification-decks": 15,
+        "battlefield": 4,
+        "auth-profile": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "deckVaultCrestIndex",
+      "kind": "function",
+      "line": 1036,
+      "byte_offset": 185434,
+      "feature_scores": {
+        "verification-decks": 11,
+        "battlefield": 2,
+        "auth-profile": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "deckVaultManaPips",
+      "kind": "function",
+      "line": 1038,
+      "byte_offset": 192541,
+      "feature_scores": {
+        "verification-decks": 52,
+        "auth-profile": 6,
+        "battlefield": 3
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "deckVaultRowsHtml",
+      "kind": "function",
+      "line": 1039,
+      "byte_offset": 193031,
+      "feature_scores": {
+        "verification-decks": 64,
+        "battlefield": 3
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "deckVaultBoxHtml",
+      "kind": "function",
+      "line": 1040,
+      "byte_offset": 193391,
+      "feature_scores": {
+        "verification-decks": 62,
+        "auth-profile": 2,
+        "battlefield": 2
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "deckVaultDetailHtml",
+      "kind": "function",
+      "line": 1041,
+      "byte_offset": 194344,
+      "feature_scores": {
+        "verification-decks": 62,
+        "battlefield": 3,
+        "auth-profile": 2,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "closeDeckVaultDrawer",
+      "kind": "function",
+      "line": 1042,
+      "byte_offset": 198200,
+      "feature_scores": {
+        "verification-decks": 59,
+        "battlefield": 4,
+        "auth-profile": 2,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "renderDeckVault",
+      "kind": "function",
+      "line": 1043,
+      "byte_offset": 198760,
+      "feature_scores": {
+        "verification-decks": 65,
+        "battlefield": 4,
+        "auth-profile": 2,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "openDeckVault",
+      "kind": "function",
+      "line": 1044,
+      "byte_offset": 200702,
+      "feature_scores": {
+        "verification-decks": 47,
+        "auth-profile": 9,
+        "battlefield": 6
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "activateSavedDeck",
+      "kind": "function",
+      "line": 1045,
+      "byte_offset": 201313,
+      "feature_scores": {
+        "verification-decks": 45,
+        "auth-profile": 5,
+        "battlefield": 4,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "loadSavedDeck",
+      "kind": "function",
+      "line": 1046,
+      "byte_offset": 201672,
+      "feature_scores": {
+        "verification-decks": 44,
+        "auth-profile": 2,
+        "battlefield": 2,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "beginEditSavedDeck",
+      "kind": "function",
+      "line": 1047,
+      "byte_offset": 201729,
+      "feature_scores": {
+        "verification-decks": 43,
+        "auth-profile": 4,
+        "multiplayer-sync": 2,
+        "battlefield": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "beginNewDeckFromVault",
+      "kind": "function",
+      "line": 1048,
+      "byte_offset": 202557,
+      "feature_scores": {
+        "verification-decks": 48,
+        "auth-profile": 14,
+        "battlefield": 3,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "renameSavedDeck",
+      "kind": "function",
+      "line": 1049,
+      "byte_offset": 203233,
+      "feature_scores": {
+        "verification-decks": 50,
+        "auth-profile": 16,
+        "battlefield": 8
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "removeSavedDeck",
+      "kind": "function",
+      "line": 1050,
+      "byte_offset": 203658,
+      "feature_scores": {
+        "verification-decks": 51,
+        "battlefield": 12,
+        "auth-profile": 10
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "handleDeckVaultCommand",
+      "kind": "function",
+      "line": 1051,
+      "byte_offset": 204328,
+      "feature_scores": {
+        "verification-decks": 46,
+        "battlefield": 14,
+        "auth-profile": 8
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "saveCurrentDeck",
+      "kind": "function",
+      "line": 1052,
+      "byte_offset": 205186,
+      "feature_scores": {
+        "verification-decks": 36,
+        "auth-profile": 16,
+        "battlefield": 4,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "groupHtml",
+      "kind": "function",
+      "line": 1058,
+      "byte_offset": 209557,
+      "feature_scores": {
+        "verification-decks": 3,
+        "battlefield": 2
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "renderLegality",
+      "kind": "function",
+      "line": 1059,
+      "byte_offset": 209973,
+      "feature_scores": {
+        "verification-decks": 3,
+        "battlefield": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "oid",
+      "kind": "arrow",
+      "line": 1075,
+      "byte_offset": 230538,
+      "feature_scores": {
+        "battlefield": 17,
+        "auth-profile": 1,
+        "verification-decks": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "netload",
+      "kind": "function",
+      "line": 1100,
+      "byte_offset": 234616,
+      "feature_scores": {
+        "multiplayer-sync": 24,
+        "auth-profile": 10,
+        "verification-decks": 8,
+        "battlefield": 7
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "roomIdentity",
+      "kind": "function",
+      "line": 1101,
+      "byte_offset": 235335,
+      "feature_scores": {
+        "auth-profile": 22,
+        "verification-decks": 22,
+        "multiplayer-sync": 20,
+        "battlefield": 8
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "adoptRoomDescriptor",
+      "kind": "function",
+      "line": 1102,
+      "byte_offset": 235477,
+      "feature_scores": {
+        "verification-decks": 28,
+        "auth-profile": 21,
+        "multiplayer-sync": 20,
+        "battlefield": 7
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "saveRoomIdentity",
+      "kind": "function",
+      "line": 1103,
+      "byte_offset": 235562,
+      "feature_scores": {
+        "verification-decks": 28,
+        "auth-profile": 22,
+        "multiplayer-sync": 20,
+        "battlefield": 7
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "localDeckCardCount",
+      "kind": "function",
+      "line": 1104,
+      "byte_offset": 235823,
+      "feature_scores": {
+        "verification-decks": 29,
+        "auth-profile": 20,
+        "multiplayer-sync": 16,
+        "battlefield": 8,
+        "display": 2
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "syncLocalProfilePresence",
+      "kind": "function",
+      "line": 1105,
+      "byte_offset": 236620,
+      "feature_scores": {
+        "multiplayer-sync": 24,
+        "auth-profile": 14,
+        "verification-decks": 12,
+        "battlefield": 8,
+        "display": 5,
+        "recovery": 1
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "clientHello",
+      "kind": "function",
+      "line": 1118,
+      "byte_offset": 237357,
+      "feature_scores": {
+        "multiplayer-sync": 11,
+        "battlefield": 10,
+        "auth-profile": 9,
+        "display": 5,
+        "verification-decks": 2,
+        "recovery": 1
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "bindConn",
+      "kind": "function",
+      "line": 1119,
+      "byte_offset": 237864,
+      "feature_scores": {
+        "multiplayer-sync": 14,
+        "battlefield": 9,
+        "display": 6,
+        "auth-profile": 4
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "bindHostIncoming",
+      "kind": "function",
+      "line": 1120,
+      "byte_offset": 239499,
+      "feature_scores": {
+        "multiplayer-sync": 20,
+        "display": 12,
+        "battlefield": 7
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "resumeNet",
+      "kind": "function",
+      "line": 1121,
+      "byte_offset": 244342,
+      "feature_scores": {
+        "multiplayer-sync": 53,
+        "auth-profile": 4,
+        "battlefield": 4,
+        "recovery": 2
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "attemptHostFailover",
+      "kind": "function",
+      "line": 1122,
+      "byte_offset": 244567,
+      "feature_scores": {
+        "multiplayer-sync": 50,
+        "battlefield": 5,
+        "auth-profile": 4
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "demoteFormerHost",
+      "kind": "function",
+      "line": 1123,
+      "byte_offset": 246119,
+      "feature_scores": {
+        "multiplayer-sync": 13,
+        "auth-profile": 10,
+        "battlefield": 6,
+        "verification-decks": 6,
+        "recovery": 4
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "publicDeckName",
+      "kind": "function",
+      "line": 1128,
+      "byte_offset": 247241,
+      "feature_scores": {
+        "multiplayer-sync": 13,
+        "battlefield": 11,
+        "auth-profile": 9,
+        "verification-decks": 7,
+        "audio": 2
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "rosterAvatar",
+      "kind": "function",
+      "line": 1129,
+      "byte_offset": 247408,
+      "feature_scores": {
+        "multiplayer-sync": 18,
+        "auth-profile": 10,
+        "battlefield": 9,
+        "audio": 2
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "slots",
+      "kind": "function",
+      "line": 1132,
+      "byte_offset": 251181,
+      "feature_scores": {
+        "multiplayer-sync": 11,
+        "auth-profile": 9,
+        "verification-decks": 2,
+        "audio": 1,
+        "battlefield": 1,
+        "recovery": 1
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "sharedDisplaySpectators",
+      "kind": "function",
+      "line": 1134,
+      "byte_offset": 253348,
+      "feature_scores": {
+        "display": 56,
+        "battlefield": 12,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "display"
+    },
+    {
+      "name": "ensureSharedDisplayRealtimeGate",
+      "kind": "function",
+      "line": 1135,
+      "byte_offset": 253474,
+      "feature_scores": {
+        "display": 53,
+        "battlefield": 10,
+        "multiplayer-sync": 3
+      },
+      "primary_feature": "display"
+    },
+    {
+      "name": "scheduleSharedDisplayState",
+      "kind": "function",
+      "line": 1136,
+      "byte_offset": 253838,
+      "feature_scores": {
+        "display": 35,
+        "battlefield": 10,
+        "multiplayer-sync": 5,
+        "recovery": 1
+      },
+      "primary_feature": "display"
+    },
+    {
+      "name": "cancelSharedDisplayState",
+      "kind": "function",
+      "line": 1137,
+      "byte_offset": 254069,
+      "feature_scores": {
+        "display": 26,
+        "battlefield": 15,
+        "multiplayer-sync": 5,
+        "recovery": 1
+      },
+      "primary_feature": "display"
+    },
+    {
+      "name": "sendSharedDisplayState",
+      "kind": "function",
+      "line": 1138,
+      "byte_offset": 254156,
+      "feature_scores": {
+        "display": 22,
+        "battlefield": 15,
+        "multiplayer-sync": 5,
+        "recovery": 1
+      },
+      "primary_feature": "display"
+    },
+    {
+      "name": "send",
+      "kind": "function",
+      "line": 1139,
+      "byte_offset": 254679,
+      "feature_scores": {
+        "battlefield": 19,
+        "display": 9,
+        "multiplayer-sync": 4,
+        "recovery": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "slotByCid",
+      "kind": "function",
+      "line": 1140,
+      "byte_offset": 256235,
+      "feature_scores": {
+        "verification-decks": 14,
+        "auth-profile": 9,
+        "battlefield": 8,
+        "multiplayer-sync": 5
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "nextSeat",
+      "kind": "function",
+      "line": 1141,
+      "byte_offset": 256296,
+      "feature_scores": {
+        "verification-decks": 16,
+        "auth-profile": 9,
+        "battlefield": 7,
+        "multiplayer-sync": 5
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "initSeatState",
+      "kind": "function",
+      "line": 1142,
+      "byte_offset": 256376,
+      "feature_scores": {
+        "verification-decks": 19,
+        "auth-profile": 10,
+        "battlefield": 7,
+        "multiplayer-sync": 5
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "kickPlayer",
+      "kind": "function",
+      "line": 1143,
+      "byte_offset": 256524,
+      "feature_scores": {
+        "verification-decks": 20,
+        "auth-profile": 12,
+        "battlefield": 8,
+        "multiplayer-sync": 6
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "hostApply",
+      "kind": "function",
+      "line": 1144,
+      "byte_offset": 257074,
+      "feature_scores": {
+        "verification-decks": 20,
+        "auth-profile": 12,
+        "battlefield": 11,
+        "multiplayer-sync": 7
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "handle",
+      "kind": "function",
+      "line": 1153,
+      "byte_offset": 259637,
+      "feature_scores": {
+        "battlefield": 14,
+        "multiplayer-sync": 14,
+        "auth-profile": 7
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "showSharedDisplayPage",
+      "kind": "function",
+      "line": 1170,
+      "byte_offset": 263276,
+      "feature_scores": {
+        "display": 50,
+        "multiplayer-sync": 7,
+        "battlefield": 4,
+        "auth-profile": 1
+      },
+      "primary_feature": "display"
+    },
+    {
+      "name": "requestSharedDisplayWakeLock",
+      "kind": "function",
+      "line": 1171,
+      "byte_offset": 263770,
+      "feature_scores": {
+        "display": 53,
+        "multiplayer-sync": 10,
+        "auth-profile": 4,
+        "battlefield": 4
+      },
+      "primary_feature": "display"
+    },
+    {
+      "name": "sharedDisplayIsLandscape",
+      "kind": "function",
+      "line": 1173,
+      "byte_offset": 264105,
+      "feature_scores": {
+        "display": 42,
+        "battlefield": 8,
+        "multiplayer-sync": 8,
+        "auth-profile": 7
+      },
+      "primary_feature": "display"
+    },
+    {
+      "name": "syncSharedDisplayOrientation",
+      "kind": "function",
+      "line": 1174,
+      "byte_offset": 264262,
+      "feature_scores": {
+        "display": 42,
+        "multiplayer-sync": 9,
+        "auth-profile": 7,
+        "battlefield": 7,
+        "verification-decks": 2
+      },
+      "primary_feature": "display"
+    },
+    {
+      "name": "queueSharedDisplayOrientationSync",
+      "kind": "function",
+      "line": 1175,
+      "byte_offset": 264893,
+      "feature_scores": {
+        "display": 42,
+        "battlefield": 9,
+        "auth-profile": 7,
+        "multiplayer-sync": 7,
+        "verification-decks": 5
+      },
+      "primary_feature": "display"
+    },
+    {
+      "name": "sharedDisplayPlayerHtml",
+      "kind": "function",
+      "line": 1178,
+      "byte_offset": 265250,
+      "feature_scores": {
+        "display": 42,
+        "battlefield": 11,
+        "auth-profile": 7,
+        "verification-decks": 5,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "display"
+    },
+    {
+      "name": "renderSharedDisplay",
+      "kind": "function",
+      "line": 1179,
+      "byte_offset": 266445,
+      "feature_scores": {
+        "display": 38,
+        "battlefield": 14,
+        "multiplayer-sync": 4
+      },
+      "primary_feature": "display"
+    },
+    {
+      "name": "connectSharedDisplay",
+      "kind": "function",
+      "line": 1180,
+      "byte_offset": 268268,
+      "feature_scores": {
+        "display": 51,
+        "multiplayer-sync": 31,
+        "battlefield": 5,
+        "auth-profile": 2
+      },
+      "primary_feature": "display"
+    },
+    {
+      "name": "startSharedDisplayMode",
+      "kind": "function",
+      "line": 1181,
+      "byte_offset": 269357,
+      "feature_scores": {
+        "display": 48,
+        "multiplayer-sync": 15,
+        "battlefield": 2
+      },
+      "primary_feature": "display"
+    },
+    {
+      "name": "showSharedDisplayLink",
+      "kind": "function",
+      "line": 1182,
+      "byte_offset": 269656,
+      "feature_scores": {
+        "display": 47,
+        "multiplayer-sync": 14,
+        "battlefield": 2
+      },
+      "primary_feature": "display"
+    },
+    {
+      "name": "commanderName",
+      "kind": "function",
+      "line": 1186,
+      "byte_offset": 275011,
+      "feature_scores": {
+        "verification-decks": 18,
+        "battlefield": 15,
+        "multiplayer-sync": 10,
+        "auth-profile": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "showBattlePage",
+      "kind": "function",
+      "line": 1187,
+      "byte_offset": 275752,
+      "feature_scores": {
+        "battlefield": 22,
+        "multiplayer-sync": 12,
+        "verification-decks": 7,
+        "auth-profile": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "showLobbyPage",
+      "kind": "function",
+      "line": 1192,
+      "byte_offset": 276286,
+      "feature_scores": {
+        "battlefield": 21,
+        "multiplayer-sync": 11,
+        "verification-decks": 4,
+        "auth-profile": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "introRosterHtml",
+      "kind": "function",
+      "line": 1197,
+      "byte_offset": 276611,
+      "feature_scores": {
+        "battlefield": 26,
+        "multiplayer-sync": 4,
+        "verification-decks": 4,
+        "audio": 2,
+        "auth-profile": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "playBattleIntro",
+      "kind": "function",
+      "line": 1199,
+      "byte_offset": 277441,
+      "feature_scores": {
+        "battlefield": 20,
+        "multiplayer-sync": 3,
+        "audio": 2,
+        "recovery": 2,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "game",
+      "kind": "function",
+      "line": 1201,
+      "byte_offset": 278290,
+      "feature_scores": {
+        "battlefield": 7,
+        "recovery": 2,
+        "auth-profile": 1,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "numericControl",
+      "kind": "function",
+      "line": 1202,
+      "byte_offset": 278491,
+      "feature_scores": {
+        "battlefield": 4
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "showWhy",
+      "kind": "function",
+      "line": 1203,
+      "byte_offset": 279641,
+      "feature_scores": {
+        "battlefield": 15,
+        "verification-decks": 8,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "hudForcedAwake",
+      "kind": "function",
+      "line": 1204,
+      "byte_offset": 283378,
+      "feature_scores": {
+        "battlefield": 22,
+        "verification-decks": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "wakePlayerHud",
+      "kind": "function",
+      "line": 1205,
+      "byte_offset": 283443,
+      "feature_scores": {
+        "battlefield": 22,
+        "verification-decks": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "bindHoldDelta",
+      "kind": "function",
+      "line": 1206,
+      "byte_offset": 283532,
+      "feature_scores": {
+        "battlefield": 22,
+        "verification-decks": 4
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "executeRankedQuickAction",
+      "kind": "function",
+      "line": 1207,
+      "byte_offset": 284048,
+      "feature_scores": {
+        "battlefield": 22,
+        "verification-decks": 11,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "renderDeckAdaptiveHud",
+      "kind": "function",
+      "line": 1208,
+      "byte_offset": 284921,
+      "feature_scores": {
+        "verification-decks": 23,
+        "battlefield": 4,
+        "auth-profile": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "quickActionMenu",
+      "kind": "function",
+      "line": 1209,
+      "byte_offset": 286958,
+      "feature_scores": {
+        "battlefield": 5,
+        "auth-profile": 1,
+        "multiplayer-sync": 1,
+        "verification-decks": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "playLandQuick",
+      "kind": "function",
+      "line": 1210,
+      "byte_offset": 288411,
+      "feature_scores": {
+        "battlefield": 25,
+        "multiplayer-sync": 4,
+        "auth-profile": 1,
+        "verification-decks": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "combatQuick",
+      "kind": "function",
+      "line": 1211,
+      "byte_offset": 288770,
+      "feature_scores": {
+        "battlefield": 31,
+        "multiplayer-sync": 7,
+        "verification-decks": 4,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "inspectStackQuick",
+      "kind": "function",
+      "line": 1212,
+      "byte_offset": 289030,
+      "feature_scores": {
+        "battlefield": 27,
+        "multiplayer-sync": 7,
+        "verification-decks": 5,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "hostPrefs",
+      "kind": "function",
+      "line": 1213,
+      "byte_offset": 289291,
+      "feature_scores": {
+        "battlefield": 29,
+        "multiplayer-sync": 8,
+        "verification-decks": 5,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "combatGateDefenders",
+      "kind": "function",
+      "line": 1214,
+      "byte_offset": 290633,
+      "feature_scores": {
+        "battlefield": 24
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "combatGateDamageControllers",
+      "kind": "function",
+      "line": 1215,
+      "byte_offset": 291029,
+      "feature_scores": {
+        "battlefield": 26
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "combatActionGateSpec",
+      "kind": "function",
+      "line": 1216,
+      "byte_offset": 291701,
+      "feature_scores": {
+        "battlefield": 29
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "ensureCombatActionGate",
+      "kind": "function",
+      "line": 1217,
+      "byte_offset": 292239,
+      "feature_scores": {
+        "battlefield": 27
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "combatDamageGateAudit",
+      "kind": "function",
+      "line": 1218,
+      "byte_offset": 292763,
+      "feature_scores": {
+        "battlefield": 25
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "rulesShouldAutoYieldHolder",
+      "kind": "function",
+      "line": 1219,
+      "byte_offset": 295610,
+      "feature_scores": {
+        "battlefield": 27,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "continueAutomaticPriorityYield",
+      "kind": "function",
+      "line": 1220,
+      "byte_offset": 296119,
+      "feature_scores": {
+        "battlefield": 26,
+        "auth-profile": 2,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "authoritativeAdvanceRulesNode",
+      "kind": "function",
+      "line": 1221,
+      "byte_offset": 296634,
+      "feature_scores": {
+        "battlefield": 25,
+        "auth-profile": 3,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "authoritativeRulesPump",
+      "kind": "function",
+      "line": 1222,
+      "byte_offset": 299418,
+      "feature_scores": {
+        "battlefield": 37,
+        "auth-profile": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "priorityOpen",
+      "kind": "function",
+      "line": 1223,
+      "byte_offset": 301588,
+      "feature_scores": {
+        "battlefield": 28,
+        "recovery": 4,
+        "verification-decks": 4
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "showPriorityStops",
+      "kind": "function",
+      "line": 1224,
+      "byte_offset": 308895,
+      "feature_scores": {
+        "battlefield": 24,
+        "auth-profile": 1,
+        "multiplayer-sync": 1,
+        "verification-decks": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runPhase99FaceDownQA",
+      "kind": "function",
+      "line": 1225,
+      "byte_offset": 310329,
+      "feature_scores": {
+        "battlefield": 5,
+        "auth-profile": 2,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runPhase100CastPermissionQA",
+      "kind": "function",
+      "line": 1228,
+      "byte_offset": 311279,
+      "feature_scores": {
+        "battlefield": 4,
+        "auth-profile": 2,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runPhase102SuspendQA",
+      "kind": "function",
+      "line": 1231,
+      "byte_offset": 312253,
+      "feature_scores": {
+        "battlefield": 7,
+        "auth-profile": 2,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runPhase101PreparedExileQA",
+      "kind": "function",
+      "line": 1232,
+      "byte_offset": 313197,
+      "feature_scores": {
+        "battlefield": 5,
+        "auth-profile": 2,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "moreQuick",
+      "kind": "function",
+      "line": 1233,
+      "byte_offset": 314147,
+      "feature_scores": {
+        "battlefield": 6
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "faceDownPrivateKey",
+      "kind": "function",
+      "line": 1234,
+      "byte_offset": 316605,
+      "feature_scores": {
+        "battlefield": 7,
+        "verification-decks": 3,
+        "multiplayer-sync": 2,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "storeFaceDownPrivate",
+      "kind": "function",
+      "line": 1235,
+      "byte_offset": 316681,
+      "feature_scores": {
+        "battlefield": 6,
+        "verification-decks": 3,
+        "multiplayer-sync": 2,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "loadFaceDownPrivate",
+      "kind": "function",
+      "line": 1236,
+      "byte_offset": 317070,
+      "feature_scores": {
+        "battlefield": 7,
+        "verification-decks": 2,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "faceDownCardMechanisms",
+      "kind": "function",
+      "line": 1237,
+      "byte_offset": 317201,
+      "feature_scores": {
+        "battlefield": 5,
+        "auth-profile": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "chooseFaceDownCast",
+      "kind": "function",
+      "line": 1238,
+      "byte_offset": 317495,
+      "feature_scores": {
+        "battlefield": 6,
+        "auth-profile": 4,
+        "verification-decks": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "chooseManifestOrCloak",
+      "kind": "function",
+      "line": 1239,
+      "byte_offset": 318259,
+      "feature_scores": {
+        "battlefield": 13,
+        "verification-decks": 4,
+        "auth-profile": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "revealCardForFaceDownObject",
+      "kind": "function",
+      "line": 1240,
+      "byte_offset": 318830,
+      "feature_scores": {
+        "battlefield": 20,
+        "verification-decks": 3,
+        "auth-profile": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "turnFaceDownObjectUp",
+      "kind": "function",
+      "line": 1241,
+      "byte_offset": 319193,
+      "feature_scores": {
+        "battlefield": 23,
+        "verification-decks": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "zoneMoveRevealPayload",
+      "kind": "function",
+      "line": 1242,
+      "byte_offset": 320113,
+      "feature_scores": {
+        "battlefield": 18,
+        "multiplayer-sync": 1,
+        "verification-decks": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "adventureCastChoices",
+      "kind": "function",
+      "line": 1243,
+      "byte_offset": 320390,
+      "feature_scores": {
+        "battlefield": 13,
+        "auth-profile": 2,
+        "verification-decks": 2,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "castAdventureChoice",
+      "kind": "function",
+      "line": 1244,
+      "byte_offset": 320683,
+      "feature_scores": {
+        "battlefield": 11,
+        "auth-profile": 2,
+        "multiplayer-sync": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "phase101PrivateKey",
+      "kind": "function",
+      "line": 1245,
+      "byte_offset": 321057,
+      "feature_scores": {
+        "battlefield": 11,
+        "multiplayer-sync": 3,
+        "auth-profile": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "phase101SavePrivate",
+      "kind": "function",
+      "line": 1246,
+      "byte_offset": 321139,
+      "feature_scores": {
+        "battlefield": 10,
+        "multiplayer-sync": 3,
+        "auth-profile": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "phase101LoadPrivate",
+      "kind": "function",
+      "line": 1247,
+      "byte_offset": 321284,
+      "feature_scores": {
+        "battlefield": 10,
+        "multiplayer-sync": 3,
+        "auth-profile": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "phase101LookupCard",
+      "kind": "function",
+      "line": 1248,
+      "byte_offset": 321417,
+      "feature_scores": {
+        "battlefield": 8,
+        "multiplayer-sync": 3,
+        "auth-profile": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "prepareExileAction",
+      "kind": "function",
+      "line": 1249,
+      "byte_offset": 322102,
+      "feature_scores": {
+        "battlefield": 11,
+        "multiplayer-sync": 2,
+        "verification-decks": 2,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "preparePhase103AlternateCast",
+      "kind": "function",
+      "line": 1250,
+      "byte_offset": 324209,
+      "feature_scores": {
+        "battlefield": 8,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runPhase103AlternateZoneQA",
+      "kind": "function",
+      "line": 1252,
+      "byte_offset": 328151,
+      "feature_scores": {
+        "battlefield": 4,
+        "auth-profile": 2,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runPhase105AltCastQA",
+      "kind": "function",
+      "line": 1253,
+      "byte_offset": 329178,
+      "feature_scores": {
+        "battlefield": 6,
+        "auth-profile": 3,
+        "multiplayer-sync": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "castTrackedPermission",
+      "kind": "function",
+      "line": 1254,
+      "byte_offset": 330154,
+      "feature_scores": {
+        "battlefield": 7,
+        "auth-profile": 5,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runContextAction",
+      "kind": "function",
+      "line": 1255,
+      "byte_offset": 332278,
+      "feature_scores": {
+        "battlefield": 21,
+        "verification-decks": 9,
+        "auth-profile": 5
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "renderPlayerAlerts",
+      "kind": "function",
+      "line": 1256,
+      "byte_offset": 333521,
+      "feature_scores": {
+        "battlefield": 10,
+        "verification-decks": 7
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runPlayerAlertQA",
+      "kind": "function",
+      "line": 1257,
+      "byte_offset": 335348,
+      "feature_scores": {
+        "battlefield": 22,
+        "audio": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "setPlayerHudPage",
+      "kind": "function",
+      "line": 1258,
+      "byte_offset": 335891,
+      "feature_scores": {
+        "battlefield": 34,
+        "audio": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "renderBattlefieldPlayerTabs",
+      "kind": "function",
+      "line": 1259,
+      "byte_offset": 336627,
+      "feature_scores": {
+        "battlefield": 39,
+        "audio": 9,
+        "verification-decks": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "renderSpatialBattlefieldOverview",
+      "kind": "function",
+      "line": 1260,
+      "byte_offset": 337717,
+      "feature_scores": {
+        "battlefield": 26,
+        "audio": 10,
+        "auth-profile": 6,
+        "verification-decks": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "inspectPublicCard",
+      "kind": "function",
+      "line": 1261,
+      "byte_offset": 339438,
+      "feature_scores": {
+        "battlefield": 10,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runPlayerPagesQA",
+      "kind": "function",
+      "line": 1262,
+      "byte_offset": 340825,
+      "feature_scores": {
+        "battlefield": 15,
+        "multiplayer-sync": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "assistEnabled",
+      "kind": "function",
+      "line": 1263,
+      "byte_offset": 341317,
+      "feature_scores": {
+        "battlefield": 14,
+        "multiplayer-sync": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "setAssistEnabled",
+      "kind": "function",
+      "line": 1264,
+      "byte_offset": 341377,
+      "feature_scores": {
+        "battlefield": 13,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "handleAssistAction",
+      "kind": "function",
+      "line": 1265,
+      "byte_offset": 341561,
+      "feature_scores": {
+        "battlefield": 13,
+        "auth-profile": 1,
+        "multiplayer-sync": 1,
+        "verification-decks": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "showAssistWhy",
+      "kind": "function",
+      "line": 1266,
+      "byte_offset": 342181,
+      "feature_scores": {
+        "battlefield": 4,
+        "multiplayer-sync": 2,
+        "auth-profile": 1,
+        "verification-decks": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "showAssistQueue",
+      "kind": "function",
+      "line": 1267,
+      "byte_offset": 343170,
+      "feature_scores": {
+        "battlefield": 3,
+        "auth-profile": 1,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "renderAssistCoach",
+      "kind": "function",
+      "line": 1268,
+      "byte_offset": 344498,
+      "feature_scores": {
+        "battlefield": 4,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runAssistModeQA",
+      "kind": "function",
+      "line": 1269,
+      "byte_offset": 346510,
+      "feature_scores": {
+        "battlefield": 8,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "refreshContextHud",
+      "kind": "function",
+      "line": 1270,
+      "byte_offset": 347246,
+      "feature_scores": {
+        "battlefield": 12
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runQuickActionQA",
+      "kind": "function",
+      "line": 1272,
+      "byte_offset": 349994,
+      "feature_scores": {
+        "battlefield": 3,
+        "audio": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runPlayerHudQA",
+      "kind": "function",
+      "line": 1273,
+      "byte_offset": 350587,
+      "feature_scores": {
+        "battlefield": 6,
+        "verification-decks": 4,
+        "audio": 2,
+        "multiplayer-sync": 1,
+        "recovery": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "showPlayerHudStatus",
+      "kind": "function",
+      "line": 1274,
+      "byte_offset": 351176,
+      "feature_scores": {
+        "battlefield": 5,
+        "audio": 4,
+        "verification-decks": 4,
+        "multiplayer-sync": 1,
+        "recovery": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "resourceRailState",
+      "kind": "function",
+      "line": 1275,
+      "byte_offset": 354973,
+      "feature_scores": {
+        "verification-decks": 10,
+        "battlefield": 5,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "showIncomingCommanderDamage",
+      "kind": "function",
+      "line": 1276,
+      "byte_offset": 355220,
+      "feature_scores": {
+        "verification-decks": 9,
+        "battlefield": 4,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "editRailResource",
+      "kind": "function",
+      "line": 1277,
+      "byte_offset": 356089,
+      "feature_scores": {
+        "battlefield": 6,
+        "verification-decks": 4,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "showAllResources",
+      "kind": "function",
+      "line": 1278,
+      "byte_offset": 356251,
+      "feature_scores": {
+        "battlefield": 5,
+        "verification-decks": 4,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "renderResourceRail",
+      "kind": "function",
+      "line": 1279,
+      "byte_offset": 357751,
+      "feature_scores": {
+        "battlefield": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runResourceRailQA",
+      "kind": "function",
+      "line": 1280,
+      "byte_offset": 360956,
+      "feature_scores": {
+        "battlefield": 12,
+        "auth-profile": 6,
+        "verification-decks": 6
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "hud",
+      "kind": "function",
+      "line": 1281,
+      "byte_offset": 361492,
+      "feature_scores": {
+        "battlefield": 18,
+        "auth-profile": 6,
+        "verification-decks": 6,
+        "audio": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runBattlefieldQuickActionQA",
+      "kind": "function",
+      "line": 1282,
+      "byte_offset": 362703,
+      "feature_scores": {
+        "battlefield": 19,
+        "verification-decks": 6
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "showOpponentDetail",
+      "kind": "function",
+      "line": 1283,
+      "byte_offset": 363306,
+      "feature_scores": {
+        "battlefield": 8,
+        "verification-decks": 7
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "runOpponentDetailQA",
+      "kind": "function",
+      "line": 1284,
+      "byte_offset": 365687,
+      "feature_scores": {
+        "audio": 15,
+        "battlefield": 7,
+        "verification-decks": 3,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "audio"
+    },
+    {
+      "name": "refreshSpatialSeatMap",
+      "kind": "function",
+      "line": 1285,
+      "byte_offset": 366240,
+      "feature_scores": {
+        "audio": 16,
+        "verification-decks": 7,
+        "battlefield": 6,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "audio"
+    },
+    {
+      "name": "arrangeOpponents",
+      "kind": "function",
+      "line": 1286,
+      "byte_offset": 366417,
+      "feature_scores": {
+        "audio": 10,
+        "verification-decks": 9,
+        "battlefield": 5,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "audio"
+    },
+    {
+      "name": "registeredCommandersFor",
+      "kind": "function",
+      "line": 1287,
+      "byte_offset": 367157,
+      "feature_scores": {
+        "verification-decks": 17,
+        "battlefield": 5,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "commanderDamageSummaryFrom",
+      "kind": "function",
+      "line": 1288,
+      "byte_offset": 367319,
+      "feature_scores": {
+        "verification-decks": 18,
+        "battlefield": 4,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "quickCommanderDamageFrom",
+      "kind": "function",
+      "line": 1289,
+      "byte_offset": 368126,
+      "feature_scores": {
+        "verification-decks": 21,
+        "battlefield": 3,
+        "audio": 2,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "runEventInputQA",
+      "kind": "function",
+      "line": 1290,
+      "byte_offset": 370229,
+      "feature_scores": {
+        "verification-decks": 8,
+        "audio": 5,
+        "battlefield": 2
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "runSpatialOpponentsQA",
+      "kind": "function",
+      "line": 1291,
+      "byte_offset": 370818,
+      "feature_scores": {
+        "battlefield": 16,
+        "verification-decks": 12,
+        "audio": 6,
+        "multiplayer-sync": 2,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "commanderDamageFrom",
+      "kind": "function",
+      "line": 1292,
+      "byte_offset": 371436,
+      "feature_scores": {
+        "battlefield": 28,
+        "verification-decks": 16,
+        "auth-profile": 7,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "flash",
+      "kind": "function",
+      "line": 1294,
+      "byte_offset": 377034,
+      "feature_scores": {
+        "multiplayer-sync": 11,
+        "battlefield": 6,
+        "auth-profile": 4,
+        "audio": 3,
+        "display": 2,
+        "recovery": 1
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "castingTargetPreflight",
+      "kind": "function",
+      "line": 1303,
+      "byte_offset": 396193,
+      "feature_scores": {
+        "battlefield": 4,
+        "verification-decks": 4
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "startCastingCostFlow",
+      "kind": "function",
+      "line": 1304,
+      "byte_offset": 396602,
+      "feature_scores": {
+        "battlefield": 9,
+        "verification-decks": 4
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "projectCastingPayments",
+      "kind": "function",
+      "line": 1305,
+      "byte_offset": 401997,
+      "feature_scores": {
+        "battlefield": 7,
+        "multiplayer-sync": 1,
+        "verification-decks": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "phase91TriggerCandidatesForEvent",
+      "kind": "function",
+      "line": 1306,
+      "byte_offset": 402317,
+      "feature_scores": {
+        "battlefield": 2,
+        "auth-profile": 1,
+        "multiplayer-sync": 1,
+        "verification-decks": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "applyStateBasedFixedPoint",
+      "kind": "function",
+      "line": 1307,
+      "byte_offset": 402604,
+      "feature_scores": {
+        "multiplayer-sync": 2,
+        "auth-profile": 1,
+        "battlefield": 1,
+        "verification-decks": 1
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "phase94ResolveCombatEvent",
+      "kind": "function",
+      "line": 1308,
+      "byte_offset": 404229,
+      "feature_scores": {
+        "battlefield": 9,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "finalizeCastingCostFlow",
+      "kind": "function",
+      "line": 1309,
+      "byte_offset": 404848,
+      "feature_scores": {
+        "battlefield": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "applyCastingCostChoiceCommand",
+      "kind": "function",
+      "line": 1310,
+      "byte_offset": 410180,
+      "feature_scores": {
+        "battlefield": 8,
+        "verification-decks": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "castingCostCancelButton",
+      "kind": "function",
+      "line": 1311,
+      "byte_offset": 411479,
+      "feature_scores": {
+        "battlefield": 3,
+        "multiplayer-sync": 2,
+        "auth-profile": 1,
+        "verification-decks": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "showCastingCostPrompt",
+      "kind": "function",
+      "line": 1312,
+      "byte_offset": 411660,
+      "feature_scores": {
+        "battlefield": 3,
+        "multiplayer-sync": 3,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "maybePromptCastingCost",
+      "kind": "function",
+      "line": 1321,
+      "byte_offset": 425201,
+      "feature_scores": {
+        "battlefield": 11,
+        "recovery": 4,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "phase92ResumeAfterResolution",
+      "kind": "function",
+      "line": 1322,
+      "byte_offset": 425287,
+      "feature_scores": {
+        "battlefield": 9,
+        "recovery": 5,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "phase92WardCandidatesForCopy",
+      "kind": "function",
+      "line": 1323,
+      "byte_offset": 425539,
+      "feature_scores": {
+        "battlefield": 7,
+        "recovery": 3,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "phase92PlaceCopy",
+      "kind": "function",
+      "line": 1324,
+      "byte_offset": 425708,
+      "feature_scores": {
+        "battlefield": 6,
+        "recovery": 3,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "beginPhase92Copy",
+      "kind": "function",
+      "line": 1325,
+      "byte_offset": 426565,
+      "feature_scores": {
+        "battlefield": 5
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "beginPhase92Cascade",
+      "kind": "function",
+      "line": 1326,
+      "byte_offset": 428103,
+      "feature_scores": {
+        "battlefield": 8
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "phase92CascadePrivateCandidates",
+      "kind": "function",
+      "line": 1327,
+      "byte_offset": 428819,
+      "feature_scores": {
+        "battlefield": 6,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "showAdvancedResolutionPrompt",
+      "kind": "function",
+      "line": 1328,
+      "byte_offset": 429227,
+      "feature_scores": {
+        "battlefield": 4,
+        "multiplayer-sync": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "maybePromptAdvancedResolution",
+      "kind": "function",
+      "line": 1335,
+      "byte_offset": 433974,
+      "feature_scores": {
+        "battlefield": 10,
+        "recovery": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "applyAdvancedResolutionChoiceCommand",
+      "kind": "function",
+      "line": 1336,
+      "byte_offset": 434074,
+      "feature_scores": {
+        "battlefield": 8,
+        "recovery": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "structuredCloneSafe",
+      "kind": "function",
+      "line": 1340,
+      "byte_offset": 436308,
+      "feature_scores": {
+        "battlefield": 12,
+        "verification-decks": 8,
+        "auth-profile": 2,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "findPublicCard",
+      "kind": "function",
+      "line": 1341,
+      "byte_offset": 445547,
+      "feature_scores": {
+        "battlefield": 6,
+        "auth-profile": 1,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "inspectPublicKnownCard",
+      "kind": "function",
+      "line": 1342,
+      "byte_offset": 445726,
+      "feature_scores": {
+        "auth-profile": 1,
+        "battlefield": 1,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "auth-profile"
+    },
+    {
+      "name": "librarySetupForPlayer",
+      "kind": "function",
+      "line": 1343,
+      "byte_offset": 448728,
+      "feature_scores": {
+        "verification-decks": 17,
+        "battlefield": 5,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "showLibraryControl",
+      "kind": "function",
+      "line": 1344,
+      "byte_offset": 449506,
+      "feature_scores": {
+        "verification-decks": 14,
+        "battlefield": 8,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "verification-decks"
+    },
+    {
+      "name": "renderBattlefieldBoardSummary",
+      "kind": "function",
+      "line": 1345,
+      "byte_offset": 451827,
+      "feature_scores": {
+        "battlefield": 34,
+        "verification-decks": 27,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "battle",
+      "kind": "function",
+      "line": 1346,
+      "byte_offset": 454671,
+      "feature_scores": {
+        "battlefield": 19,
+        "audio": 1,
+        "display": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "setR",
+      "kind": "function",
+      "line": 1347,
+      "byte_offset": 465771,
+      "feature_scores": {
+        "battlefield": 5
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "extraTriggersFor",
+      "kind": "function",
+      "line": 1348,
+      "byte_offset": 467487,
+      "feature_scores": {
+        "battlefield": 3,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "triggerCandidateFromHit",
+      "kind": "function",
+      "line": 1349,
+      "byte_offset": 468319,
+      "feature_scores": {
+        "battlefield": 8,
+        "auth-profile": 2,
+        "recovery": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "oracleSetupSpecForItem",
+      "kind": "function",
+      "line": 1350,
+      "byte_offset": 469187,
+      "feature_scores": {
+        "battlefield": 8,
+        "recovery": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "oracleResumeSeat",
+      "kind": "function",
+      "line": 1351,
+      "byte_offset": 469515,
+      "feature_scores": {
+        "battlefield": 4,
+        "recovery": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "primeOracleSetupChoice",
+      "kind": "function",
+      "line": 1352,
+      "byte_offset": 469684,
+      "feature_scores": {
+        "battlefield": 3,
+        "recovery": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "beginPhase102SuspendCast",
+      "kind": "function",
+      "line": 1354,
+      "byte_offset": 471575,
+      "feature_scores": {
+        "battlefield": 6,
+        "auth-profile": 1,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "beginPhase103MadnessCast",
+      "kind": "function",
+      "line": 1355,
+      "byte_offset": 472830,
+      "feature_scores": {
+        "battlefield": 5,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "beginPhase104ReboundCast",
+      "kind": "function",
+      "line": 1356,
+      "byte_offset": 473939,
+      "feature_scores": {
+        "battlefield": 6,
+        "multiplayer-sync": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "resolvePhase103WarpTrigger",
+      "kind": "function",
+      "line": 1358,
+      "byte_offset": 475186,
+      "feature_scores": {
+        "battlefield": 11,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "resolveAdvancedOracleEffect",
+      "kind": "function",
+      "line": 1359,
+      "byte_offset": 476425,
+      "feature_scores": {
+        "battlefield": 8
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "applyReplacementOrderCommand",
+      "kind": "function",
+      "line": 1368,
+      "byte_offset": 484887,
+      "feature_scores": {
+        "battlefield": 10
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "applyOracleChoiceCommand",
+      "kind": "function",
+      "line": 1369,
+      "byte_offset": 486177,
+      "feature_scores": {
+        "battlefield": 4,
+        "recovery": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "showReplacementOrderPrompt",
+      "kind": "function",
+      "line": 1370,
+      "byte_offset": 489175,
+      "feature_scores": {
+        "battlefield": 8,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "maybePromptReplacementOrder",
+      "kind": "function",
+      "line": 1371,
+      "byte_offset": 490739,
+      "feature_scores": {
+        "battlefield": 6,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "showOracleChoicePrompt",
+      "kind": "function",
+      "line": 1372,
+      "byte_offset": 490835,
+      "feature_scores": {
+        "battlefield": 5,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "maybePromptOracleChoice",
+      "kind": "function",
+      "line": 1375,
+      "byte_offset": 497121,
+      "feature_scores": {
+        "battlefield": 11,
+        "recovery": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "continueOracleResolution",
+      "kind": "function",
+      "line": 1376,
+      "byte_offset": 497455,
+      "feature_scores": {
+        "battlefield": 12,
+        "recovery": 4
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "commitTriggerCandidates",
+      "kind": "function",
+      "line": 1378,
+      "byte_offset": 497632,
+      "feature_scores": {
+        "battlefield": 11,
+        "recovery": 6
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "cleanupLoopPatch",
+      "kind": "function",
+      "line": 1379,
+      "byte_offset": 497871,
+      "feature_scores": {
+        "battlefield": 11,
+        "recovery": 7
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "beginCleanupIteration",
+      "kind": "function",
+      "line": 1380,
+      "byte_offset": 498071,
+      "feature_scores": {
+        "battlefield": 9,
+        "recovery": 7,
+        "verification-decks": 4
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "safeCleanupStateBasedSweep",
+      "kind": "function",
+      "line": 1381,
+      "byte_offset": 498334,
+      "feature_scores": {
+        "battlefield": 9,
+        "recovery": 8,
+        "verification-decks": 5
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "deferredCleanupTriggerCount",
+      "kind": "function",
+      "line": 1382,
+      "byte_offset": 498635,
+      "feature_scores": {
+        "battlefield": 10,
+        "recovery": 6,
+        "verification-decks": 5
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "releaseCleanupDeferredTriggers",
+      "kind": "function",
+      "line": 1383,
+      "byte_offset": 498826,
+      "feature_scores": {
+        "battlefield": 10,
+        "recovery": 5,
+        "verification-decks": 5,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "finishCleanupCheckpoint",
+      "kind": "function",
+      "line": 1384,
+      "byte_offset": 499207,
+      "feature_scores": {
+        "battlefield": 13,
+        "verification-decks": 5,
+        "recovery": 3,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "startRepeatedCleanup",
+      "kind": "function",
+      "line": 1385,
+      "byte_offset": 500738,
+      "feature_scores": {
+        "battlefield": 11,
+        "recovery": 7,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "pendingTriggerGroup",
+      "kind": "function",
+      "line": 1386,
+      "byte_offset": 500999,
+      "feature_scores": {
+        "battlefield": 10,
+        "recovery": 8
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "finalizePendingTriggerOrder",
+      "kind": "function",
+      "line": 1387,
+      "byte_offset": 501169,
+      "feature_scores": {
+        "battlefield": 9,
+        "recovery": 9
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "queueTriggerCandidates",
+      "kind": "function",
+      "line": 1388,
+      "byte_offset": 501931,
+      "feature_scores": {
+        "battlefield": 9,
+        "recovery": 6
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "gatherPublicTriggerHits",
+      "kind": "function",
+      "line": 1389,
+      "byte_offset": 502994,
+      "feature_scores": {
+        "battlefield": 10
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "observePublicTriggerEvent",
+      "kind": "function",
+      "line": 1390,
+      "byte_offset": 503229,
+      "feature_scores": {
+        "battlefield": 9,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "spellCastCandidates",
+      "kind": "function",
+      "line": 1391,
+      "byte_offset": 506267,
+      "feature_scores": {
+        "battlefield": 7,
+        "verification-decks": 3,
+        "multiplayer-sync": 1,
+        "recovery": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "showTriggerOrderPrompt",
+      "kind": "function",
+      "line": 1392,
+      "byte_offset": 507764,
+      "feature_scores": {
+        "battlefield": 10,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "maybePromptTriggerOrder",
+      "kind": "function",
+      "line": 1393,
+      "byte_offset": 508873,
+      "feature_scores": {
+        "battlefield": 8
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "enter",
+      "kind": "function",
+      "line": 1394,
+      "byte_offset": 508961,
+      "feature_scores": {
+        "battlefield": 7
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "resolveTriggerItem",
+      "kind": "function",
+      "line": 1395,
+      "byte_offset": 509098,
+      "feature_scores": {
+        "battlefield": 4
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "resolveTrig",
+      "kind": "function",
+      "line": 1396,
+      "byte_offset": 513473,
+      "feature_scores": {
+        "battlefield": 22,
+        "multiplayer-sync": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "postResolutionFlow",
+      "kind": "function",
+      "line": 1397,
+      "byte_offset": 513753,
+      "feature_scores": {
+        "battlefield": 19,
+        "verification-decks": 2,
+        "multiplayer-sync": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "resolveSpell",
+      "kind": "function",
+      "line": 1398,
+      "byte_offset": 515051,
+      "feature_scores": {
+        "battlefield": 14,
+        "auth-profile": 2,
+        "verification-decks": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "cast",
+      "kind": "function",
+      "line": 1408,
+      "byte_offset": 518660,
+      "feature_scores": {
+        "battlefield": 8,
+        "verification-decks": 2
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "resolveTop",
+      "kind": "function",
+      "line": 1409,
+      "byte_offset": 522225,
+      "feature_scores": {
+        "battlefield": 19,
+        "multiplayer-sync": 1,
+        "recovery": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "markPlayerFallenAuthoritative",
+      "kind": "function",
+      "line": 1415,
+      "byte_offset": 531381,
+      "feature_scores": {
+        "battlefield": 11,
+        "auth-profile": 3
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "fallen",
+      "kind": "function",
+      "line": 1416,
+      "byte_offset": 533057,
+      "feature_scores": {
+        "multiplayer-sync": 25,
+        "battlefield": 13,
+        "auth-profile": 1,
+        "verification-decks": 1
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "showHostControl",
+      "kind": "function",
+      "line": 1419,
+      "byte_offset": 533430,
+      "feature_scores": {
+        "multiplayer-sync": 27,
+        "battlefield": 14,
+        "verification-decks": 6
+      },
+      "primary_feature": "multiplayer-sync"
+    },
+    {
+      "name": "hostAdjustPlayer",
+      "kind": "function",
+      "line": 1422,
+      "byte_offset": 534163,
+      "feature_scores": {
+        "battlefield": 18,
+        "multiplayer-sync": 16,
+        "verification-decks": 9,
+        "recovery": 3,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "hostCommanderDamage",
+      "kind": "function",
+      "line": 1423,
+      "byte_offset": 534805,
+      "feature_scores": {
+        "battlefield": 18,
+        "verification-decks": 8,
+        "multiplayer-sync": 7,
+        "recovery": 3,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "hostUndo",
+      "kind": "function",
+      "line": 1424,
+      "byte_offset": 535324,
+      "feature_scores": {
+        "battlefield": 26,
+        "multiplayer-sync": 4,
+        "verification-decks": 4,
+        "recovery": 3,
+        "auth-profile": 1
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "eventLabel",
+      "kind": "function",
+      "line": 1425,
+      "byte_offset": 535513,
+      "feature_scores": {
+        "battlefield": 27,
+        "verification-decks": 4
+      },
+      "primary_feature": "battlefield"
+    },
+    {
+      "name": "renderHost",
+      "kind": "function",
+      "line": 1426,
+      "byte_offset": 538227,
+      "feature_scores": {
+        "multiplayer-sync": 25,
+        "battlefield": 21,
+        "recovery": 1
+      },
+      "primary_feature": "multiplayer-sync"
+    }
+  ]
+}
