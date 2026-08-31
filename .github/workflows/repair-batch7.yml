@@ -1,0 +1,51 @@
+name: Repair batch 7 - reconnect and host failover
+
+on:
+  push:
+    branches:
+      - sidekick-refactor
+    paths:
+      - .github/workflows/repair-batch7.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: sidekick-refactor
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Apply reconnect and failover hardening
+        run: python tools/apply_repair_batch7.py
+      - name: Rebuild generated runtime
+        run: python tools/build_runtime_from_source.py
+      - name: Verify JavaScript syntax
+        run: node --check scripts/inline-101.js
+      - name: Verify reconnect invariants
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('scripts/inline-101.js').read_text()
+          assert 'h.lastSeen=Date.now()-20000' not in s
+          assert 'attemptHostFailover()},1800' not in s
+          assert 'attemptHostFailover()},16000' in s
+          assert 'if(peer?.disconnected)resumeNet()' in s
+          assert "roomDescriptor=previousDescriptor" in s
+          assert "Another host recovered first. Rejoining the room." in s
+          print('Reconnect grace period, host signaling recovery, and failover rollback verified.')
+          PY
+      - name: Commit repair
+        run: |
+          git config user.name "sidekick-refactor-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/app-src scripts/inline-101.js runtime-build-report.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Harden reconnect grace period and host failover rollback"
+          git push origin HEAD:sidekick-refactor
