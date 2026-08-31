@@ -19,35 +19,27 @@ jobs:
         with:
           ref: sidekick-refactor
           fetch-depth: 0
-      - name: Map avatar visual owners
+      - name: Summarize avatar CSS owners
         run: |
           python - <<'PY'
-          import json,re
+          import re
           from pathlib import Path
           css=Path('styles/inline-01.css').read_text(errors='ignore')
-          html=Path('index.html').read_text(errors='ignore')
-          selectors=['.fantasyAvatar.characterAvatar.portraitAvatar','.avatarHeroArt','.avatarChoicePortrait','#myAvatar','.hudAvatar','.oppMiniAvatar','.bfSeatAvatar']
-          out={'css_bytes':len(css.encode()),'important_count':css.count('!important'),'selectors':{},'inline_premium_avatar_block':None}
-          for sel in selectors:
-              hits=[]
-              for m in re.finditer(re.escape(sel),css):
-                  s=max(0,m.start()-900);e=min(len(css),m.end()+1700)
-                  hits.append({'offset':m.start(),'context':css[s:e]})
-                  if len(hits)>=12:break
-              out['selectors'][sel]={'count':len(list(re.finditer(re.escape(sel),css))),'hits':hits}
-          marker='premiumExternalAvatarAssets'
-          pos=html.find(marker)
-          if pos>=0:
-              s=max(0,html.rfind('<style',0,pos));e=html.find('</style>',pos)
-              out['inline_premium_avatar_block']=html[s:e+8] if e>=0 else html[s:pos+6000]
-          Path('avatar-visual-owner-probe.json').write_text(json.dumps(out,indent=2)+'\n')
-          print('selector counts:',{k:v['count'] for k,v in out['selectors'].items()})
+          targets=['avatarHeroArt','avatarChoicePortrait','fantasyAvatar.characterAvatar.portraitAvatar','hudAvatar','oppMiniAvatar','bfSeatAvatar','#myAvatar']
+          rows=[]
+          for m in re.finditer(r'([^{}]+)\{([^{}]*)\}',css):
+              sel=' '.join(m.group(1).split())
+              if any(t in sel for t in targets):
+                  body=' '.join(m.group(2).split())
+                  rows.append(f'OFFSET {m.start()}\nSELECTOR {sel}\nDECL {body}\n')
+          Path('avatar-owner-summary.txt').write_text('\n'.join(rows))
+          print(f'avatar rules: {len(rows)}')
           PY
       - name: Commit probe report
         run: |
           git config user.name "sidekick-refactor-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add avatar-visual-owner-probe.json
+          git add avatar-owner-summary.txt
           git diff --cached --quiet && exit 0
-          git commit -m "Record avatar visual ownership probe"
+          git commit -m "Summarize avatar CSS owners"
           git push origin HEAD:sidekick-refactor
