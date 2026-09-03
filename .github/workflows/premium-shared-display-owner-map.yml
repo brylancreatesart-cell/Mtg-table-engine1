@@ -1,0 +1,55 @@
+name: Map shared display premium owners
+
+on:
+  push:
+    branches:
+      - premium-cohesion-pass
+    paths:
+      - .github/workflows/premium-shared-display-owner-map.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  map:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: premium-cohesion-pass
+          fetch-depth: 0
+      - name: Map shared display CSS and renderer owners
+        run: |
+          python - <<'PY'
+          import json,re
+          from pathlib import Path
+          selectors=['.sharedDisplayScreen','.sharedDisplayStage','.sharedDisplayTurn','.sharedDisplayStateSide','.sharedDisplayTurnMain','.sharedDisplayPlayers','.sharedDisplayPlayer','.sharedDisplayLower','.sharedDisplayPanel','.sharedDisplayEvent']
+          functions=['sharedDisplayPlayerHtml','renderSharedDisplay','showSharedDisplayPage','connectSharedDisplay']
+          out={'css':{},'js':{}}
+          for sel in selectors:
+              hits=[]
+              for p in sorted(Path('styles/app-src').glob('*.css')):
+                  text=p.read_text(errors='ignore')
+                  for m in re.finditer(re.escape(sel)+r'\{[^{}]*\}',text):
+                      hits.append({'file':str(p),'offset':m.start(),'rule':m.group(0)})
+              out['css'][sel]=hits
+          pat=re.compile(r'(?m)^function\s+([A-Za-z_$][\w$]*)\s*\(')
+          for p in sorted(Path('scripts/app-src').glob('*.js')):
+              text=p.read_text(errors='ignore');ms=list(pat.finditer(text))
+              for i,m in enumerate(ms):
+                  name=m.group(1)
+                  if name not in functions: continue
+                  end=ms[i+1].start() if i+1<len(ms) else len(text)
+                  out['js'][name]={'file':str(p),'line':text.count('\n',0,m.start())+1,'body':text[m.start():end][:22000]}
+          Path('premium-shared-display-owner-map.json').write_text(json.dumps(out,indent=2)+'\n')
+          print('mapped shared display owners')
+          PY
+      - name: Commit owner map
+        run: |
+          git config user.name "sidekick-premium-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add premium-shared-display-owner-map.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Map shared display premium owners"
+          git push origin HEAD:premium-cohesion-pass
