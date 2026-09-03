@@ -20,17 +20,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: verify-shell-fidelity
-      - name: Wait for deployed studio-quality Verify shell
+      - name: Wait for deployed precision-aligned Verify shell
         run: |
           for i in $(seq 1 36); do
             html=$(curl -L -s "$PREVIEW_URL/")
             css=$(curl -L -s "$PREVIEW_URL/styles/inline-01.css")
             js=$(curl -L -s "$PREVIEW_URL/scripts/inline-101.js")
-            if echo "$html" | grep -q 'verifyShell' && echo "$html" | grep -q 'setupDeckVaultBtn' && echo "$css" | grep -q 'verifyManaBreathe' && echo "$js" | grep -q 'syncVerifyDeckCount'; then
-              echo 'Studio-quality Verify shell preview is ready'
+            if echo "$html" | grep -q 'verifyShell' && echo "$html" | grep -q 'setupDeckVaultBtn' && echo "$css" | grep -q -- '--verify-content-width:620px' && echo "$css" | grep -q 'text-align-last:center' && echo "$js" | grep -q 'syncVerifyDeckCount'; then
+              echo 'Precision-aligned Verify shell preview is ready'
               exit 0
             fi
-            echo "Waiting for studio-quality Verify preview attempt $i"
+            echo "Waiting for precision Verify preview attempt $i"
             sleep 5
           done
           exit 1
@@ -58,5 +58,5 @@ jobs:
           ]){
             if(!names.has(required)) throw new Error('Missing smoke assertion: '+required);
           }
-          console.log('Studio-quality Verify shell passed deployed Verify → Lobby smoke for both players.');
+          console.log('Precision-aligned Verify shell passed deployed Verify → Lobby smoke for both players.');
           JS
