@@ -6,6 +6,9 @@ on:
       - premium-cohesion-pass
     paths:
       - .github/workflows/premium-preview-smoke.yml
+      - index.html
+      - styles/inline-01.css
+      - scripts/inline-101.js
   workflow_dispatch:
 
 permissions:
@@ -21,17 +24,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: premium-cohesion-pass
-      - name: Wait for premium preview
+      - name: Wait for current premium preview
         run: |
-          for i in $(seq 1 30); do
+          for i in $(seq 1 36); do
             page=$(curl -L -s -o /tmp/page.html -w '%{http_code}' "$PREVIEW_URL" || true)
             css=$(curl -L -s -o /tmp/app.css -w '%{http_code}' "$PREVIEW_URL/styles/inline-01.css" || true)
             js=$(curl -L -s -o /tmp/app.js -w '%{http_code}' "$PREVIEW_URL/scripts/inline-101.js" || true)
-            if [ "$page" = "200" ] && [ "$css" = "200" ] && [ "$js" = "200" ] && grep -q 'LET THE BATTLE BEGIN' /tmp/app.js && grep -q 'inset:-18px -10px auto;height:300px' /tmp/app.css; then
-              echo 'Premium preview is current and ready'
+            if [ "$page" = "200" ] && [ "$css" = "200" ] && [ "$js" = "200" ] && grep -q 'id="battleIntroTitle"' /tmp/page.html && grep -q 'LET THE BATTLE BEGIN' /tmp/app.js && grep -q 'inset:-18px -10px auto;height:300px' /tmp/app.css; then
+              echo 'Current premium preview is ready'
               exit 0
             fi
-            echo "Waiting for premium preview ($page/$css/$js) attempt $i"
+            echo "Waiting for current premium preview ($page/$css/$js) attempt $i"
             sleep 5
           done
           exit 1
