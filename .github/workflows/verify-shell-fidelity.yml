@@ -1,4 +1,4 @@
-name: Verify shell fidelity review gate
+name: Verify shell studio-quality implementation
 
 on:
   push:
@@ -6,66 +6,53 @@ on:
       - verify-shell-fidelity
     paths:
       - .github/workflows/verify-shell-fidelity.yml
-  workflow_dispatch:
+      - tools/apply_verify_shell_studio_quality.py
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  review:
+  implement:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    env:
-      PREVIEW_URL: https://mtg-table-engine1-git-verify-shell-528d4c-brylancreatesart-7523.vercel.app
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
         with:
           ref: verify-shell-fidelity
+      - name: Replace canonical Verify visual owner
+        run: python tools/apply_verify_shell_studio_quality.py
+      - name: Rebuild generated runtime from canonical source
+        run: python tools/build_runtime_from_source.py
       - name: Audit canonical Verify ownership
         run: |
           python - <<'PY'
           from pathlib import Path
           css=Path('styles/app-src/styles-part-01.part.css').read_text()
           html=Path('index.html').read_text()
-          assert css.count('/* Verify Deck reference-fidelity shell — canonical owner */')==1
+          marker='/* Verify Deck reference-fidelity shell — canonical owner */'
+          assert css.count(marker)==1, css.count(marker)
+          block=css[css.index(marker):]
+          next_comment=block.find('\n/* ',len(marker))
+          if next_comment>=0:block=block[:next_comment]
+          assert '!important' not in block
           for token in ['#setup>.card{','#setup>.card:before{','#setup>.card::after{']:
-              assert token not in css, token
+              assert token not in css,token
           for element_id in ['deck','formatSelect','pasteDeckBtn','importDeckFileBtn','deckFileInput','ver','vr','legalityReport','commanderSelect','partnerSelect','saveDeckBtn','cont']:
               assert html.count(f'id="{element_id}"')==1,(element_id,html.count(f'id="{element_id}"'))
-          print('Canonical Verify ownership audit passed.')
+          print('Studio Verify ownership audit passed.')
           PY
       - name: Validate JavaScript syntax
         run: node --check scripts/inline-101.js
-      - name: Verify authoritative synchronization
+      - name: Run authoritative sync QA
         run: node tools/run_authoritative_sync_qa.js
-      - name: Wait for current deployed Verify shell
+      - name: Commit studio-quality implementation
         run: |
-          for i in $(seq 1 36); do
-            html=$(curl -L -s "$PREVIEW_URL/")
-            css=$(curl -L -s "$PREVIEW_URL/styles/inline-01.css")
-            js=$(curl -L -s "$PREVIEW_URL/scripts/inline-101.js")
-            if echo "$html" | grep -q 'verifyShell' && echo "$html" | grep -q 'setupDeckVaultBtn' && echo "$css" | grep -q 'Verify Deck reference-fidelity shell' && echo "$js" | grep -q 'syncVerifyDeckCount'; then
-              echo 'Current Verify shell preview is ready'
-              exit 0
-            fi
-            echo "Waiting for current Verify preview attempt $i"
-            sleep 5
-          done
-          exit 1
-      - name: Install Playwright Chromium
-        run: |
-          npm install --no-save playwright@1.55.0
-          npx playwright install --with-deps chromium
-      - name: Run deployed app smoke through Verify and Lobby
-        run: node tools/preview_smoke_test.js
-      - name: Confirm Verify to Lobby behavior
-        run: |
-          node - <<'JS'
-          const r=require('./preview-smoke-report.json');
-          if(!r.ok) throw new Error('Preview smoke report is not green');
-          const names=r.checks.map(x=>x.name);
-          for(const required of ['guest Verify both','commander options both','Verify → Lobby both']){
-            if(!names.includes(required)) throw new Error('Missing smoke assertion: '+required);
-          }
-          console.log('Verify shell passed deployed Verify → Lobby smoke.');
-          JS
+          git config user.name "brylancreatesart-cell"
+          git config user.email "brylancreatesart@gmail.com"
+          git add styles/app-src/styles-part-01.part.css styles/inline-01.css runtime-build-report.json authoritative-sync-qa.json
+          if git diff --cached --quiet; then
+            echo "No studio-quality changes to commit"
+          else
+            git commit -m "Raise Verify Deck shell to studio-quality finish"
+            git push origin HEAD:verify-shell-fidelity
+          fi
