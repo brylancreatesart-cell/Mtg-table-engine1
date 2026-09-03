@@ -1,0 +1,54 @@
+name: Verify shell fidelity implementation
+
+on:
+  push:
+    branches:
+      - verify-shell-fidelity
+    paths:
+      - .github/workflows/verify-shell-fidelity.yml
+      - tools/apply_verify_shell_fidelity.py
+
+permissions:
+  contents: write
+
+jobs:
+  implement:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: verify-shell-fidelity
+      - name: Apply canonical Verify shell replacement
+        run: python tools/apply_verify_shell_fidelity.py
+      - name: Rebuild generated runtime from canonical source
+        run: python tools/build_runtime_from_source.py
+      - name: Validate JavaScript syntax
+        run: node --check scripts/inline-101.js
+      - name: Run authoritative sync QA
+        run: node tools/run_authoritative_sync_qa.js
+      - name: Verify source ownership and functional IDs
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          css=Path('styles/app-src/styles-part-01.part.css').read_text()
+          html=Path('index.html').read_text()
+          for token in ['#setup .verifyShell{','#setup .verifyManaWheel{','#setup .verifyDeckCta{','#setup .verifyPrivacy{']:
+              assert css.count(token)==1,(token,css.count(token))
+          for token in ['#setup>.card{','#setup>.card:before{','#setup>.card::after{']:
+              assert token not in css,token
+          for element_id in ['deck','formatSelect','pasteDeckBtn','importDeckFileBtn','deckFileInput','ver','vr','legalityReport','commanderSelect','partnerSelect','saveDeckBtn','cont']:
+              assert html.count(f'id="{element_id}"')==1,(element_id,html.count(f'id="{element_id}"'))
+          print('Verify shell ownership and functional ID audit passed.')
+          PY
+      - name: Commit implementation
+        run: |
+          git config user.name "brylancreatesart-cell"
+          git config user.email "brylancreatesart@gmail.com"
+          git add index.html styles/app-src/styles-part-01.part.css styles/inline-01.css scripts/app-src/controller-part-04.part.js scripts/inline-101.js runtime-build-report.json authoritative-sync-qa.json
+          if git diff --cached --quiet; then
+            echo "No implementation changes to commit"
+          else
+            git commit -m "Match Verify Deck shell to premium reference"
+            git push origin HEAD:verify-shell-fidelity
+          fi
