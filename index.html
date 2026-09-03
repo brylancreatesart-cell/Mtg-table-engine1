@@ -3,15 +3,28 @@
 <div id="i"><div id="sw"><canvas id="cv" width="720" height="1280"></canvas><div id="ic"><div class="k">ENTERING THE BATTLEFIELD</div><div class="br">MTG TABLE ENGINE</div><div class="tg">PHYSICAL CARDS. DIGITAL PRECISION.</div><div class="ch"><div id="cf" class="f"></div><div id="co" class="o"></div></div></div></div></div>
 <div id="bt"><b>BATTLE BEGINS</b></div>
 <main id="app" class="h"><header><div><h1>MTG Table Engine</h1><div class="sub">PHYSICAL CARDS · DIGITAL PRECISION</div></div><div><button id="ann" class="chip">ANNOUNCER ON</button> <span id="net" class="pill">STARTING</span></div></header>
-<section id="setup"><div class="card"><h2>Import Your Deck</h2><p class="small">Verify a deck once when adding it to your collection. Registered accounts keep verified decks in the Deck Vault for future games.</p><textarea id="deck" rows="8"></textarea><div class="legalityToolbar"><label for="formatSelect">FORMAT / LEGALITY PLATFORM</label><select id="formatSelect"><option value="commander" selected>Commander</option><option value="standard">Standard</option><option value="pioneer">Pioneer</option><option value="modern">Modern</option><option value="legacy">Legacy</option><option value="vintage">Vintage</option><option value="pauper">Pauper</option><option value="brawl">Brawl</option></select></div><div class="importActions" style="margin-top:9px"><button id="pasteDeckBtn" class="btn">Paste Decklist</button><button id="importDeckFileBtn" class="btn">Import Deck File</button></div><input id="deckFileInput" class="h" type="file" accept=".txt,.dec,.deck,text/plain"><div class="physicalDeckNote">PHYSICAL DECK REQUIRED · Your list stays private and is used to verify legality and personalize your HUD.</div><button id="ver" class="btn pri verifyDeckCta" style="margin-top:9px">Verify Deck</button><div id="vr" class="h"><div id="legalityReport"></div><div id="tags" class="tags"></div><div id="conf" class="small" style="margin-top:8px"></div><div id="verifyDetails"></div>
-<div id="commanderPick" class="cmdPick h">
-  <label>COMMANDER</label>
-  <select id="commanderSelect"><option value="">Choose your commander</option></select>
-  <label for="partnerSelect" style="margin-top:8px">CO-COMMANDER / PARTNER (OPTIONAL)</label>
-  <select id="partnerSelect"><option value="">None</option></select>
-  <div id="commanderInfo" class="small" style="margin-top:7px">Choose the card the app should track as your commander.</div>
+<section id="setup"><div class="card verifyShell">
+<div class="verifyFrame" aria-hidden="true"><span class="verifyCorner tl">✦</span><span class="verifyCorner tr">✦</span><span class="verifyCorner bl">✦</span><span class="verifyCorner br">✦</span></div>
+<div class="verifyArcaneRail verifyArcaneRailLeft" aria-hidden="true">ᚠ<br>ᚢ<br>ᚦ<br>ᚨ<br>ᚱ<br>ᚲ<br>ᚷ<br>ᚹ<br>ᚺ<br>ᚾ<br>ᛁ<br>ᛃ</div><div class="verifyArcaneRail verifyArcaneRailRight" aria-hidden="true">ᛉ<br>ᛏ<br>ᛒ<br>ᛖ<br>ᛗ<br>ᛚ<br>ᛜ<br>ᛞ<br>ᛟ<br>ᚫ<br>ᛇ<br>ᛡ</div>
+<div class="verifyManaAtmosphere" aria-hidden="true"><span class="manaFlow cool"></span><span class="manaFlow warm"></span></div>
+<div class="verifyHero">
+  <div class="verifyManaWheel" aria-hidden="true"><span class="manaMark white">✹</span><span class="manaMark blue">◆</span><span class="manaMark black">☠</span><span class="manaMark red">✦</span><span class="manaMark green">♣</span><span class="manaCore"></span></div>
+  <h2>Import Your Deck</h2><p class="verifyLead">Deck verification builds your private Quick Cast list<br>and your custom match HUD.</p>
 </div>
-<div class="grid" style="margin-top:8px"><button id="saveDeckBtn" class="btn">Save to Deck Library</button><button id="cont" class="btn gr">Continue to Lobby</button></div></div></div></section>
+<div class="verifyDivider"><span>✦</span><b>DECKLIST</b><span>✦</span></div>
+<div class="verifyDeckPanel"><textarea id="deck" rows="8" placeholder="Paste your decklist here..." aria-label="Decklist"></textarea><div id="deckCharCount" class="deckCharCount" aria-live="polite">0 / 10000</div></div>
+<div class="legalityToolbar"><label for="formatSelect">FORMAT / LEGALITY PLATFORM</label><select id="formatSelect"><option value="commander" selected>Commander</option><option value="standard">Standard</option><option value="pioneer">Pioneer</option><option value="modern">Modern</option><option value="legacy">Legacy</option><option value="vintage">Vintage</option><option value="pauper">Pauper</option><option value="brawl">Brawl</option></select></div>
+<div class="verifyDivider verifyImportDivider"><span>✦</span><b>IMPORT OPTIONS</b><span>✦</span></div>
+<div class="importActions"><button id="pasteDeckBtn" class="btn verifyImportCard" type="button"><span class="verifyActionIcon">≡</span><span><b>Paste Decklist</b><small>Paste from clipboard</small></span></button><button id="importDeckFileBtn" class="btn verifyImportCard" type="button"><span class="verifyActionIcon">▣</span><span><b>Import Deck File</b><small>From file or image</small></span></button></div>
+<button id="setupDeckVaultBtn" class="btn verifyVaultRow" type="button"><span class="verifyActionIcon vaultIcon">◇</span><span><b>Deck Vault</b><small>View and manage your saved decks</small></span><strong>›</strong></button>
+<input id="deckFileInput" class="h" type="file" accept=".txt,.dec,.deck,text/plain">
+<div class="physicalDeckNote">PHYSICAL DECK REQUIRED · Your list stays private and is used only to verify legality and personalize your Sidekick.</div>
+<button id="ver" class="btn pri verifyDeckCta" type="button"><span class="verifyShield" aria-hidden="true">✦</span><span><b>Verify Deck</b><small>Check legality and build your Quick Cast list</small></span></button>
+<div id="vr" class="h"><div id="legalityReport"></div><div id="tags" class="tags"></div><div id="conf" class="small"></div><div id="verifyDetails"></div>
+<div id="commanderPick" class="cmdPick h"><label>COMMANDER</label><select id="commanderSelect"><option value="">Choose your commander</option></select><label for="partnerSelect">CO-COMMANDER / PARTNER (OPTIONAL)</label><select id="partnerSelect"><option value="">None</option></select><div id="commanderInfo" class="small">Choose the card the app should track as your commander.</div></div>
+<div class="grid verifyContinueGrid"><button id="saveDeckBtn" class="btn">Save to Deck Library</button><button id="cont" class="btn gr">Continue to Lobby</button></div></div>
+<div class="verifyPrivacy"><span aria-hidden="true">▣</span><b>Private</b><i>•</i><b>Secure</b><i>•</i><span>Your decklist is never shared</span></div>
+</div></section>
 <section id="lobby" class="h"><div class="lobbyAtmosphere" aria-hidden="true"></div><div class="card"><h2>Battle Lobby</h2><div class="grid"><button id="host" class="btn pri">Host Game</button><button id="join" class="btn">Join Game</button></div><button id="sharedDisplayLinkBtn" class="btn lobbySharedDisplayBtn">SHARED TABLE DISPLAY</button><div id="room" class="h" style="margin-top:8px"><div class="small">ROOM CODE</div><div id="code" style="font-size:34px;font-weight:900;letter-spacing:.18em">------</div><div id="jb" class="h"><input id="jc" maxlength="6" placeholder="ROOM CODE"><button id="con" class="btn pri" style="margin-top:6px">Connect</button></div></div></div>
 <div class="card">
   <div class="profileCard">
