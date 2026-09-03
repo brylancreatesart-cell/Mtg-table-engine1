@@ -1,5 +1,5 @@
 name: Premium cohesion preview smoke
-# current validation target: shared table display centerpiece
+# current validation target: shared table display centerpiece + canonical turn hierarchy
 
 on:
   push:
