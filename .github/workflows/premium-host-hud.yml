@@ -1,5 +1,5 @@
 name: Premium Host HUD cohesion
-# rerun after responsive-owner guard fix
+# rerun with exact base-owner validation
 
 on:
   push:
@@ -36,15 +36,18 @@ jobs:
           from pathlib import Path
           css=Path('styles/inline-01.css').read_text()
           html=Path('index.html').read_text()
+          base_tabs='.hostTabs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;padding:10px 0 12px;overflow:visible}'
+          base_tab='.hostTab{min-width:0;white-space:nowrap;border:1px solid #263d4d;background:#071119;color:#8ea2b0;border-radius:10px;padding:10px 7px;font-size:9px;font-weight:950;letter-spacing:.055em;transition:border-color .18s,background .18s,color .18s,box-shadow .18s}'
           assert 'AUTHORITATIVE TABLE CONTROL' in html
           assert '>Host Command<' in html
           assert 'RETURN TO PLAYER HUD' in html
-          assert css.count('.hostTabs{')==1
-          assert css.count('.hostTab{')==1
-          assert css.count('.hostTab.active{')==1
+          assert css.count(base_tabs)==1
+          assert css.count(base_tab)==1
           assert '.hostTab[data-host-tab="judge"]' in css
-          assert '!important' not in css[css.find('.hostAuthorityIdentity{'):css.find('.hostAuthorityIdentity{')+3500]
-          print('Host HUD premium ownership verified.')
+          assert '@media(max-width:700px){.hostTabs{grid-template-columns:repeat(3,minmax(0,1fr))}' in css
+          shell=css[css.find('.hostAuthorityIdentity{'):css.find('.hostAuthorityIdentity{')+3500]
+          assert '!important' not in shell
+          print('Host HUD premium ownership verified, including responsive variants.')
           PY
       - name: Run authoritative sync QA
         run: node tools/run_authoritative_sync_qa.js
