@@ -1,0 +1,57 @@
+name: Premium Host HUD cohesion
+
+on:
+  push:
+    branches:
+      - premium-cohesion-pass
+    paths:
+      - .github/workflows/premium-host-hud.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: premium-cohesion-pass
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Apply premium Host HUD pass
+        run: python tools/apply_premium_host_hud.py
+      - name: Refresh stylesheet source fragments
+        run: python tools/split_styles_source.py
+      - name: Rebuild generated runtime
+        run: python tools/build_runtime_from_source.py
+      - name: Verify Host HUD ownership and runtime syntax
+        run: |
+          node --check scripts/inline-101.js
+          python - <<'PY'
+          from pathlib import Path
+          css=Path('styles/inline-01.css').read_text()
+          html=Path('index.html').read_text()
+          assert 'AUTHORITATIVE TABLE CONTROL' in html
+          assert '>Host Command<' in html
+          assert 'RETURN TO PLAYER HUD' in html
+          assert css.count('.hostTabs{')==1
+          assert css.count('.hostTab{')==1
+          assert css.count('.hostTab.active{')==1
+          assert '.hostTab[data-host-tab="judge"]' in css
+          assert '!important' not in css[css.find('.hostAuthorityIdentity{'):css.find('.hostAuthorityIdentity{')+3500]
+          print('Host HUD premium ownership verified.')
+          PY
+      - name: Run authoritative sync QA
+        run: node tools/run_authoritative_sync_qa.js
+      - name: Commit Host HUD pass
+        run: |
+          git config user.name "sidekick-premium-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html styles/inline-01.css styles/app-src styles-source-report.json runtime-build-report.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Polish separate Host HUD command center"
+          git push origin HEAD:premium-cohesion-pass
