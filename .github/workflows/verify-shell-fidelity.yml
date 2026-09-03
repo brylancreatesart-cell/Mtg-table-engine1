@@ -1,4 +1,4 @@
-name: Verify shell precision alignment implementation
+name: Verify shell targeted mobile alignment repair
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - verify-shell-fidelity
     paths:
       - .github/workflows/verify-shell-fidelity.yml
-      - tools/apply_verify_shell_precision_polish.py
+      - tools/apply_verify_mobile_alignment_repair.py
 
 permissions:
   contents: write
@@ -19,11 +19,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: verify-shell-fidelity
-      - name: Calibrate canonical Verify layout owner
-        run: python tools/apply_verify_shell_precision_polish.py
+      - name: Repair canonical mobile alignment owners
+        run: python tools/apply_verify_mobile_alignment_repair.py
       - name: Rebuild generated runtime from canonical source
         run: python tools/build_runtime_from_source.py
-      - name: Audit canonical Verify ownership and shared centerline
+      - name: Audit canonical Verify ownership and targeted repairs
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -35,26 +35,30 @@ jobs:
           next_comment=block.find('\n/* ',len(marker))
           if next_comment>=0:block=block[:next_comment]
           assert '!important' not in block
+          assert '#setup .verifyDivider>span{display:none}' in block
+          assert 'grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)' in block
+          assert '#setup .verifyDeckCta{position:relative' in block
+          assert 'grid-template-columns:1fr;place-items:center;text-align:center' in block
+          assert 'header h1{font-size:clamp(24px,7.2vw,31px)' in block
+          assert 'header>div:last-child{display:flex' in css
           for token in ['#setup>.card{','#setup>.card:before{','#setup>.card::after{']:
               assert token not in css,token
-          for required in ['--verify-content-width:620px','width:min(100%,var(--verify-content-width))','grid-template-columns:repeat(2,minmax(0,1fr))','text-align-last:center']:
-              assert required in block, required
           for element_id in ['deck','formatSelect','pasteDeckBtn','importDeckFileBtn','deckFileInput','ver','vr','legalityReport','commanderSelect','partnerSelect','saveDeckBtn','cont']:
               assert html.count(f'id="{element_id}"')==1,(element_id,html.count(f'id="{element_id}"'))
-          print('Precision Verify ownership and centerline audit passed.')
+          print('Targeted mobile alignment ownership audit passed.')
           PY
       - name: Validate JavaScript syntax
         run: node --check scripts/inline-101.js
       - name: Run authoritative sync QA
         run: node tools/run_authoritative_sync_qa.js
-      - name: Commit precision alignment implementation
+      - name: Commit targeted mobile repair
         run: |
           git config user.name "brylancreatesart-cell"
           git config user.email "brylancreatesart@gmail.com"
           git add styles/app-src/styles-part-01.part.css styles/inline-01.css runtime-build-report.json authoritative-sync-qa.json
           if git diff --cached --quiet; then
-            echo "No precision alignment changes to commit"
+            echo "No targeted mobile changes to commit"
           else
-            git commit -m "Calibrate Verify Deck alignment and typography"
+            git commit -m "Fix Verify mobile header dividers and CTA centering"
             git push origin HEAD:verify-shell-fidelity
           fi
