@@ -6,6 +6,7 @@ on:
       - premium-cohesion-pass
     paths:
       - .github/workflows/premium-cohesion-pass1.yml
+      - tools/apply_premium_cohesion_pass1.py
   workflow_dispatch:
 
 permissions:
@@ -47,7 +48,7 @@ jobs:
         run: |
           git config user.name "sidekick-premium-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add styles/app-src/styles-part-01.part.css scripts/app-src/controller-part-04.part.js styles/inline-01.css scripts/inline-101.js runtime-build-report.json authoritative-sync-qa.json
+          git add styles/app-src/styles-part-01.part.css scripts/app-src/controller-part-04.part.js scripts/app-src/controller-part-05.part.js styles/inline-01.css scripts/inline-101.js runtime-build-report.json authoritative-sync-qa.json
           git diff --cached --quiet && exit 0
           git commit -m "Polish personalized lobby and battlefield entry"
           git push origin HEAD:premium-cohesion-pass
