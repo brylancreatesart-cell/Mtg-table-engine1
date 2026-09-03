@@ -1,0 +1,549 @@
+{
+  "css": {
+    ".lobbyAtmosphere": [
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 15029,
+        "rule": ".lobbyAtmosphere{position:absolute;inset:-12px 0 auto;height:260px;pointer-events:none;overflow:hidden;z-index:-1}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 15143,
+        "rule": ".lobbyAtmosphere:before{content:\"\";position:absolute;inset:0;background:radial-gradient(circle at 50% 22%,rgba(82,184,255,.12),transparent 55%),radial-gradient(circle at 15% 80%,rgba(180,88,255,.08),transparent 45%);animation:lobbyDrift 9s ease-in-out infinite alternate}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 19502,
+        "rule": "#lobby.readyArrival .lobbyAtmosphere:before{animation:lobbyDrift 9s ease-in-out infinite alternate,readySkyFlash .9s ease}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 23550,
+        "rule": "@media(prefers-reduced-motion:reduce){.lobbyAtmosphere:before,.lobbyPulse,.readySigil,.battleIntroPlayer,.deckVaultPremiumDetail.opening,.deckVaultPremiumDetail.closing{animation:none!important}"
+      }
+    ],
+    ".readyRitual": [
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 17127,
+        "rule": ".readyRitual{display:grid;grid-template-columns:64px 1fr;gap:11px;align-items:center;margin-top:11px;padding:10px;border:1px solid color-mix(in srgb,var(--deck-a,#52b8ff) 22%,#213744);border-radius:12px;background:rgba(3,10,15,.58);transition:.45s}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 18248,
+        "rule": ".readyRitualKicker{font-size:8px;letter-spacing:.18em;color:var(--m);font-weight:900}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 18333,
+        "rule": ".readyRitualText{font-size:10px;color:#cbd9e2;margin-top:3px;line-height:1.35}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 19232,
+        "rule": "#lobby[data-ready-all=\"1\"] .readyRitual{border-color:color-mix(in srgb,var(--deck-b,#52b8ff) 58%,#4bdf88);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a,#52b8ff) 10%,#06130f),rgba(4,13,17,.78))}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 23419,
+        "rule": ".readyRitual{grid-template-columns:54px 1fr;padding:9px}"
+      }
+    ],
+    ".readyHeadline": [
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 15750,
+        "rule": ".readyHeadline{font-size:12px;font-weight:900;letter-spacing:.08em}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 66594,
+        "rule": "html[data-deck-theme] #lobby .card h2,html[data-deck-theme] #lobby .sectionHead>b,html[data-deck-theme] #lobby .readyHeadline{color:color-mix(in srgb,var(--deck-a) 22%,#f5f0df)}"
+      }
+    ],
+    ".rosterPreview": [
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 15872,
+        "rule": ".rosterPreview{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:9px}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 23330,
+        "rule": ".rosterPreview{grid-template-columns:1fr}"
+      }
+    ],
+    ".battleIntro": [
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 19654,
+        "rule": ".battleIntro{position:fixed;z-index:95;inset:0;background:radial-gradient(circle at 50% 35%,#10283a 0,#071018 42%,#020406 100%);display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;pointer-events:none;transition:opacity .3s}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 19903,
+        "rule": ".battleIntro.on{opacity:1;pointer-events:auto}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 19949,
+        "rule": ".battleIntroPanel{width:min(760px,100%);text-align:center}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20007,
+        "rule": ".battleIntroKicker{font-size:10px;letter-spacing:.28em;color:#8fa3b3;font-weight:900}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20092,
+        "rule": ".battleIntroTitle{font-size:32px;font-weight:950;margin-top:7px}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20156,
+        "rule": ".battleIntroRoster{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:18px 0}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20246,
+        "rule": ".battleIntroPlayer{display:grid;grid-template-columns:50px 1fr;gap:10px;text-align:left;align-items:center;border:1px solid #28465a;border-radius:12px;background:rgba(6,14,20,.78);padding:10px;transform:translateY(8px);opacity:0;animation:rosterRise .45s ease forwards}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20515,
+        "rule": ".battleIntroPlayer:nth-child(2){animation-delay:.12s}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20568,
+        "rule": ".battleIntroPlayer:nth-child(3){animation-delay:.24s}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20621,
+        "rule": ".battleIntroPlayer:nth-child(4){animation-delay:.36s}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20674,
+        "rule": ".battleIntroPlayer:nth-child(5){animation-delay:.48s}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20727,
+        "rule": ".battleIntroPlayer:nth-child(6){animation-delay:.60s}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20780,
+        "rule": ".battleIntroPlayer:nth-child(7){animation-delay:.72s}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20833,
+        "rule": ".battleIntroPlayer:nth-child(8){animation-delay:.84s}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20886,
+        "rule": ".battleIntroAvatar{width:50px;height:50px;border-radius:50%;overflow:hidden;background:#0c1720}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20981,
+        "rule": ".battleIntroName{font-weight:950}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 21014,
+        "rule": ".battleIntroCmd{font-size:9px;color:var(--m);margin-top:2px}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 21074,
+        "rule": ".battleIntroCall{font-size:14px;min-height:22px;color:#dbe9f2;font-weight:800;letter-spacing:.05em}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 21173,
+        "rule": ".battleIntroFinal{font-size:37px;font-weight:1000;letter-spacing:.08em;margin-top:9px;opacity:0;transform:scale(.94);transition:.35s}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 21306,
+        "rule": ".battleIntroFinal.show{opacity:1;transform:scale(1);text-shadow:0 0 32px rgba(82,184,255,.4)}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 21399,
+        "rule": ".battleIntroSkip{margin-top:14px;border:1px solid #314c5e;background:#09141d;color:#c9d8e1;border-radius:999px;padding:8px 13px}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 23285,
+        "rule": ".battleIntroRoster{grid-template-columns:1fr}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 23598,
+        "rule": "@media(prefers-reduced-motion:reduce){.lobbyAtmosphere:before,.lobbyPulse,.readySigil,.battleIntroPlayer,.deckVaultPremiumDetail.opening,.deckVaultPremiumDetail.closing{animation:none!important}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 23803,
+        "rule": ".battleIntroPlayer{opacity:1;transform:none}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 23847,
+        "rule": ".battleIntroFinal,.battleIntro,.readyMeterFill,.announcerCaption,.deckVaultPremiumBox,.deckVaultPremiumAction,.deckVaultPremiumActivePlaque{transition:none!important}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 23865,
+        "rule": ".battleIntroFinal,.battleIntro,.readyMeterFill,.announcerCaption,.deckVaultPremiumBox,.deckVaultPremiumAction,.deckVaultPremiumActivePlaque{transition:none!important}"
+      }
+    ],
+    ".battleIntroPanel": [
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 19949,
+        "rule": ".battleIntroPanel{width:min(760px,100%);text-align:center}"
+      }
+    ],
+    ".battleIntroPlayer": [
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20246,
+        "rule": ".battleIntroPlayer{display:grid;grid-template-columns:50px 1fr;gap:10px;text-align:left;align-items:center;border:1px solid #28465a;border-radius:12px;background:rgba(6,14,20,.78);padding:10px;transform:translateY(8px);opacity:0;animation:rosterRise .45s ease forwards}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20515,
+        "rule": ".battleIntroPlayer:nth-child(2){animation-delay:.12s}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20568,
+        "rule": ".battleIntroPlayer:nth-child(3){animation-delay:.24s}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20621,
+        "rule": ".battleIntroPlayer:nth-child(4){animation-delay:.36s}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20674,
+        "rule": ".battleIntroPlayer:nth-child(5){animation-delay:.48s}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20727,
+        "rule": ".battleIntroPlayer:nth-child(6){animation-delay:.60s}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20780,
+        "rule": ".battleIntroPlayer:nth-child(7){animation-delay:.72s}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 20833,
+        "rule": ".battleIntroPlayer:nth-child(8){animation-delay:.84s}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 23598,
+        "rule": "@media(prefers-reduced-motion:reduce){.lobbyAtmosphere:before,.lobbyPulse,.readySigil,.battleIntroPlayer,.deckVaultPremiumDetail.opening,.deckVaultPremiumDetail.closing{animation:none!important}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 23803,
+        "rule": ".battleIntroPlayer{opacity:1;transform:none}"
+      }
+    ],
+    ".playerHud": [
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 10008,
+        "rule": ".playerHud{position:relative;border:1px solid #244257;background:linear-gradient(180deg,#0b1822,#071019);border-radius:16px;padding:13px;margin-bottom:10px;overflow:hidden}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 27751,
+        "rule": ".battleScreen.lowAttention .playerHud{margin-top:7vh}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 28124,
+        "rule": ".playerHud[data-context=\"combat\"]{border-color:#5d4928}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 28179,
+        "rule": ".playerHud[data-context=\"stack\"]{border-color:#4d3f73}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 28233,
+        "rule": ".playerHud[data-context=\"opponent\"]{border-color:#273c4a}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 32420,
+        "rule": ".playerHud[data-poison-band=\"critical\"] .hudAvatar{filter:saturate(.75) contrast(1.06)}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 32507,
+        "rule": ".playerHud[data-life-band=\"low\"]{box-shadow:inset 0 0 40px rgba(80,20,20,.08)}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 32585,
+        "rule": ".playerHud.lastStandHud{border-color:#8b5c35;box-shadow:inset 0 0 46px rgba(93,34,20,.13),0 0 18px rgba(136,82,38,.10)}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 32704,
+        "rule": ".playerHud.lastStandHud .hudCriticalBanner{border-color:#a76d32;background:rgba(111,50,20,.2)}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 32798,
+        "rule": ".playerHud.lastStandHud .hudCriticalBanner b{color:#ffcc7d}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 32960,
+        "rule": ".battleScreen.lowAttention .playerHud.criticalHud{margin-top:3vh}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 33025,
+        "rule": ".battleScreen.lowAttention .playerHud.criticalHud .hudCriticalBanner{display:flex!important}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 38178,
+        "rule": ".playerHudPage{min-width:0}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 43287,
+        "rule": ".playerHud{border-color:color-mix(in srgb,var(--deck-a) 48%,#244257);background:radial-gradient(circle at 12% 0,var(--deck-glow),transparent 38%),radial-gradient(circle at 92% 18%,var(--deck-glow-2),transparent 34%),linear-gradient(180deg,#0b1822,#071019)}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 46266,
+        "rule": ".battleActive .playerHud{border-color:color-mix(in srgb,var(--deck-a) 68%,#465863);box-shadow:0 14px 42px rgba(0,0,0,.34),0 0 32px var(--deck-glow);background:\n radial-gradient(circle at 7% 0,color-mix(in srgb,var(--deck-a) 25%,transparent),transparent 36%),\n radial-gradient(circle at 96% 14%,color-mix(in srgb,var(--deck-b) 20%,transparent),transparent 42%),\n linear-gradient(155deg,color-mix(in srgb,var(--deck-a) 9%,#0b151d),color-mix(in srgb,var(--deck-b) 8%,#071018) 48%,#061018)}"
+      }
+    ],
+    ".hudIdentity": [
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 10180,
+        "rule": ".hudIdentity{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 40324,
+        "rule": ".hudIdentity{grid-template-columns:52px minmax(0,1fr);}"
+      }
+    ],
+    ".turnStrip": [
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 10749,
+        "rule": ".turnStrip{display:flex;justify-content:space-between;margin-top:11px;padding:8px 0;border-top:1px solid #1b2e3a;color:#b7c8d4;font-size:11px;font-weight:800}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 43933,
+        "rule": ".turnStrip{border-top-color:color-mix(in srgb,var(--deck-a) 25%,#1b2e3a)}"
+      }
+    ],
+    ".lifeStage": [
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 10907,
+        "rule": ".lifeStage{text-align:center;padding:12px 0}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 27804,
+        "rule": ".battleScreen.lowAttention .lifeStage{padding:22px 0}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 44007,
+        "rule": ".lifeStage{position:relative;border-radius:18px;isolation:isolate;transition:background-color .16s ease,box-shadow .16s ease}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 44133,
+        "rule": ".lifeStage::before{content:\"\";position:absolute;inset:0;border-radius:18px;opacity:0;pointer-events:none;z-index:-1}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 44250,
+        "rule": ".lifeStage.gainPulse::before{animation:lifeGainWash .72s ease-out;background:radial-gradient(circle at 70% 50%,rgba(75,223,136,.34),rgba(23,91,51,.13) 52%,transparent 78%)}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 44423,
+        "rule": ".lifeStage.lossPulse::before{animation:lifeLossWash .72s ease-out;background:radial-gradient(circle at 30% 50%,rgba(255,90,80,.34),rgba(116,29,29,.14) 52%,transparent 78%)}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 45259,
+        "rule": "@media(prefers-reduced-motion:reduce){.lifeStage.gainPulse::before,.lifeStage.lossPulse::before,.delta.on{animation-duration:.18s!important;transform:none!important}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 45288,
+        "rule": "@media(prefers-reduced-motion:reduce){.lifeStage.gainPulse::before,.lifeStage.lossPulse::before,.delta.on{animation-duration:.18s!important;transform:none!important}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 48271,
+        "rule": ".battleActive .lifeStage{background:radial-gradient(ellipse at center,color-mix(in srgb,var(--deck-a) 7%,transparent),transparent 67%);box-shadow:inset 0 0 28px color-mix(in srgb,var(--deck-b) 5%,transparent)}"
+      }
+    ],
+    ".contextualDock": [
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 27579,
+        "rule": ".battleScreen.lowAttention .contextualDock{display:none}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 28008,
+        "rule": ".contextualDock .dk[disabled]{opacity:.35}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 28050,
+        "rule": ".contextualDock .dk:first-child{border-color:var(--bl);background:#102333}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 39360,
+        "rule": ".contextualDock{box-sizing:border-box;width:100%;max-width:none}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 39424,
+        "rule": ".contextualDock .dk{min-width:0;overflow:hidden;text-overflow:ellipsis}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 39923,
+        "rule": ".contextualDock{left:0;right:0;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;padding-left:max(7px,env(safe-area-inset-left));padding-right:max(7px,env(safe-area-inset-right))}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 40106,
+        "rule": ".contextualDock .dk{font-size:9px;padding:12px 3px;white-space:normal;line-height:1.1}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 40609,
+        "rule": ".contextualDock .dk{font-size:8px}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 43595,
+        "rule": ".playerPageTab.active,.battlefieldPlayerTab.active,.contextualDock .dk:first-child,.dkPrimary{border-color:var(--deck-a)!important;box-shadow:0 0 16px var(--deck-glow);background:linear-gradient(135deg,color-mix(in srgb,var(--deck-a) 16%,#102333),color-mix(in srgb,var(--deck-b) 10%,#0b1720))!important}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 50374,
+        "rule": "/* Viewport-centered action dock. Flex keeps 1\u20134 visible actions centered instead of leaving empty grid columns. */\n.contextualDock{position:fixed!important;z-index:30!important;left:50vw!important;right:auto!important;bottom:calc(8px + env(safe-area-inset-bottom))!important;transform:translateX(-50%)!important;width:calc(100vw - 20px - env(safe-area-inset-left) - env(safe-area-inset-right))!important;max-width:820px!important;box-sizing:border-box!important;display:flex!important;justify-content:center!important;align-items:stretch!important;gap:7px!important;padding:7px!important;margin:0!important;border:1px solid color-mix(in srgb,var(--deck-a) 30%,#243b4c)!important;border-radius:15px!important;background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 9%,rgba(3,7,10,.96)),color-mix(in srgb,var(--deck-b) 7%,rgba(3,7,10,.96)))!important;box-shadow:0 10px 38px rgba(0,0,0,.42),0 0 22px var(--deck-glow)!important;backdrop-filter:blur(18px)}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 51221,
+        "rule": ".contextualDock.h{display:none!important}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 51263,
+        "rule": ".contextualDock .dk{flex:1 1 0!important;max-width:196px!important;min-width:0!important;padding:13px 8px!important;border-color:color-mix(in srgb,var(--deck-a) 34%,#2b4353)!important;background:linear-gradient(145deg,color-mix(in srgb,var(--deck-a) 8%,#0c1720),color-mix(in srgb,var(--deck-b) 6%,#09141c))!important}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 51581,
+        "rule": ".contextualDock .dk:not(.h):first-of-type{border-color:color-mix(in srgb,var(--deck-a) 75%,#fff)!important;box-shadow:0 0 16px var(--deck-glow)}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 51821,
+        "rule": "@media(max-width:620px){.contextualDock{width:calc(100vw - 14px - env(safe-area-inset-left) - env(safe-area-inset-right))!important;gap:6px!important;padding:6px!important}"
+      },
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 51969,
+        "rule": ".contextualDock .dk{max-width:none!important;font-size:9px!important;padding:12px 5px!important}"
+      },
+      {
+        "file": "styles/app-src/styles-part-02.part.css",
+        "offset": 21053,
+        "rule": ".contextualDock .dk.waitingAction{opacity:.62;border-style:dashed!important}"
+      }
+    ],
+    ".opponentsCard": [
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 49157,
+        "rule": ".battleActive .opponentsCard> .sectionHead b,.battleActive .quickActionsCard> .sectionHead b,.battleActive .battleTitle{ text-shadow:0 0 16px var(--deck-glow)}"
+      }
+    ],
+    ".quickActionsCard": [
+      {
+        "file": "styles/app-src/styles-part-01.part.css",
+        "offset": 49202,
+        "rule": ".battleActive .opponentsCard> .sectionHead b,.battleActive .quickActionsCard> .sectionHead b,.battleActive .battleTitle{ text-shadow:0 0 16px var(--deck-glow)}"
+      }
+    ]
+  },
+  "js": {
+    "slots": {
+      "file": "scripts/app-src/controller-part-04.part.js",
+      "line": 76,
+      "body": "function slots(){refreshAudioTableContext('roster-change');$('slots').innerHTML='';for(let i=1;i<=8;i++){let p=players.find(x=>x.id===i),d=document.createElement('div');d.className='slot';let left=document.createElement('div');left.className='slotName';let nm=document.createElement('span');nm.textContent=p?(p.name||('Player '+i)):('Player '+i);left.appendChild(nm);if(p&&i!==1){let sub=document.createElement('span');sub.className='slotSub';sub.textContent=(p.connected===false?'SLOT '+i+' \u00b7 RECONNECT RESERVED':'SLOT '+i)+(p.commander?' \u00b7 '+p.commander:'');left.appendChild(sub)}let right=document.createElement('div');right.className='slotActions';let stx=document.createElement('span');stx.className=p&&p.r?'ready':'';stx.textContent=p?(p.connected===false?'OFFLINE':(p.r?'READY':'CONNECTED')):'OPEN';right.appendChild(stx);if(HST&&p&&i!==1){let k=document.createElement('button');k.className='kickBtn';k.textContent='KICK';k.onclick=()=>kickPlayer(i);right.appendChild(k)}d.append(left,right);$('slots').append(d)}updateLobbyStatus()}function phase108Outbound(m,{advance=true,lobbyAdvance=true}={}){if(!HST||typeof MTGAuthoritativeSync==='undefined'||!m)return m;let x=m;if(['state','start'].includes(String(x.t||''))&&x.st){if(advance)authoritySyncRevision=MTGAuthoritativeSync.nextRevision(Math.max(authoritySyncRevision,MTGAuthoritativeSync.stateRevision(st)));x=MTGAuthoritativeSync.stampStateMessage(x,{revision:authoritySyncRevision,epoch:Number(roomDescriptor?.epoch||1),reason:x.t});}else if(['welcome','resume_state'].includes(String(x.t||''))&&x.st){if(!authoritySyncRevision)authoritySyncRevision=Math.max(1,MTGAuthoritativeSync.stateRevision(st));x=MTGAuthoritativeSync.stampStateMessage(x,{revision:authoritySyncRevision,epoch:Number(roomDescriptor?.epoch||1),reason:x.t});}if(x.players&&['players','welcome','resume_state','start'].includes(String(x.t||''))){if(x.t==='players'&&lobbyAdvance)authorityLobbyRevision=MTGAuthoritativeSync.nextRevision(authorityLobbyRevision);x=MTGAuthoritativeSync.stampPlayersMessage(x,{revision:authorityLobbyRevision});}return x}\nlet sharedDisplayRealtimeGate=null,sharedDisplayRealtimeReason='state-mutation';\n"
+    },
+    "showBattlePage": {
+      "file": "scripts/app-src/controller-part-04.part.js",
+      "line": 131,
+      "body": "function showBattlePage(){\n $('setup').classList.add('h');$('lobby').classList.add('h');$('hostControl').classList.add('h');$('game').classList.remove('h');$('app').classList.add('battleActive');$('hudModeBtn').classList.toggle('h',!HST);\n $('battleRoomCode').textContent=(activeRoom||'------').toUpperCase();$('battleSeat').textContent=me;$('battleCommander').textContent=(commanderName()||'NO COMMANDER').toUpperCase();setPlayerHudPage(playerHudPage||'home');\n if(location.hash!=='#battle')history.replaceState(null,'','#battle')\n}\n"
+    },
+    "showLobbyPage": {
+      "file": "scripts/app-src/controller-part-04.part.js",
+      "line": 136,
+      "body": "function showLobbyPage(){$('app')?.classList.remove('battleActive');\n $('game').classList.add('h');$('hostControl').classList.add('h');$('lobby').classList.remove('h');startLobbyAmbience();\n if(location.hash==='#battle')history.replaceState(null,'',location.pathname+location.search+'#lobby');\n slots();consumeInviteLink()\n}\n"
+    },
+    "introRosterHtml": {
+      "file": "scripts/app-src/controller-part-04.part.js",
+      "line": 141,
+      "body": "function introRosterHtml(){return players.filter(p=>p.connected!==false).map(p=>'<div class=\"battleIntroPlayer\"><div class=\"battleIntroAvatar\">'+rosterAvatar(p)+'</div><div><div class=\"battleIntroName\">'+(p.name||('Player '+p.id))+'</div><div class=\"battleIntroCmd\">'+(p.commander||'No commander')+(p.deckName?' \u00b7 '+p.deckName:'')+'</div></div></div>').join('')}\nlet introTimer=null,introDone=null;function finishBattleIntro(){clearTimeout(introTimer);$('battleIntro').classList.remove('on');$('battleIntro').classList.add('h');$('battleIntro').setAttribute('aria-hidden','true');showBattlePage();hud();sync();$('bt').classList.add('on');setTimeout(()=>$('bt').classList.remove('on'),950);stopLobbyAmbience();cue('battle');feed('All combatants were ready. The battle began.');if(introDone){let fn=introDone;introDone=null;fn()}}\n"
+    },
+    "playBattleIntro": {
+      "file": "scripts/app-src/controller-part-05.part.js",
+      "line": 1,
+      "body": "function playBattleIntro(done){introDone=done||null;let ov=$('battleIntro');$('setup').classList.add('h');$('lobby').classList.add('h');$('game').classList.add('h');$('hostControl').classList.add('h');$('battleIntroRoster').innerHTML=introRosterHtml();$('battleIntroCall').textContent='All combatants are ready.';$('battleIntroFinal').classList.remove('show');ov.classList.remove('h');ov.setAttribute('aria-hidden','false');requestAnimationFrame(()=>ov.classList.add('on'));MTGAnnouncerEngine.event('battleEntry',{});setTimeout(()=>{$('battleIntroCall').textContent='The battlefield waits.'},1250);setTimeout(()=>{$('battleIntroFinal').classList.add('show');$('battleIntroCall').textContent='';MTGAnnouncerEngine.event('battleStart',{force:true})},2300);introTimer=setTimeout(finishBattleIntro,3600)}\n$('battleIntroSkip').onclick=finishBattleIntro;\n"
+    },
+    "renderDeckAdaptiveHud": {
+      "file": "scripts/app-src/controller-part-05.part.js",
+      "line": 10,
+      "body": "function renderDeckAdaptiveHud(){let mount=$('deckAdaptiveSummary');if(!mount)return;if(!hudFlags.deckAdaptiveHud||typeof MTGDeckAdaptiveHUD==='undefined'||!(prof.cards||[]).length){mount.innerHTML='';mount.classList.add('h');return}let dna=MTGDeckAdaptiveHUD.build(prof,st,me);mount.classList.remove('h');let deckName=currentSavedDeck()?.name||prof.commander||'Loaded Deck',chips=dna.tags.length?dna.tags.map(x=>'<span class=\"deckDNAChip\"><b>'+esc(x.label)+'</b>'+(x.count?' \u00b7 '+x.count+' card'+(x.count===1?'':'s'):'')+'</span>').join(''):'<span class=\"deckDNAChip\">GENERAL</span>';let ranked=(typeof MTGQuickActions!=='undefined'?MTGQuickActions.rank({profile:prof,state:st,playerId:me,limit:8}):[]),byKind=new Map(ranked.map(x=>[x.kind,x])),actions=dna.primary.map(x=>byKind.get(x.kind)||{label:x.action,kind:x.kind,reasons:['loaded deck uses this mechanic']}).slice(0,4);if(!actions.length)actions=[{label:'Add Manual Permanent',kind:'manual',reasons:['universal physical-table fallback']}];mount.innerHTML='<div class=\"deckAdaptiveSummary\"><div class=\"deckAdaptiveTop\"><div><div class=\"deckAdaptiveName\">'+esc(deckName.toUpperCase())+' \u00b7 DECK DNA</div><div class=\"deckAdaptivePrivate\">PRIVATE \u00b7 GENERATED FROM YOUR LOADED LIST</div></div><span class=\"pill\">'+dna.cardCount+' CARDS</span></div><div class=\"deckDNA\">'+chips+'</div><div class=\"deckAdaptiveActions\">'+actions.map((a,i)=>'<button class=\"deckAdaptiveAction\" data-adaptive-action=\"'+i+'\"><b>'+esc(a.label)+'</b><small>'+esc((a.reasons||[]).at(-1)||'deck-matched shortcut')+'</small></button>').join('')+'</div>'+(dna.counterTypes.length?'<div class=\"small\" style=\"margin-top:7px\">TRACKED COUNTERS \u00b7 '+dna.counterTypes.map(esc).join(' \u00b7 ')+'</div>':'')+'<button class=\"deckAdaptiveFallback\" id=\"deckAdaptiveAll\">SHOW ALL DECK TOOLS</button></div>';mount.querySelectorAll('[data-adaptive-action]').forEach(b=>b.onclick=()=>{let a=actions[Number(b.dataset.adaptiveAction)];executeRankedQuickAction(a)});let all=$('deckAdaptiveAll');if(all)all.onclick=quickActionMenu;}\n"
+    },
+    "hud": {
+      "file": "scripts/app-src/controller-part-06.part.js",
+      "line": 12,
+      "body": "function hud(){let p=players.find(x=>x.id===me),nm=p?.name||playerProfile?.name||('Player '+me),cm=p?.commander||commanderName()||'NO COMMANDER';$('hudName').textContent=nm;$('hudAvatar').innerHTML=avatarMarkup(playerProfile?.avatarId||MTGAvatars.DEFAULT_ID);$('battleCommander').textContent=cm;renderResourceRail();renderDeckAdaptiveHud();$('mods').innerHTML=hudFlags.deckAdaptiveHud?'':prof.mods.map(m=>'<div class=\"mod\"><b>'+m[0]+'</b><div class=\"acts\">'+m[1].map(a=>'<button class=\"act\">'+a+'</button>').join('')+'</div></div>').join('');$('mods').querySelectorAll('.act').forEach(b=>b.onclick=()=>action(b.textContent));$('life').onclick=()=>{let cur=st.life[me]??40,raw=prompt('Set Life',String(cur));if(raw===null)return;let d=MTGPlayerHUD?.directDelta?MTGPlayerHUD.directDelta(cur,raw):Number(raw)-Number(cur);if(d===null||!Number.isFinite(Number(d)))return toast('Enter a number.');if(Number(d)!==0)cmd('life',{d:Number(d)})};bindHoldDelta($('lifeMinus'),()=>cmd('life',{d:-1}));bindHoldDelta($('lifePlus'),()=>cmd('life',{d:1}));$('hudWakeBtn').onclick=()=>wakePlayerHud(30000);if($('arrangeOpponentsBtn'))$('arrangeOpponentsBtn').onclick=arrangeOpponents;refreshSpatialSeatMap();refreshContextHud()}\n"
+    }
+  }
+}
