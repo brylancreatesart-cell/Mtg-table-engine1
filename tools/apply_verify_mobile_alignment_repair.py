@@ -21,7 +21,6 @@ if old_h1 in css:
 elif new_h1 not in css:
     raise SystemExit('h1 base owner not found')
 
-# Direct companion owner for the header action cluster.
 anchor = '.sub{font-size:9px;color:var(--m);letter-spacing:.15em}'
 header_cluster = '.sub{font-size:9px;color:var(--m);letter-spacing:.15em}header>div:last-child{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:7px;min-width:0}'
 if anchor in css:
@@ -37,15 +36,13 @@ if end < 0:
     end = len(css)
 block = css[start:end]
 
-# ---- divider: 3 actual visual items only (line | label | line) ----
-# Hide the two literal ornament spans so ::before/b/::after are the only grid items.
+# ---- divider: exactly line | label | line ----
 if '#setup .verifyDivider>span{display:none}' not in block:
     divider_rule_end = block.find('}', block.find('#setup .verifyDivider{'))
     if divider_rule_end < 0:
         raise SystemExit('Verify divider owner not found')
     block = block[:divider_rule_end+1] + '#setup .verifyDivider>span{display:none}' + block[divider_rule_end+1:]
 
-# Ensure a mathematically balanced 3-column divider and full-width line items.
 block = re.sub(
     r'(#setup \.verifyDivider\{[^}]*?)grid-template-columns:[^;]+;',
     r'\1grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);',
@@ -59,7 +56,7 @@ block = re.sub(
     count=1,
 )
 
-# ---- CTA: text owns the true centerline; shield is decorative/absolute ----
+# ---- CTA: the text owns the true centerline ----
 cta_match = re.search(r'#setup \.verifyDeckCta\{([^}]*)\}', block)
 if not cta_match:
     raise SystemExit('Verify CTA owner not found')
@@ -69,32 +66,32 @@ cta_body = re.sub(r'gap:[^;]+;', '', cta_body)
 for decl in ['display:grid;', 'grid-template-columns:1fr;', 'place-items:center;', 'text-align:center;']:
     if decl not in cta_body:
         cta_body += decl
-block = block[:cta_match.start()] + '#setup .verifyDeckCta{' + cta_body + '}' + block[cta_match.end():]
+new_cta = '#setup .verifyDeckCta{' + cta_body + '}'
+block = block[:cta_match.start()] + new_cta + block[cta_match.end():]
 
 shield_match = re.search(r'#setup \.verifyShield\{([^}]*)\}', block)
 if not shield_match:
     raise SystemExit('Verify shield owner not found')
 shield_body = shield_match.group(1)
-# Remove layout participation; place independently so it cannot offset text.
 for prop in ['position', 'left', 'top', 'transform', 'justify-self']:
     shield_body = re.sub(rf'{prop}:[^;]+;', '', shield_body)
 shield_body += 'position:absolute;left:clamp(18px,5vw,32px);top:50%;transform:translateY(-50%);justify-self:auto;'
 block = block[:shield_match.start()] + '#setup .verifyShield{' + shield_body + '}' + block[shield_match.end():]
 
-last_match = re.search(r'#setup \.verifyDeckCta>span:last-child\{([^}]*)\}', block)
-if not last_match:
-    raise SystemExit('Verify CTA text owner not found')
-last_body = last_match.group(1)
-for decl in ['width:100%;', 'max-width:100%;', 'text-align:center;', 'justify-self:center;']:
-    if decl not in last_body:
-        last_body += decl
-block = block[:last_match.start()] + '#setup .verifyDeckCta>span:last-child{' + last_body + '}' + block[last_match.end():]
+# Current branch may or may not have an explicit last-child text rule. Normalize to one canonical rule.
+last_re = re.compile(r'#setup \.verifyDeckCta\s*>\s*span:last-child\{([^}]*)\}')
+last_match = last_re.search(block)
+canonical_last = '#setup .verifyDeckCta>span:last-child{width:100%;max-width:100%;text-align:center;justify-self:center}'
+if last_match:
+    block = block[:last_match.start()] + canonical_last + block[last_match.end():]
+else:
+    insert_at = block.find('}', block.find('#setup .verifyDeckCta{')) + 1
+    block = block[:insert_at] + canonical_last + block[insert_at:]
 
-# ---- replace the existing mobile calibration variant rather than stacking another one ----
+# ---- replace the existing mobile variant; do not stack another media block ----
 mobile_start = block.find('@media(max-width:620px){')
 if mobile_start < 0:
     raise SystemExit('Verify mobile owner not found')
-# Find matching media close with a lightweight brace scan.
 depth = 0
 mobile_end = None
 for i in range(mobile_start, len(block)):
@@ -125,13 +122,12 @@ header .chip,header .pill{font-size:8px;padding:6px 9px;white-space:nowrap}
 #setup .verifyImportCard{grid-template-columns:52px minmax(0,1fr) 52px}
 #setup .verifyImportCard:after{width:52px}
 #setup .verifyDeckCta{grid-template-columns:1fr;place-items:center;text-align:center;padding-left:clamp(76px,20vw,94px);padding-right:clamp(76px,20vw,94px)}
-#setup .verifyDeckCta>span:last-child{width:100%;text-align:center;justify-self:center}
+#setup .verifyDeckCta>span:last-child{width:100%;max-width:100%;text-align:center;justify-self:center}
 #setup .verifyShield{left:clamp(22px,7vw,34px);top:50%;transform:translateY(-50%)}
 #setup .verifyPrivacy{flex-wrap:wrap;row-gap:5px;justify-content:center;text-align:center}
 }'''
 block = block[:mobile_start] + mobile + block[mobile_end:]
 
-# Guardrails.
 if block.count(START) != 1:
     raise SystemExit('canonical marker count changed')
 if '!important' in block:
@@ -139,7 +135,7 @@ if '!important' in block:
 for required in [
     '#setup .verifyDivider>span{display:none}',
     'grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)',
-    'grid-template-columns:1fr;place-items:center;text-align:center',
+    '#setup .verifyDeckCta>span:last-child{width:100%;max-width:100%;text-align:center;justify-self:center}',
     'header h1{font-size:clamp(24px,7.2vw,31px)',
 ]:
     if required not in block and required not in css:
