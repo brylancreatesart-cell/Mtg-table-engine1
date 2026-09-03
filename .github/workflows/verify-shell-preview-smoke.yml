@@ -1,0 +1,55 @@
+name: Verify shell deployed smoke
+
+on:
+  push:
+    branches:
+      - verify-shell-fidelity
+    paths:
+      - .github/workflows/verify-shell-preview-smoke.yml
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PREVIEW_URL: https://mtg-table-engine1-git-verify-shell-528d4c-brylancreatesart-7523.vercel.app
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: verify-shell-fidelity
+      - name: Wait for deployed Verify shell
+        run: |
+          for i in $(seq 1 36); do
+            html=$(curl -L -s "$PREVIEW_URL/")
+            css=$(curl -L -s "$PREVIEW_URL/styles/inline-01.css")
+            js=$(curl -L -s "$PREVIEW_URL/scripts/inline-101.js")
+            if echo "$html" | grep -q 'verifyShell' && echo "$html" | grep -q 'setupDeckVaultBtn' && echo "$css" | grep -q 'Verify Deck reference-fidelity shell' && echo "$js" | grep -q 'syncVerifyDeckCount'; then
+              echo 'Verify shell preview is ready'
+              exit 0
+            fi
+            echo "Waiting for Verify shell preview attempt $i"
+            sleep 5
+          done
+          exit 1
+      - name: Verify authoritative sync
+        run: node tools/run_authoritative_sync_qa.js
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Run deployed multiplayer smoke through Verify and Lobby
+        run: node tools/preview_smoke_test.js
+      - name: Confirm Verify to Lobby path stayed green
+        run: |
+          node - <<'JS'
+          const r=require('./preview-smoke-report.json');
+          if(!r.ok) throw new Error('Preview smoke report is not green');
+          const names=r.checks.map(x=>x.name);
+          for(const required of ['guest Verify both','commander options both','Verify → Lobby both']){
+            if(!names.includes(required)) throw new Error('Missing smoke assertion: '+required);
+          }
+          console.log('Verify shell passed deployed Verify → Lobby smoke.');
+          JS
