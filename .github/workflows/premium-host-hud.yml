@@ -1,5 +1,5 @@
 name: Premium Host HUD cohesion
-# rerun with exact base-owner validation
+# canonical source -> generated runtime
 
 on:
   push:
@@ -23,11 +23,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
-      - name: Apply premium Host HUD pass
+      - name: Apply premium Host HUD pass to canonical source
         run: python tools/apply_premium_host_hud.py
-      - name: Refresh stylesheet source fragments
-        run: python tools/split_styles_source.py
-      - name: Rebuild generated runtime
+      - name: Rebuild generated runtime from canonical source
         run: python tools/build_runtime_from_source.py
       - name: Verify Host HUD ownership and runtime syntax
         run: |
@@ -55,7 +53,7 @@ jobs:
         run: |
           git config user.name "sidekick-premium-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html styles/inline-01.css styles/app-src styles-source-report.json runtime-build-report.json
+          git add index.html styles/inline-01.css styles/app-src runtime-build-report.json
           git diff --cached --quiet && exit 0
           git commit -m "Polish separate Host HUD command center"
           git push origin HEAD:premium-cohesion-pass
