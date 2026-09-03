@@ -47,9 +47,16 @@ jobs:
           node - <<'JS'
           const r=require('./preview-smoke-report.json');
           if(!r.ok) throw new Error('Preview smoke report is not green');
-          const names=r.checks.map(x=>x.name);
-          for(const required of ['guest Verify both','commander options both','Verify → Lobby both']){
-            if(!names.includes(required)) throw new Error('Missing smoke assertion: '+required);
+          const names=new Set(r.checks.map(x=>x.name));
+          for(const required of [
+            'Smoke Host guest reaches verify',
+            'Smoke Host commander options populate',
+            'Smoke Host verify-to-lobby',
+            'Smoke Join guest reaches verify',
+            'Smoke Join commander options populate',
+            'Smoke Join verify-to-lobby'
+          ]){
+            if(!names.has(required)) throw new Error('Missing smoke assertion: '+required);
           }
-          console.log('Verify shell passed deployed Verify → Lobby smoke.');
+          console.log('Verify shell passed deployed Verify → Lobby smoke for both players.');
           JS
