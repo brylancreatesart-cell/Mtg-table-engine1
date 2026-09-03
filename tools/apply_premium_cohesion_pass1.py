@@ -2,9 +2,11 @@
 from pathlib import Path
 
 CSS=Path('styles/app-src/styles-part-01.part.css')
-JS=Path('scripts/app-src/controller-part-04.part.js')
+JS4=Path('scripts/app-src/controller-part-04.part.js')
+JS5=Path('scripts/app-src/controller-part-05.part.js')
 css=CSS.read_text(encoding='utf-8')
-js=JS.read_text(encoding='utf-8')
+js4=JS4.read_text(encoding='utf-8')
+js5=JS5.read_text(encoding='utf-8')
 
 def replace_once(text,old,new,label):
     n=text.count(old)
@@ -66,24 +68,26 @@ css=replace_once(css,
 # Personalize existing behavior owners rather than layering observers/listeners.
 old_status="if($('readyHeadline'))$('readyHeadline').textContent=all?'THE TABLE IS READY':count?'THE BATTLEFIELD FILLS':'WAITING FOR COMBATANTS';if($('readySub'))$('readySub').textContent=all?'Every connected seat is locked in.':count?count+' of '+total+' connected players ready.':'Join the room, choose your deck, then ready up.';"
 new_status="let lobbyDeck=currentSavedDeck?.(),lobbyDeckName=lobbyDeck?.name||prof?.commander||'Your deck',lobbyCommander=prof?.commander||'Commander';if($('readyHeadline'))$('readyHeadline').textContent=all?'THE TABLE IS READY':count?'THE BATTLEFIELD FILLS':String(lobbyCommander).toUpperCase()+' IS READY';if($('readySub'))$('readySub').textContent=all?'Every connected seat is locked in.':count?count+' of '+total+' connected players ready.':lobbyDeckName+' is loaded · host or join a room when you are ready.';"
-js=replace_once(js,old_status,new_status,'personalized lobby status copy')
+js4=replace_once(js4,old_status,new_status,'personalized lobby status copy')
 old_intro="function introRosterHtml(){return players.filter(p=>p.connected!==false).map(p=>'<div class=\"battleIntroPlayer\"><div class=\"battleIntroAvatar\">'+rosterAvatar(p)+'</div><div><div class=\"battleIntroName\">'+(p.name||('Player '+p.id))+'</div><div class=\"battleIntroCmd\">'+(p.commander||'No commander')+(p.deckName?' · '+p.deckName:'')+'</div></div></div>').join('')}"
 new_intro="function battleIntroDeckAccent(identity){let palette={W:'#f3e7bd',U:'#58a8df',B:'#9b79b6',R:'#d76a4a',G:'#5fa879'},ids=Array.isArray(identity)?identity:String(identity||'').toUpperCase().match(/[WUBRG]/g)||[],colors=[...new Set(ids)].map(x=>palette[x]).filter(Boolean);return[colors[0]||'var(--deck-a,#52b8ff)',colors[1]||colors[0]||'var(--deck-b,#b458ff)']}function introRosterHtml(){return players.filter(p=>p.connected!==false).map(p=>{let[a,b]=battleIntroDeckAccent(p.deckColorIdentity);return'<div class=\"battleIntroPlayer\" style=\"--intro-a:'+a+';--intro-b:'+b+'\"><div class=\"battleIntroAvatar\">'+rosterAvatar(p)+'</div><div><div class=\"battleIntroName\">'+(p.name||('Player '+p.id))+'</div><div class=\"battleIntroCmd\">'+(p.commander||'No commander')+(p.deckName?' · '+p.deckName:'')+'</div></div></div>'}).join('')}"
-js=replace_once(js,old_intro,new_intro,'deck-accented battle intro roster')
+js4=replace_once(js4,old_intro,new_intro,'deck-accented battle intro roster')
 
 old_play="function playBattleIntro(done){introDone=done||null;let ov=$('battleIntro');$('setup').classList.add('h');$('lobby').classList.add('h');$('game').classList.add('h');$('hostControl').classList.add('h');$('battleIntroRoster').innerHTML=introRosterHtml();$('battleIntroCall').textContent='All combatants are ready.';$('battleIntroFinal').classList.remove('show');ov.classList.remove('h');ov.setAttribute('aria-hidden','false');requestAnimationFrame(()=>ov.classList.add('on'));MTGAnnouncerEngine.event('battleEntry',{});setTimeout(()=>{$('battleIntroCall').textContent='The battlefield waits.'},1250);setTimeout(()=>{$('battleIntroFinal').classList.add('show');$('battleIntroCall').textContent='';MTGAnnouncerEngine.event('battleStart',{force:true})},2300);introTimer=setTimeout(finishBattleIntro,3600)}"
 new_play="function playBattleIntro(done){introDone=done||null;let ov=$('battleIntro'),battleName=String(st?.meta?.battleName||'Entering the Battlefield');$('setup').classList.add('h');$('lobby').classList.add('h');$('game').classList.add('h');$('hostControl').classList.add('h');$('battleIntroTitle').textContent=battleName;$('battleIntroRoster').innerHTML=introRosterHtml();$('battleIntroCall').textContent='Every combatant has answered the call.';$('battleIntroFinal').textContent='LET THE BATTLE BEGIN';$('battleIntroFinal').classList.remove('show');ov.classList.remove('h');ov.setAttribute('aria-hidden','false');requestAnimationFrame(()=>ov.classList.add('on'));MTGAnnouncerEngine.event('battleEntry',{});setTimeout(()=>{$('battleIntroCall').textContent='The battlefield waits.'},1250);setTimeout(()=>{$('battleIntroFinal').classList.add('show');$('battleIntroCall').textContent='';MTGAnnouncerEngine.event('battleStart',{force:true})},2300);introTimer=setTimeout(finishBattleIntro,3600)}"
-js=replace_once(js,old_play,new_play,'premium battle intro sequence')
+js5=replace_once(js5,old_play,new_play,'premium battle intro sequence')
 
 # Ownership audit.
 for selector in ('.lobbyAtmosphere{','.readyRitual{','.battleIntro{','.battleIntroPanel{','.battleIntroPlayer{','.playerHud{'):
     if css.count(selector)!=1:
         raise SystemExit(f'Ownership audit failed for {selector}: {css.count(selector)} owners')
-if 'battleIntroDeckAccent' not in js or "LET THE BATTLE BEGIN" not in js:
+combined_js=js4+'\n'+js5
+if 'battleIntroDeckAccent' not in combined_js or 'LET THE BATTLE BEGIN' not in combined_js:
     raise SystemExit('Premium intro behavior missing')
 if '.premiumOverride' in css:
     raise SystemExit('Unexpected override layer detected')
 
 CSS.write_text(css,encoding='utf-8')
-JS.write_text(js,encoding='utf-8')
+JS4.write_text(js4,encoding='utf-8')
+JS5.write_text(js5,encoding='utf-8')
 print('Premium cohesion pass 1 source edits complete; canonical owners remain singular.')
