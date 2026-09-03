@@ -1,0 +1,115 @@
+{
+  "css": {
+    ".sharedDisplayScreen": [
+      {
+        "file": "styles/app-src/styles-part-12.part.css",
+        "offset": 26712,
+        "rule": ".sharedDisplayScreen{position:relative;min-height:100dvh;padding:max(16px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));overflow:hidden;background:radial-gradient(circle at 50% -8%,rgba(147,111,57,.18),transparent 30%),radial-gradient(circle at 10% 52%,rgba(32,84,76,.12),transparent 31%),radial-gradient(circle at 90% 52%,rgba(52,70,96,.12),transparent 31%),linear-gradient(180deg,#06090b 0%,#020405 48%,#010202 100%);color:#f3ead8}"
+      },
+      {
+        "file": "styles/app-src/styles-part-12.part.css",
+        "offset": 28559,
+        "rule": ".sharedDisplayScreen{min-height:100vh;padding:max(10px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}"
+      }
+    ],
+    ".sharedDisplayStage": [
+      {
+        "file": "styles/app-src/styles-part-12.part.css",
+        "offset": 28776,
+        "rule": ".sharedDisplayStage{padding-top:10px}"
+      },
+      {
+        "file": "styles/app-src/styles-part-12.part.css",
+        "offset": 28813,
+        "rule": ".sharedDisplayStage{position:relative;z-index:2;display:grid;gap:12px;padding:14px}"
+      },
+      {
+        "file": "styles/app-src/styles-part-12.part.css",
+        "offset": 32891,
+        "rule": ".sharedDisplayStage{padding:18px 24px 24px}"
+      }
+    ],
+    ".sharedDisplayTurn": [
+      {
+        "file": "styles/app-src/styles-part-12.part.css",
+        "offset": 28896,
+        "rule": ".sharedDisplayTurn{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center;padding:12px 14px;border:1px solid rgba(161,124,69,.25);border-radius:14px;background:linear-gradient(90deg,rgba(17,25,29,.88),rgba(11,17,20,.96),rgba(17,25,29,.88));box-shadow:inset 0 1px rgba(255,255,255,.025)}"
+      },
+      {
+        "file": "styles/app-src/styles-part-12.part.css",
+        "offset": 33254,
+        "rule": ".sharedDisplayTurn{grid-template-columns:1fr}"
+      }
+    ],
+    ".sharedDisplayStateSide": [
+      {
+        "file": "styles/app-src/styles-part-12.part.css",
+        "offset": 29407,
+        "rule": ".sharedDisplayStateSide{font-size:9px;color:#9cabaf;letter-spacing:.14em;font-weight:800}"
+      }
+    ],
+    ".sharedDisplayTurnMain": [
+      {
+        "file": "styles/app-src/styles-part-12.part.css",
+        "offset": 29223,
+        "rule": ".sharedDisplayTurnMain{text-align:center}"
+      }
+    ],
+    ".sharedDisplayPlayers": [
+      {
+        "file": "styles/app-src/styles-part-12.part.css",
+        "offset": 29548,
+        "rule": ".sharedDisplayPlayers{display:grid;grid-template-columns:repeat(var(--shared-cols,2),minmax(0,1fr));gap:10px;align-items:stretch}"
+      },
+      {
+        "file": "styles/app-src/styles-part-12.part.css",
+        "offset": 33376,
+        "rule": ".sharedDisplayPlayers{--shared-cols:1!important}"
+      }
+    ],
+    ".sharedDisplayPlayer": [],
+    ".sharedDisplayLower": [
+      {
+        "file": "styles/app-src/styles-part-12.part.css",
+        "offset": 32153,
+        "rule": ".sharedDisplayLower{display:grid;grid-template-columns:1fr 1fr;gap:10px}"
+      },
+      {
+        "file": "styles/app-src/styles-part-12.part.css",
+        "offset": 33424,
+        "rule": ".sharedDisplayLower{grid-template-columns:1fr}"
+      }
+    ],
+    ".sharedDisplayPanel": [
+      {
+        "file": "styles/app-src/styles-part-12.part.css",
+        "offset": 32225,
+        "rule": ".sharedDisplayPanel{min-height:92px;padding:12px;border:1px solid rgba(91,112,120,.28);border-radius:13px;background:rgba(5,10,12,.84)}"
+      }
+    ],
+    ".sharedDisplayEvent": [
+      {
+        "file": "styles/app-src/styles-part-12.part.css",
+        "offset": 32669,
+        "rule": ".sharedDisplayEvent{font-family:Georgia,serif;font-size:clamp(15px,1.5vw,23px);line-height:1.25;color:#e9ddc4}"
+      }
+    ]
+  },
+  "js": {
+    "showSharedDisplayPage": {
+      "file": "scripts/app-src/controller-part-04.part.js",
+      "line": 114,
+      "body": "function showSharedDisplayPage(){sharedDisplayMode=true;document.body.classList.add('sharedTableDisplayMode');$('accountOverlay')?.classList.add('h');$('setup')?.classList.add('h');$('lobby')?.classList.add('h');$('game')?.classList.add('h');$('hostControl')?.classList.add('h');$('sharedDisplay')?.classList.remove('h');if(location.hash!=='#display')history.replaceState(null,'',location.pathname+location.search+'#display');requestSharedDisplayWakeLock();queueSharedDisplayOrientationSync()}\nasync function requestSharedDisplayWakeLock(){if(!sharedDisplayMode||!navigator.wakeLock?.request||sharedDisplayWakeLock)return;try{sharedDisplayWakeLock=await navigator.wakeLock.request('screen');sharedDisplayWakeLock.addEventListener?.('release',()=>{sharedDisplayWakeLock=null})}catch{}}\nlet sharedDisplayOrientationSyncTimer=null;\n"
+    },
+    "sharedDisplayPlayerHtml": {
+      "file": "scripts/app-src/controller-part-04.part.js",
+      "line": 122,
+      "body": "function sharedDisplayPlayerHtml(p){let avatar=avatarMarkup(p.avatarId||MTGAvatars.DEFAULT_ID,{compact:true}),cls='sharedPlayerCard'+(p.active?' active':'')+(p.priority?' priority':'')+(p.fallen?' fallen':'');let stateLabel=p.fallen?'FALLEN':p.active?'ACTIVE PLAYER':p.priority?'PRIORITY':p.connected?'CONNECTED':'OFFLINE';return '<article class=\"'+cls+'\"><div class=\"sharedDisplayAvatar\">'+avatar+'</div><div class=\"sharedDisplayIdentity\"><b>'+esc(p.name||('Player '+p.id))+'</b><span>'+esc(p.commander||p.deckName||('PLAYER '+p.id))+' \u00b7 '+esc(stateLabel)+'</span></div><div class=\"sharedDisplayLife\"><b>'+esc(p.life)+'</b><span>LIFE</span></div><div class=\"sharedDisplayPublic\"><div class=\"sharedDisplayStat\"><b>'+esc(p.poison)+'</b><span>POISON</span></div><div class=\"sharedDisplayStat\"><b>'+esc(p.commanderDamage)+'</b><span>CMD MAX</span></div><div class=\"sharedDisplayStat\"><b>'+esc(p.permanents)+'</b><span>FIELD</span></div><div class=\"sharedDisplayStat\"><b>'+esc(p.lands)+'</b><span>LANDS</span></div><div class=\"sharedDisplayStat\"><b>'+esc(p.library)+'</b><span>LIBRARY</span></div><div class=\"sharedDisplayStat\"><b>'+esc(p.graveyard)+'</b><span>GRAVE</span></div></div></article>'}\n"
+    },
+    "renderSharedDisplay": {
+      "file": "scripts/app-src/controller-part-04.part.js",
+      "line": 123,
+      "body": "function renderSharedDisplay(){if(!sharedDisplayMode||!$('sharedDisplay'))return;showSharedDisplayPage();let s=st?.sharedDisplay||(typeof MTGSharedDisplay!=='undefined'?MTGSharedDisplay.summary(st,players):null);if(!s)return;let ps=Array.isArray(s.players)?s.players:[];$('sharedDisplayJoin').classList.toggle('h',!!activeRoom);$('sharedDisplayStage').classList.toggle('h',!activeRoom);let active=ps.find(p=>p.id===s.active),priority=ps.find(p=>p.id===s.priority);$('sharedDisplayTurnMain').textContent=s.started?(s.battleName||'THE BATTLE BEGINS'):'LOBBY \u00b7 WAITING FOR BATTLE';$('sharedDisplayTurnSub').textContent=s.started?('TURN '+Number(s.turn||1)+' \u00b7 '+String(s.phase||'').toUpperCase()+' \u00b7 '+(active?.name||('Player '+s.active))+' ACTIVE'+(priority?' \u00b7 '+priority.name+' HAS PRIORITY':'')):(ps.filter(p=>p.ready).length+' / '+ps.length+' READY');$('sharedDisplayLeftState').textContent=s.monarch?('MONARCH \u00b7 '+(ps.find(p=>p.id===s.monarch)?.name||('P'+s.monarch))):'PUBLIC MATCH STATE';$('sharedDisplayRightState').textContent=s.initiative?('INITIATIVE \u00b7 '+(ps.find(p=>p.id===s.initiative)?.name||('P'+s.initiative))):'READ ONLY';let pm=$('sharedDisplayPlayers');pm.dataset.count=String(ps.length);pm.style.setProperty('--shared-cols',ps.length<=2?'2':ps.length<=4?'2':'4');pm.innerHTML=ps.length?ps.map(sharedDisplayPlayerHtml).join(''):'<div class=\"sharedDisplayEmpty\">Waiting for players to join the room.</div>';$('sharedDisplayStack').innerHTML=s.stack?.length?s.stack.map((x,i)=>'<div class=\"sharedDisplayStackLine\"><span>'+esc(x.name||'Stack object')+'</span><strong>'+(i===0?'TOP':'#'+(i+1))+'</strong></div>').join(''):'<div class=\"sharedDisplayEmpty\">Stack is clear.</div>';$('sharedDisplayEvent').textContent=s.latestEvent||'Waiting for the next public table event.';requestSharedDisplayWakeLock()}\n"
+    }
+  }
+}
