@@ -1,0 +1,53 @@
+name: Premium cohesion pass 1
+
+on:
+  push:
+    branches:
+      - premium-cohesion-pass
+    paths:
+      - .github/workflows/premium-cohesion-pass1.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: premium-cohesion-pass
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Apply canonical premium cohesion edits
+        run: python tools/apply_premium_cohesion_pass1.py
+      - name: Rebuild runtime from canonical source
+        run: python tools/build_runtime_from_source.py
+      - name: Verify runtime syntax and ownership
+        run: |
+          node --check scripts/inline-101.js
+          python - <<'PY'
+          from pathlib import Path
+          css=Path('styles/inline-01.css').read_text()
+          js=Path('scripts/inline-101.js').read_text()
+          for sel in ('.lobbyAtmosphere{','.readyRitual{','.battleIntro{','.battleIntroPanel{','.battleIntroPlayer{','.playerHud{'):
+              assert css.count(sel)==1,(sel,css.count(sel))
+          assert 'battleIntroDeckAccent' in js
+          assert 'LET THE BATTLE BEGIN' in js
+          assert "lobbyDeckName+' is loaded · host or join a room when you are ready.'" in js
+          print('Premium cohesion ownership and runtime checks passed.')
+          PY
+      - name: Run authoritative multiplayer QA
+        run: node tools/run_authoritative_sync_qa.js
+      - name: Commit premium pass
+        run: |
+          git config user.name "sidekick-premium-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add styles/app-src/styles-part-01.part.css scripts/app-src/controller-part-04.part.js styles/inline-01.css scripts/inline-101.js runtime-build-report.json authoritative-sync-qa.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Polish personalized lobby and battlefield entry"
+          git push origin HEAD:premium-cohesion-pass
