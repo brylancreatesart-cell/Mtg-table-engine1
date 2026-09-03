@@ -1,0 +1,47 @@
+name: Fix premium battle intro title owner
+
+on:
+  push:
+    branches:
+      - premium-cohesion-pass
+    paths:
+      - .github/workflows/premium-intro-title-fix.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: premium-cohesion-pass
+          fetch-depth: 0
+      - name: Give the canonical battle intro title its runtime ID
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          old='<div class="battleIntroTitle">Entering the Battlefield</div>'
+          new='<div id="battleIntroTitle" class="battleIntroTitle">Entering the Battlefield</div>'
+          assert s.count(old)==1, s.count(old)
+          assert 'id="battleIntroTitle"' not in s
+          p.write_text(s.replace(old,new,1))
+          print('Canonical battle intro title now matches its runtime owner.')
+          PY
+      - name: Verify runtime reference and markup agree
+        run: |
+          grep -q 'id="battleIntroTitle"' index.html
+          grep -q "\$('battleIntroTitle').textContent=battleName" scripts/inline-101.js
+          node --check scripts/inline-101.js
+      - name: Commit title owner repair
+        run: |
+          git config user.name "sidekick-premium-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Fix premium battle intro title binding"
+          git push origin HEAD:premium-cohesion-pass
