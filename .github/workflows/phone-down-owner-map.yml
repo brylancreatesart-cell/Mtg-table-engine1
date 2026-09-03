@@ -1,0 +1,54 @@
+name: Map phone-down companion owners
+
+on:
+  push:
+    branches:
+      - premium-cohesion-pass
+    paths:
+      - .github/workflows/phone-down-owner-map.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  map:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: premium-cohesion-pass
+          fetch-depth: 0
+      - name: Map low-attention and wake owners
+        run: |
+          python - <<'PY'
+          import json,re
+          from pathlib import Path
+          terms=['lowAttention','hudForcedAwake','wakePlayerHud','refreshContextHud','priorityPill','hudCriticalBanner','assistCoach','playerAlerts','priorityDirector']
+          out={'css':[],'js':[]}
+          for p in sorted(Path('styles/app-src').glob('*.css')):
+              text=p.read_text(errors='ignore')
+              for term in terms:
+                  for m in re.finditer(re.escape(term),text):
+                      s=max(0,text.rfind('}',0,m.start())+1); e=text.find('}',m.start());
+                      if e<0: e=min(len(text),m.start()+1200)
+                      out['css'].append({'term':term,'file':str(p),'offset':m.start(),'context':text[s:e+1][:1800]})
+          fpat=re.compile(r'(?m)^function\s+([A-Za-z_$][\w$]*)\s*\(')
+          wanted={'hudForcedAwake','wakePlayerHud','refreshContextHud','renderPlayerAlerts','priorityOpen','continueAutomaticPriorityYield','renderAssistCoach'}
+          for p in sorted(Path('scripts/app-src').glob('*.js')):
+              text=p.read_text(errors='ignore');ms=list(fpat.finditer(text))
+              for i,m in enumerate(ms):
+                  if m.group(1) not in wanted: continue
+                  end=ms[i+1].start() if i+1<len(ms) else len(text)
+                  out['js'].append({'name':m.group(1),'file':str(p),'line':text.count('\n',0,m.start())+1,'body':text[m.start():end][:22000]})
+          Path('phone-down-owner-map.json').write_text(json.dumps(out,indent=2)+'\n')
+          print('mapped phone-down companion owners')
+          PY
+      - name: Commit owner map
+        run: |
+          git config user.name "sidekick-premium-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add phone-down-owner-map.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Map phone-down companion flow owners"
+          git push origin HEAD:premium-cohesion-pass
