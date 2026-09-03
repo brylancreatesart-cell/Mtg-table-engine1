@@ -1,0 +1,56 @@
+name: Premium cohesion preview smoke
+
+on:
+  push:
+    branches:
+      - premium-cohesion-pass
+    paths:
+      - .github/workflows/premium-preview-smoke.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PREVIEW_URL: https://mtg-table-engine1-git-premium-cohe-6cdabc-brylancreatesart-7523.vercel.app
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: premium-cohesion-pass
+      - name: Wait for premium preview
+        run: |
+          for i in $(seq 1 30); do
+            page=$(curl -L -s -o /tmp/page.html -w '%{http_code}' "$PREVIEW_URL" || true)
+            css=$(curl -L -s -o /tmp/app.css -w '%{http_code}' "$PREVIEW_URL/styles/inline-01.css" || true)
+            js=$(curl -L -s -o /tmp/app.js -w '%{http_code}' "$PREVIEW_URL/scripts/inline-101.js" || true)
+            if [ "$page" = "200" ] && [ "$css" = "200" ] && [ "$js" = "200" ] && grep -q 'LET THE BATTLE BEGIN' /tmp/app.js && grep -q 'inset:-18px -10px auto;height:300px' /tmp/app.css; then
+              echo 'Premium preview is current and ready'
+              exit 0
+            fi
+            echo "Waiting for premium preview ($page/$css/$js) attempt $i"
+            sleep 5
+          done
+          exit 1
+      - name: Verify authoritative sync
+        run: node tools/run_authoritative_sync_qa.js
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Run deployed end-to-end smoke
+        run: node tools/preview_smoke_test.js
+      - name: Verify premium runtime survived smoke
+        run: |
+          node - <<'JS'
+          const r=require('./preview-smoke-report.json');
+          if(!r.ok) throw new Error('Preview smoke report is not green');
+          const names=r.checks.map(x=>x.name);
+          for(const required of ['second player connects to host','joining player enters battlefield','host enters battlefield','shared display updates into live battle','no uncaught page errors','no required document/script/style 404s']){
+            if(!names.includes(required)) throw new Error('Missing smoke assertion: '+required);
+          }
+          console.log('Premium deployed flow passed full multiplayer battlefield smoke.');
+          JS
