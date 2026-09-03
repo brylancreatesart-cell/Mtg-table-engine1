@@ -1,4 +1,5 @@
 name: Premium cohesion preview smoke
+# current validation target: personalized active-deck lobby identity
 
 on:
   push:
@@ -30,7 +31,7 @@ jobs:
             page=$(curl -L -s -o /tmp/page.html -w '%{http_code}' "$PREVIEW_URL" || true)
             css=$(curl -L -s -o /tmp/app.css -w '%{http_code}' "$PREVIEW_URL/styles/inline-01.css" || true)
             js=$(curl -L -s -o /tmp/app.js -w '%{http_code}' "$PREVIEW_URL/scripts/inline-101.js" || true)
-            if [ "$page" = "200" ] && [ "$css" = "200" ] && [ "$js" = "200" ] && grep -q 'id="battleIntroTitle"' /tmp/page.html && grep -q 'LET THE BATTLE BEGIN' /tmp/app.js && grep -q 'inset:-18px -10px auto;height:300px' /tmp/app.css; then
+            if [ "$page" = "200" ] && [ "$css" = "200" ] && [ "$js" = "200" ] && grep -q 'id="battleIntroTitle"' /tmp/page.html && grep -q 'id="lobbyDeckIdentity"' /tmp/page.html && grep -q 'function renderLobbyDeckIdentity' /tmp/app.js && grep -q 'LET THE BATTLE BEGIN' /tmp/app.js; then
               echo 'Current premium preview is ready'
               exit 0
             fi
