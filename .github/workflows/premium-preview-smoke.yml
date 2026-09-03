@@ -1,5 +1,5 @@
 name: Premium cohesion preview smoke
-# current validation target: shared table display centerpiece + canonical turn hierarchy
+# current validation target: phone-down Sidekick behavior
 
 on:
   push:
@@ -25,17 +25,16 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: premium-cohesion-pass
-      - name: Wait for current premium preview
+      - name: Wait for current phone-down preview
         run: |
           for i in $(seq 1 36); do
-            page=$(curl -L -s -o /tmp/page.html -w '%{http_code}' "$PREVIEW_URL" || true)
             css=$(curl -L -s -o /tmp/app.css -w '%{http_code}' "$PREVIEW_URL/styles/inline-01.css" || true)
             js=$(curl -L -s -o /tmp/app.js -w '%{http_code}' "$PREVIEW_URL/scripts/inline-101.js" || true)
-            if [ "$page" = "200" ] && [ "$css" = "200" ] && [ "$js" = "200" ] && grep -q '.sharedDisplayIdentity .sharedDisplayDeckName' /tmp/app.css && grep -q '.sharedDisplayIdentity .sharedDisplayPlayerState' /tmp/app.css && ! grep -q -- '--shared-cols:1!important' /tmp/app.css && grep -q "deck=p.deckName||'DECK NOT SHARED'" /tmp/app.js; then
-              echo 'Current premium shared display preview is ready'
+            if [ "$css" = "200" ] && [ "$js" = "200" ] && grep -q 'function companionAttentionState' /tmp/app.js && grep -q 'SIDEKICK MONITORING · TAP FOR CONTROLS' /tmp/app.js && grep -q 'forcedHudAwakeTimer=setTimeout' /tmp/app.js && grep -q '.battleScreen.companionAttention .playerHud' /tmp/app.css; then
+              echo 'Current phone-down preview is ready'
               exit 0
             fi
-            echo "Waiting for current premium shared display preview ($page/$css/$js) attempt $i"
+            echo "Waiting for current phone-down preview ($css/$js) attempt $i"
             sleep 5
           done
           exit 1
@@ -45,16 +44,16 @@ jobs:
         run: |
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
-      - name: Run deployed end-to-end smoke
-        run: node tools/preview_smoke_test.js
-      - name: Verify premium runtime survived smoke
+      - name: Run deployed phone-down smoke
+        run: node tools/phone_down_preview_smoke.js
+      - name: Verify phone-down runtime survived smoke
         run: |
           node - <<'JS'
-          const r=require('./preview-smoke-report.json');
-          if(!r.ok) throw new Error('Preview smoke report is not green');
+          const r=require('./phone-down-smoke-report.json');
+          if(!r.ok) throw new Error('Phone-down smoke report is not green');
           const names=r.checks.map(x=>x.name);
-          for(const required of ['second player connects to host','joining player enters battlefield','host enters battlefield','shared display updates into live battle','no uncaught page errors','no required document/script/style 404s']){
+          for(const required of ['opponent-turn player enters passive Sidekick mode','passive mode exposes monitoring control','passive control identifies Sidekick monitoring','tap immediately reopens full controls','manual wake automatically returns to passive mode after grace period','no uncaught browser errors']){
             if(!names.includes(required)) throw new Error('Missing smoke assertion: '+required);
           }
-          console.log('Premium shared display passed full multiplayer battlefield smoke.');
+          console.log('Phone-down Sidekick passed deployed multiplayer behavior smoke.');
           JS
