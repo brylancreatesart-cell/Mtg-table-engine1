@@ -1,5 +1,5 @@
 name: Premium cohesion preview smoke
-# current validation target: separate Host HUD command center
+# current validation target: shared table display centerpiece
 
 on:
   push:
@@ -31,11 +31,11 @@ jobs:
             page=$(curl -L -s -o /tmp/page.html -w '%{http_code}' "$PREVIEW_URL" || true)
             css=$(curl -L -s -o /tmp/app.css -w '%{http_code}' "$PREVIEW_URL/styles/inline-01.css" || true)
             js=$(curl -L -s -o /tmp/app.js -w '%{http_code}' "$PREVIEW_URL/scripts/inline-101.js" || true)
-            if [ "$page" = "200" ] && [ "$css" = "200" ] && [ "$js" = "200" ] && grep -q 'AUTHORITATIVE TABLE CONTROL' /tmp/page.html && grep -q 'Host Command' /tmp/page.html && grep -q 'RETURN TO PLAYER HUD' /tmp/page.html && grep -q '.hostTabs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr))' /tmp/app.css && grep -q '.hostTab\[data-host-tab="judge"\]' /tmp/app.css; then
-              echo 'Current premium Host HUD preview is ready'
+            if [ "$page" = "200" ] && [ "$css" = "200" ] && [ "$js" = "200" ] && grep -q '.sharedDisplayIdentity .sharedDisplayDeckName' /tmp/app.css && grep -q '.sharedDisplayIdentity .sharedDisplayPlayerState' /tmp/app.css && ! grep -q -- '--shared-cols:1!important' /tmp/app.css && grep -q "deck=p.deckName||'DECK NOT SHARED'" /tmp/app.js; then
+              echo 'Current premium shared display preview is ready'
               exit 0
             fi
-            echo "Waiting for current premium Host HUD preview ($page/$css/$js) attempt $i"
+            echo "Waiting for current premium shared display preview ($page/$css/$js) attempt $i"
             sleep 5
           done
           exit 1
@@ -56,5 +56,5 @@ jobs:
           for(const required of ['second player connects to host','joining player enters battlefield','host enters battlefield','shared display updates into live battle','no uncaught page errors','no required document/script/style 404s']){
             if(!names.includes(required)) throw new Error('Missing smoke assertion: '+required);
           }
-          console.log('Premium Host HUD deployed flow passed full multiplayer battlefield smoke.');
+          console.log('Premium shared display passed full multiplayer battlefield smoke.');
           JS
