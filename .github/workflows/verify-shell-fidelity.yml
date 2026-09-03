@@ -1,4 +1,4 @@
-name: Verify shell fidelity implementation
+name: Verify shell fidelity review gate
 
 on:
   push:
@@ -6,59 +6,66 @@ on:
       - verify-shell-fidelity
     paths:
       - .github/workflows/verify-shell-fidelity.yml
-      - tools/apply_verify_shell_fidelity.py
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  implement:
+  review:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
+    env:
+      PREVIEW_URL: https://mtg-table-engine1-git-verify-shell-528d4c-brylancreatesart-7523.vercel.app
     steps:
       - uses: actions/checkout@v4
         with:
           ref: verify-shell-fidelity
-      - name: Relax responsive-owner count in local patch runner
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          p=Path('tools/apply_verify_shell_fidelity.py')
-          s=p.read_text()
-          s=s.replace("if css_check.count(token) != 1:\n        raise SystemExit(f'ownership audit failed for {token}: {css_check.count(token)}')","if css_check.count(token) < 1:\n        raise SystemExit(f'ownership audit failed for {token}: {css_check.count(token)}')")
-          p.write_text(s)
-          PY
-      - name: Apply canonical Verify shell replacement
-        run: python tools/apply_verify_shell_fidelity.py
-      - name: Rebuild generated runtime from canonical source
-        run: python tools/build_runtime_from_source.py
-      - name: Validate JavaScript syntax
-        run: node --check scripts/inline-101.js
-      - name: Run authoritative sync QA
-        run: node tools/run_authoritative_sync_qa.js
-      - name: Verify source ownership and functional IDs
+      - name: Audit canonical Verify ownership
         run: |
           python - <<'PY'
           from pathlib import Path
           css=Path('styles/app-src/styles-part-01.part.css').read_text()
           html=Path('index.html').read_text()
           assert css.count('/* Verify Deck reference-fidelity shell — canonical owner */')==1
-          for token in ['#setup .verifyShell{','#setup .verifyManaWheel{','#setup .verifyDeckCta{','#setup .verifyPrivacy{']:
-              assert css.count(token)>=1,(token,css.count(token))
           for token in ['#setup>.card{','#setup>.card:before{','#setup>.card::after{']:
-              assert token not in css,token
+              assert token not in css, token
           for element_id in ['deck','formatSelect','pasteDeckBtn','importDeckFileBtn','deckFileInput','ver','vr','legalityReport','commanderSelect','partnerSelect','saveDeckBtn','cont']:
               assert html.count(f'id="{element_id}"')==1,(element_id,html.count(f'id="{element_id}"'))
-          print('Verify shell ownership and functional ID audit passed.')
+          print('Canonical Verify ownership audit passed.')
           PY
-      - name: Commit implementation
+      - name: Validate JavaScript syntax
+        run: node --check scripts/inline-101.js
+      - name: Verify authoritative synchronization
+        run: node tools/run_authoritative_sync_qa.js
+      - name: Wait for current deployed Verify shell
         run: |
-          git config user.name "brylancreatesart-cell"
-          git config user.email "brylancreatesart@gmail.com"
-          git add index.html styles/app-src/styles-part-01.part.css styles/inline-01.css scripts/app-src/controller-part-04.part.js scripts/inline-101.js runtime-build-report.json authoritative-sync-qa.json
-          if git diff --cached --quiet; then
-            echo "No implementation changes to commit"
-          else
-            git commit -m "Match Verify Deck shell to premium reference"
-            git push origin HEAD:verify-shell-fidelity
-          fi
+          for i in $(seq 1 36); do
+            html=$(curl -L -s "$PREVIEW_URL/")
+            css=$(curl -L -s "$PREVIEW_URL/styles/inline-01.css")
+            js=$(curl -L -s "$PREVIEW_URL/scripts/inline-101.js")
+            if echo "$html" | grep -q 'verifyShell' && echo "$html" | grep -q 'setupDeckVaultBtn' && echo "$css" | grep -q 'Verify Deck reference-fidelity shell' && echo "$js" | grep -q 'syncVerifyDeckCount'; then
+              echo 'Current Verify shell preview is ready'
+              exit 0
+            fi
+            echo "Waiting for current Verify preview attempt $i"
+            sleep 5
+          done
+          exit 1
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Run deployed app smoke through Verify and Lobby
+        run: node tools/preview_smoke_test.js
+      - name: Confirm Verify to Lobby behavior
+        run: |
+          node - <<'JS'
+          const r=require('./preview-smoke-report.json');
+          if(!r.ok) throw new Error('Preview smoke report is not green');
+          const names=r.checks.map(x=>x.name);
+          for(const required of ['guest Verify both','commander options both','Verify → Lobby both']){
+            if(!names.includes(required)) throw new Error('Missing smoke assertion: '+required);
+          }
+          console.log('Verify shell passed deployed Verify → Lobby smoke.');
+          JS
