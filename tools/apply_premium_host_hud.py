@@ -25,7 +25,8 @@ replace_rule('.hostCard,.hostPlayer,.judgeBlock','border:1px solid color-mix(in 
 replace_rule('.hostPlayerActions,.hostPlayerStats','display:flex;flex-wrap:wrap;gap:7px;margin-top:9px','host control clusters')
 replace_rule('.hostStackItem,.hostEvent','padding:11px 0;border-bottom:1px solid color-mix(in srgb,var(--deck-a,#52b8ff) 12%,#172733)','host stack/log rows')
 
-# Optional canonical rules: replace only if each exists exactly once.
+# Optional base rules. Some have intentional responsive variants later in the file;
+# replace only the first/base owner and leave media/state variants intact.
 optional={
 '.hostGrid':'display:grid;grid-template-columns:minmax(0,1.35fr) minmax(220px,.65fr);gap:10px',
 '.hostMetric':'font-size:28px;font-weight:950;line-height:1;letter-spacing:-.035em;color:#f6fbff;margin:7px 0 5px;text-shadow:0 0 18px color-mix(in srgb,var(--deck-a,#52b8ff) 18%,transparent)',
@@ -41,23 +42,22 @@ optional={
 for sel,body in optional.items():
     pat=re.compile(re.escape(sel)+r'\{[^{}]*\}')
     hits=list(pat.finditer(css))
-    if len(hits)==1:
-        m=hits[0]; css=css[:m.start()]+sel+'{'+body+'}'+css[m.end():]
-        print('replaced optional',sel)
-    elif len(hits)>1:
-        raise SystemExit(f'Safety stop: duplicate base owner for {sel}: {len(hits)}')
+    if hits:
+        m=hits[0]
+        css=css[:m.start()]+sel+'{'+body+'}'+css[m.end():]
+        print('replaced base owner',sel,'variants preserved',max(0,len(hits)-1))
 
-# Shared canonical hostMini owner is grouped with lobby buttons; do not fork it. Add semantic states by replacing existing state owners if present.
+# Shared canonical hostMini owner is grouped with lobby buttons; do not fork it.
+# Replace existing semantic state owners only when already present.
 for sel,body in {
 '.hostMini.danger':'border-color:#7d3434;background:#2b1114;color:#ffb4ae',
 '.rulesFreeze':'border-color:#987326;background:#2c220d;color:#ffe19a;box-shadow:0 0 15px rgba(235,187,67,.12)'
 }.items():
     pat=re.compile(re.escape(sel)+r'\{[^{}]*\}')
     hits=list(pat.finditer(css))
-    if len(hits)==1:
-        m=hits[0];css=css[:m.start()]+sel+'{'+body+'}'+css[m.end():]
-    elif len(hits)>1:
-        raise SystemExit(f'Safety stop: duplicate state owner for {sel}: {len(hits)}')
+    if hits:
+        m=hits[0]
+        css=css[:m.start()]+sel+'{'+body+'}'+css[m.end():]
 
 # Host screen topbar gets a dedicated semantic shell; replace markup, then add its canonical rule near the existing shared flex owner.
 old_markup='<div class="hostTopbar">\n    <div><div class="battleTitle">Table Control</div><div class="battleRoom">AUTHORITATIVE HOST HUD · ROOM <span id="hostRoomCode">------</span></div></div>\n    <button id="playerHudBtn" class="battleExit">PLAYER HUD</button>\n  </div>'
@@ -72,7 +72,7 @@ if css.count(anchor)!=1:
     raise SystemExit('Safety stop: host tabs anchor missing after replacement')
 css=css.replace(anchor,anchor+insert,1)
 
-# Ownership audit: new canonical owners are singular and no late !important Host HUD overrides are introduced.
+# Ownership audit: canonical base owners remain singular; responsive/state variants may coexist.
 for sel in ('.hostTabs{','.hostTab{','.hostTab.active{','.hostCard,.hostPlayer,.judgeBlock{'):
     if css.count(sel)!=1:
         raise SystemExit(f'Safety stop: canonical Host HUD owner count for {sel} is {css.count(sel)}')
