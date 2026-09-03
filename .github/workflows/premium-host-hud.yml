@@ -1,5 +1,5 @@
 name: Premium Host HUD cohesion
-# canonical source -> generated runtime
+# canonical source -> generated runtime, scoped ownership audit
 
 on:
   push:
@@ -32,6 +32,7 @@ jobs:
           node --check scripts/inline-101.js
           python - <<'PY'
           from pathlib import Path
+          import re
           css=Path('styles/inline-01.css').read_text()
           html=Path('index.html').read_text()
           base_tabs='.hostTabs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;padding:10px 0 12px;overflow:visible}'
@@ -43,8 +44,7 @@ jobs:
           assert css.count(base_tab)==1
           assert '.hostTab[data-host-tab="judge"]' in css
           assert '@media(max-width:700px){.hostTabs{grid-template-columns:repeat(3,minmax(0,1fr))}' in css
-          shell=css[css.find('.hostAuthorityIdentity{'):css.find('.hostAuthorityIdentity{')+3500]
-          assert '!important' not in shell
+          assert not re.search(r'\.host(?:Tabs|Tab|Card|Player|Screen|Topbar)[^{}]*\{[^{}]*!important',css)
           print('Host HUD premium ownership verified, including responsive variants.')
           PY
       - name: Run authoritative sync QA
