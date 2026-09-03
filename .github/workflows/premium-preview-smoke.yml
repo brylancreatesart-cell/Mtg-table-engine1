@@ -1,0 +1,81 @@
+name: Premium release preview gate
+
+on:
+  push:
+    branches:
+      - premium-cohesion-pass
+    paths:
+      - .github/workflows/premium-preview-smoke.yml
+      - index.html
+      - styles/inline-01.css
+      - scripts/inline-101.js
+      - tools/preview_smoke_test.js
+      - tools/phone_down_preview_smoke.js
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    env:
+      PREVIEW_URL: https://mtg-table-engine1-git-premium-cohe-6cdabc-brylancreatesart-7523.vercel.app
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: premium-cohesion-pass
+      - name: Wait for complete premium preview
+        run: |
+          for i in $(seq 1 40); do
+            page=$(curl -L -s -o /tmp/page.html -w '%{http_code}' "$PREVIEW_URL" || true)
+            css=$(curl -L -s -o /tmp/app.css -w '%{http_code}' "$PREVIEW_URL/styles/inline-01.css" || true)
+            js=$(curl -L -s -o /tmp/app.js -w '%{http_code}' "$PREVIEW_URL/scripts/inline-101.js" || true)
+            if [ "$page" = "200" ] && [ "$css" = "200" ] && [ "$js" = "200" ] \
+              && grep -q 'id="lobbyDeckIdentity"' /tmp/page.html \
+              && grep -q 'AUTHORITATIVE TABLE CONTROL' /tmp/page.html \
+              && grep -q '.sharedDisplayIdentity .sharedDisplayDeckName' /tmp/app.css \
+              && ! grep -q -- '--shared-cols:1!important' /tmp/app.css \
+              && grep -q 'function companionAttentionState' /tmp/app.js \
+              && grep -q 'SIDEKICK MONITORING · TAP FOR CONTROLS' /tmp/app.js \
+              && grep -q 'forcedHudAwakeTimer=setTimeout' /tmp/app.js; then
+              echo 'Complete premium preview is ready'
+              exit 0
+            fi
+            echo "Waiting for complete premium preview ($page/$css/$js) attempt $i"
+            sleep 5
+          done
+          exit 1
+      - name: Verify authoritative synchronization
+        run: node tools/run_authoritative_sync_qa.js
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Run full deployed multiplayer smoke
+        run: node tools/preview_smoke_test.js
+      - name: Verify full multiplayer report
+        run: |
+          node - <<'JS'
+          const r=require('./preview-smoke-report.json');
+          if(!r.ok) throw new Error('Full preview smoke report is not green');
+          const names=r.checks.map(x=>x.name);
+          for(const required of ['second player connects to host','joining player enters battlefield','host enters battlefield','shared display updates into live battle','no uncaught page errors','no required document/script/style 404s']){
+            if(!names.includes(required)) throw new Error('Missing full-flow assertion: '+required);
+          }
+          console.log('Full premium multiplayer battlefield flow passed.');
+          JS
+      - name: Run deployed phone-down regression
+        run: node tools/phone_down_preview_smoke.js
+      - name: Verify phone-down regression report
+        run: |
+          node - <<'JS'
+          const r=require('./phone-down-smoke-report.json');
+          if(!r.ok) throw new Error('Phone-down smoke report is not green');
+          const names=r.checks.map(x=>x.name);
+          for(const required of ['opponent-turn player enters passive Sidekick mode','passive mode exposes monitoring control','passive control identifies Sidekick monitoring','tap immediately reopens full controls','manual wake automatically returns to passive mode after grace period','no uncaught browser errors']){
+            if(!names.includes(required)) throw new Error('Missing phone-down assertion: '+required);
+          }
+          console.log('Phone-down Sidekick behavior passed.');
+          JS

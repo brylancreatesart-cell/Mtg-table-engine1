@@ -2,7 +2,7 @@
 (()=>{const $=x=>document.getElementById(x),toast=t=>{let e=$('to');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1300)},word=n=>['zero','one','two','three','four','five','six','seven','eight'][n]||n;
 let playerProfile=null,presencePeer=null,presenceReady=false,presenceChecks=new Map(),pendingInvite=null,activeDeckId=null,pendingAvatarId=MTGAvatars.DEFAULT_ID,profileHubTab='overview';
 let profileStorage=MTGProfileStore.adapter();
-let hudFlags=typeof MTGPlayerHUD!=='undefined'?MTGPlayerHUD.loadFlags(localStorage):{newPlayerHud:true,contextualActions:true,lowAttention:true,universalNumeric:true,spatialOpponents:true,quickCommanderDamage:true,eventBasedInput:true,quickActionIntelligence:true,criticalStateAwareness:true,opponentDetailDrawer:true,battlefieldQuickActions:true,smartResourceRail:true,deckAdaptiveHud:true},forcedHudAwakeUntil=0,playerHudPage='home',battlefieldViewPlayer='all';
+let hudFlags=typeof MTGPlayerHUD!=='undefined'?MTGPlayerHUD.loadFlags(localStorage):{newPlayerHud:true,contextualActions:true,lowAttention:true,universalNumeric:true,spatialOpponents:true,quickCommanderDamage:true,eventBasedInput:true,quickActionIntelligence:true,criticalStateAwareness:true,opponentDetailDrawer:true,battlefieldQuickActions:true,smartResourceRail:true,deckAdaptiveHud:true},forcedHudAwakeUntil=0,forcedHudAwakeTimer=null,companionAttentionKey='',playerHudPage='home',battlefieldViewPlayer='all';
 let lastPlayerAlertStatus=null,lastPlayerAlertMatchId=null;
 let assistHistory={seen:{},dismissed:{}};
 function loadAssistHistory(){try{let x=JSON.parse(localStorage.getItem('mtgte_assist_history_v1')||'{}');assistHistory={seen:x&&typeof x.seen==='object'?x.seen:{},dismissed:x&&typeof x.dismissed==='object'?x.dismissed:{}}}catch{assistHistory={seen:{},dismissed:{}}}return assistHistory}
@@ -161,10 +161,11 @@ function saveProfile(){
  }
  renderProfile();return playerProfile
 }
+function renderLobbyDeckIdentity(){let el=$('lobbyDeckIdentity');if(!el)return;let d=typeof currentSavedDeck==='function'?currentSavedDeck():null,deckName=d?.name||null,commander=prof?.commander||d?.commander||null,identity=d?deckIdentity(d):[];if(!deckName&&!commander){el.innerHTML='<span class="lobbyDeckPrimary">NO ACTIVE DECK</span><span class="lobbyDeckCommander">Verify or select a deck</span>';return}el.innerHTML='<span class="lobbyDeckPrimary">'+esc(deckName||'ACTIVE DECK')+'</span>'+deckManaPips(identity,{compact:true})+'<span class="lobbyDeckCommander">COMMANDER · '+esc(commander||'Not selected')+'</span>'}
 function renderProfile(){
  if(!playerProfile)return;
  playerProfile.displayName=playerProfile.displayName||playerProfile.name||'Player';playerProfile.name=playerProfile.displayName;playerProfile.code=String(playerProfile.friendCode||playerProfile.code||'').replace(/^TME-/,'');
- $('myName').textContent=playerProfile.displayName;$('myFriendCode').textContent=playerProfile.friendCode||('TME-'+playerProfile.code);$('myAvatar').innerHTML=avatarMarkup(playerProfile.avatarId,{compact:true});let ha=$('hudAvatar');if(ha)ha.innerHTML=avatarMarkup(playerProfile.avatarId);let hud=document.querySelector('.playerHud'),av=MTGAvatars.get(playerProfile.avatarId);if(hud)hud.dataset.avatarTheme=av.theme;
+ $('myName').textContent=playerProfile.displayName;$('myFriendCode').textContent=playerProfile.friendCode||('TME-'+playerProfile.code);$('myAvatar').innerHTML=avatarMarkup(playerProfile.avatarId,{compact:true});let ha=$('hudAvatar');if(ha)ha.innerHTML=avatarMarkup(playerProfile.avatarId);let hud=document.querySelector('.playerHud'),av=MTGAvatars.get(playerProfile.avatarId);if(hud)hud.dataset.avatarTheme=av.theme;renderLobbyDeckIdentity();
 }
 if($('myAvatar'))$('myAvatar').onclick=()=>showAvatarPicker();
 $('createProfileBtn').onclick=async()=>{

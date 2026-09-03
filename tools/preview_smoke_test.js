@@ -120,8 +120,8 @@ async function main() {
     check('battlefield room code preserved for host', ((await host.locator('#battleRoomCode').textContent())||'').trim()===room);
     check('battlefield room code preserved for joiner', ((await join.locator('#battleRoomCode').textContent())||'').trim()===room);
 
-    await display.waitForFunction(() => /TURN\s+1/i.test(document.querySelector('#sharedDisplayTurnSub')?.textContent||''), null, { timeout: 15000 });
-    check('shared display updates into live battle', /TURN\s+1/i.test((await display.locator('#sharedDisplayTurnSub').textContent())||''));
+    await display.waitForFunction(() => /TURN\s+1/i.test(document.querySelector('#sharedDisplayTurnMain')?.textContent||''), null, { timeout: 15000 });
+    check('shared display updates into live battle', /TURN\s+1/i.test((await display.locator('#sharedDisplayTurnMain').textContent())||''));
 
     const assetStatuses = await host.evaluate(async () => {
       const urls=['styles/inline-01.css','scripts/inline-100.js','scripts/inline-101.js','sw.js'];
