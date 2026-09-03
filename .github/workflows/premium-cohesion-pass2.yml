@@ -1,0 +1,53 @@
+name: Premium cohesion pass 2
+
+on:
+  push:
+    branches:
+      - premium-cohesion-pass
+    paths:
+      - .github/workflows/premium-cohesion-pass2.yml
+      - tools/apply_premium_cohesion_pass2.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: premium-cohesion-pass
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Apply personalized Lobby deck identity
+        run: python tools/apply_premium_cohesion_pass2.py
+      - name: Rebuild generated runtime
+        run: python tools/build_runtime_from_source.py
+      - name: Verify syntax and ownership
+        run: |
+          node --check scripts/inline-101.js
+          python - <<'PY'
+          from pathlib import Path
+          h=Path('index.html').read_text();c=Path('styles/inline-01.css').read_text();j=Path('scripts/inline-101.js').read_text()
+          assert h.count('id="lobbyDeckIdentity"')==1
+          assert c.count('.lobbyDeckIdentity{')==1
+          assert j.count('function renderLobbyDeckIdentity()')==1
+          assert 'COMMANDER · ' in j
+          assert 'try{renderLobbyDeckIdentity()}catch{}' in j
+          print('Personalized Lobby deck identity is singular and wired to active-deck changes.')
+          PY
+      - name: Run authoritative sync QA
+        run: node tools/run_authoritative_sync_qa.js
+      - name: Commit pass 2
+        run: |
+          git config user.name "sidekick-premium-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html styles/app-src/styles-part-01.part.css scripts/app-src/controller-part-01.part.js scripts/app-src/controller-part-03.part.js styles/inline-01.css scripts/inline-101.js runtime-build-report.json authoritative-sync-qa.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Show active deck identity throughout the Lobby"
+          git push origin HEAD:premium-cohesion-pass
