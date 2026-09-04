@@ -22,7 +22,7 @@ function endSoloTest(){
  if(!soloTestMode)return;
  if(!confirm('End Solo Test and return to setup?'))return;
  discardNonMultiplayerRecovery();
- clearTimeout(soloNpcTimer);soloNpcTimer=null;soloTestMode=false;battleStarted=false;HST=0;activeRoom='';transportSession=null;
+ clearTimeout(soloNpcTimer);soloNpcTimer=null;soloTestMode=false;battleStarted=false;releaseCompanionWakeLock();HST=0;activeRoom='';transportSession=null;
  players=[{id:1,r:0,connected:true,cid:'HOST',name:playerProfile?.name||'Player 1',commander:commanderName(),avatarId:playerProfile?.avatarId||MTGAvatars.DEFAULT_ID,deckName:publicDeckName()}];
  st=MTGEngine.normalizeState({life:{1:40},poison:{1:0},tax:{1:0},cmdCasts:{1:0},energy:{1:0},exp:{1:0},cmd:{},turn:1,active:1,phase:'MAIN 1',stack:[],battle:[],feed:[],choice:{},hist:[],fallen:{},events:[],snapshots:[]});
  $('game').classList.add('h');$('hostControl').classList.add('h');$('lobby').classList.add('h');$('setup').classList.remove('h');$('app')?.classList.remove('battleActive');history.replaceState(null,'',location.pathname+location.search);startVerifyAmbience();toast('Solo Test ended cleanly.');
@@ -34,7 +34,7 @@ function leaveBattleFromHud(){
  if(!confirm('Leave this battle? Your local seat will disconnect and this match will not be offered for recovery again on this device.'+hostWarning))return;
  const recovery=typeof MTGRecovery!=='undefined'?MTGRecovery.load(localStorage,MTGSessionBoundary.recoveryKey(playerProfile?.id)):null;if(recovery)markRecoveryDecision(recovery,'leave');discardLiveRecovery();
  const oldRoom=activeRoom;try{cc?.close()}catch{};cc=null;try{cs.forEach(x=>x?.close?.())}catch{};cs.clear();try{peer?.destroy?.()}catch{};peer=null;if(oldRoom){try{MTGLiveReconnect?.clearIdentity?.(localStorage,oldRoom)}catch{}localStorage.removeItem('mtgte_last_seat_'+oldRoom)}localStorage.removeItem('mtgte_last_room');
- clearTimeout(soloNpcTimer);soloNpcTimer=null;battleStarted=false;soloTestMode=false;HST=0;me=1;activeRoom='';roomDescriptor=null;transportSession=null;
+ clearTimeout(soloNpcTimer);soloNpcTimer=null;battleStarted=false;releaseCompanionWakeLock();soloTestMode=false;HST=0;me=1;activeRoom='';roomDescriptor=null;transportSession=null;
  players=[{id:1,r:0,connected:true,cid:clientId,name:playerProfile?.name||'Player 1',commander:commanderName(),avatarId:playerProfile?.avatarId||MTGAvatars.DEFAULT_ID,deckName:publicDeckName(),deckSize:localDeckCardCount(),commanderCount:localCommanderCount()}];
  st=MTGEngine.normalizeState({life:{1:40},poison:{1:0},tax:{1:0},cmdCasts:{1:0},energy:{1:0},exp:{1:0},cmd:{},turn:1,active:1,phase:'MAIN 1',stack:[],battle:[],feed:[],choice:{},hist:[],fallen:{},events:[],snapshots:[]});
  $('room').classList.add('h');$('jb').classList.add('h');$('code').textContent='------';showLobbyPage();toast('You left the battle.');
