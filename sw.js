@@ -1,5 +1,5 @@
-const CACHE='mtgte-sidekick-shell-v1';
-const SHELL=['/','/index.html','/styles/inline-01.css'];
+const CACHE='mtgte-sidekick-shell-v2';
+const SHELL=['/','/index.html','/styles/inline-01.css?direct'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));
@@ -22,6 +22,10 @@ self.addEventListener('fetch',event=>{
   }
   const type=req.destination;
   if(!['script','style','image','font'].includes(type))return;
+  if(type==='style'&&url.pathname==='/styles/inline-01.css'){
+    event.respondWith(caches.match('/styles/inline-01.css?direct').then(cached=>cached||fetch('/styles/inline-01.css?direct')));
+    return;
+  }
   event.respondWith(caches.match(req).then(cached=>cached||fetch(req).then(res=>{
     if(res&&res.ok){const copy=res.clone();caches.open(CACHE).then(cache=>cache.put(req,copy));}
     return res;
