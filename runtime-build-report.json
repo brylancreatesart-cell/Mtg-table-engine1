@@ -3,14 +3,14 @@
   "outputs": [
     {
       "target": "scripts\\inline-101.js",
-      "bytes": 563881,
-      "sha256": "e01ea517cb736f766ff79735139fe997a3fcf0b2b2f879d0758d0eed8381a7a2",
+      "bytes": 564036,
+      "sha256": "5ff2bdb5afef0a497e96ab6de376a4fb9a16e68d8c7aecdc0cfa4185594b78ea",
       "parts": 8
     },
     {
       "target": "styles\\inline-01.css",
-      "bytes": 2073430,
-      "sha256": "8fe8611d6625fc3cdeea5d288e135984fe8c42f598d0a49c1d62587f3f995fe9",
+      "bytes": 2073777,
+      "sha256": "3a5421f566031da4c085a383febdd15690a2288d2c7dc33b35b0ca0b98d1ea7b",
       "parts": 12
     }
   ]
